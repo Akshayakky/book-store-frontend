@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PrimarySearchAppBar from './component/AppBar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -12,6 +12,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {MuiThemeProvider} from "@material-ui/core";
+import axios from 'axios';
 
 const theme = createMuiTheme({
     palette: {
@@ -80,6 +81,16 @@ const useStyles = makeStyles((theme) => ({
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 export default function () {
+    const [data, setData] = useState()
+    const [request] = useState('get-books')
+    useEffect(() => {
+        axios.get('http://localhost:8080/book/' + request)
+            .then((results) => {
+                setData(results.data);
+                console.log("done")
+            });
+    }, [request]);
+
     const classes = useStyles();
     return (
         <React.Fragment>
@@ -93,24 +104,7 @@ export default function () {
                     <Grid container spacing={3}>
                         {cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
                             <Card className={classes.card}>
-                                <Card className={classes.mediaContainer}>
-                                    <CardMedia
-                                        className={useStyles().cardMedia}
-                                        image="https://books.google.com/books/content?id=u5aJe6Mb0YIC&printsec=frontcover&img=1&zoom=5%27"
-                                        title="Image title"
-                                    />
-                                </Card>
-                                <CardContent className={classes.cardContent}>
-                                    <Typography variant="body2" component="h2">
-                                        The Girl In Room
-                                    </Typography>
-                                    <Typography variant={"caption"} color="textSecondary" display="block">
-                                        Chetan Bhagat
-                                    </Typography>
-                                    <Typography variant={"caption"} className={classes.price}>
-                                        Rs. 1200
-                                    </Typography>
-                                </CardContent>
+                                <CardData data={data}/>
                                 <CardActions>
                                     <MuiThemeProvider theme={theme}>
                                         <Button size={"large"} variant={"contained"} color={"secondary"}
@@ -140,5 +134,41 @@ export default function () {
                 </Typography>
             </footer>
         </React.Fragment>
+    );
+}
+
+function CardData(data) {
+    const classes = useStyles();
+    let bookTitle;
+    let bookAuthor;
+    let bookPrice;
+    let bookImage;
+    if (data.data !== undefined) {
+        bookAuthor = data.data[0].bookAuthor
+        bookTitle = data.data[0].bookTitle
+        bookPrice = "Rs. " + data.data[0].bookPrice
+        bookImage = data.data[0].bookImage
+    }
+    return (
+        <>
+            <Card className={classes.mediaContainer}>
+                <CardMedia
+                    className={classes.cardMedia}
+                    image={bookImage}
+                    title="Image title"
+                />
+            </Card>
+            <CardContent className={classes.cardContent}>
+                <Typography variant="body2" component="h2">
+                    {bookTitle}
+                </Typography>
+                <Typography variant={"caption"} color="textSecondary" display="block">
+                    {bookAuthor}
+                </Typography>
+                <Typography variant={"caption"} className={classes.price}>
+                    {bookPrice}
+                </Typography>
+            </CardContent>
+        </>
     );
 }
