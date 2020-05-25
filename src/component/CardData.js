@@ -37,10 +37,10 @@ export default function CardData(data) {
     let bookPrice;
     let bookImage;
     if (data.data !== undefined) {
-        bookAuthor = data.data[0].bookAuthor
-        bookTitle = data.data[0].bookTitle
-        bookPrice = "Rs. " + data.data[0].bookPrice
-        bookImage = data.data[0].bookImage
+        bookAuthor = data.data[data.num].bookAuthor
+        bookTitle = data.data[data.num].bookTitle
+        bookPrice = "Rs. " + data.data[data.num].bookPrice
+        bookImage =  data.data[data.num].bookImage
     }
     return (
         <div>

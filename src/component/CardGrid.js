@@ -47,7 +47,7 @@ export default function CardGrid(data) {
             <Grid container spacing={3}>
                 {cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
                     <Card className={classes.card}>
-                        <CardData data={data.data}/>
+                        <CardData num={i} data={data.data}/>
                         <CardActions>
                             <MuiThemeProvider theme={theme}>
                                 <Button size={"large"} variant={"contained"} color={"secondary"}
