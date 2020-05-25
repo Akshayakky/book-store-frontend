@@ -38,16 +38,14 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-
 export default function CardGrid(data) {
     const classes = useStyles();
     return (
         <Container className={classes.cardGrid} maxWidth="md">
             <Grid container spacing={3}>
-                {cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
+                {data.cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
                     <Card className={classes.card}>
-                        <CardData num={i} data={data.data}/>
+                        <CardData num={card + data.cards.length * (data.pagenumber - 1)} data={data.data}/>
                         <CardActions>
                             <MuiThemeProvider theme={theme}>
                                 <Button size={"large"} variant={"contained"} color={"secondary"}
