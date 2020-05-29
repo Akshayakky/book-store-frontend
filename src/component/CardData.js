@@ -40,7 +40,7 @@ export default function CardData(data) {
         bookAuthor = data.data[data.num].bookAuthor
         bookTitle = data.data[data.num].bookTitle
         bookPrice = "Rs. " + data.data[data.num].bookPrice
-        bookImage =  data.data[data.num].bookImage
+        bookImage = data.data[data.num].bookImage
     }
     return (
         <div>
