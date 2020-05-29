@@ -5,6 +5,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import IconButton from "@material-ui/core/IconButton";
+import Badge from "@material-ui/core/Badge";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -43,14 +47,20 @@ const useStyles = makeStyles((theme) => ({
     inputInput: {
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     },
+    bookIcon: {
+        [theme.breakpoints.up('md')]: {
+            marginLeft: theme.spacing(20),
+        },
+    },
 }));
 
-export default function PrimarySearchAppBar(props) {
+export default function PrimarySearchAppBar() {
     const classes = useStyles();
     return (
         <div className={classes.grow}>
             <AppBar position="static" style={{background: '#990033'}}>
                 <Toolbar>
+                    <MenuBookIcon className={classes.bookIcon}/>
                     <Typography className={classes.title} variant="h6" noWrap>
                         Bookstore
                     </Typography>
@@ -68,6 +78,13 @@ export default function PrimarySearchAppBar(props) {
                         />
                     </div>
                     <div className={classes.grow}/>
+                    <div>
+                        <IconButton aria-label="show 4 new mails" color="inherit">
+                            <Badge badgeContent={4} className={classes.cartIcon} color="secondary">
+                                <ShoppingCartIcon/>
+                            </Badge>
+                        </IconButton>
+                    </div>
                 </Toolbar>
             </AppBar>
         </div>
