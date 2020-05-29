@@ -15,34 +15,33 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
             marginTop: theme.spacing(2),
-            // paddingLeft: '36.5%',
-            // horizontalAlign:'Middle',
             position: 'absolute',
             left: '50%',
             transform: 'translate(-50%, -50%)'
-
-
         },
     },
 }));
+
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+
 export default function () {
-    const [data, setData] = useState()
+    const [bookData, setBookData] = useState()
     const [request] = useState('get-books')
     const [page, setPage] = React.useState(1);
     const handleChange = (event, value) => {
         setPage(value);
     };
+
     useEffect(() => {
         axios.get('http://localhost:8080/book/' + request)
             .then((results) => {
-                setData(results.data);
+                setBookData(results.data);
                 console.log("done")
             });
     }, [request]);
 
-    if (data !== undefined)
-        var records = (data.length)
+    if (bookData !== undefined)
+        var records = (bookData.length)
     const classes = useStyles();
     return (
         <React.Fragment>
@@ -52,10 +51,10 @@ export default function () {
                 <Typography variant="h6" color="inherit" noWrap>
                     Books
                 </Typography>
-                <CardGrid data={data} cards={cards} pagenumber={page}/>
+                <CardGrid data={bookData} cards={cards} pageNumber={page}/>
             </main>
             <div className={classes.root}>
-            {/*    /!*<Typography>Page: {page}</Typography>*!/*/}
+                {/*    /!*<Typography>Page: {page}</Typography>*!/*/}
                 <Pagination count={Math.ceil(records / cards.length)} color="secondary" page={page}
                             onChange={handleChange}/>
             </div>

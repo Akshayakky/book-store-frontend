@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import CardData from './CardData'
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -9,6 +9,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {MuiThemeProvider} from "@material-ui/core";
+import axios from "axios";
 
 const theme = createMuiTheme({
     palette: {
@@ -40,16 +41,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CardGrid(data) {
     const classes = useStyles();
+    const [cart, setCart] = useState(0)
+
+    const addBook = (value) => {
+        axios.post('http://localhost:8080/cart/add-book/', {bookId: value, quantity: 1})
+            .then((results) => {
+                // console.log(results)
+                setCart(cart + 1)
+            });
+    }
+
     return (
         <Container className={classes.cardGrid} maxWidth="md">
             <Grid container spacing={3}>
                 {data.cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
                     <Card className={classes.card}>
-                        <CardData num={card + data.cards.length * (data.pagenumber - 1)} data={data.data}/>
+                        <CardData num={card + data.cards.length * (data.pageNumber - 1) - 1} data={data.data}/>
                         <CardActions>
                             <MuiThemeProvider theme={theme}>
-                                <Button size={"large"} variant={"contained"} color={"secondary"}
-                                        className={classes.button}>
+                                <Button size={"large"} variant={"contained"} color={"secondary"} className={classes
+                                    .button} onClick={addBook.bind(this, card + data.cards.length * (data
+                                    .pageNumber - 1))}>
                                     <Typography variant={"caption"}>
                                         ADD TO BAG
                                     </Typography>
