@@ -26,9 +26,9 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 export default function () {
     const [bookData, setBookData] = useState()
-    const [request] = useState('get-books')
     const [page, setPage] = React.useState(1);
     const [cartCount, setCartCount] = useState(0)
+    const [request, setRequest] = useState("")
 
     const handleCart = (value) => {
         setCartCount(value);
@@ -38,12 +38,16 @@ export default function () {
         setPage(value);
     };
 
+    const handleSearch = (value) => {
+        setRequest(value);
+        setPage(1)
+    };
+
     useEffect(() => {
-        axios.get('http://localhost:8080/book/' + request)
+        setTimeout(() => axios.get('http://localhost:8080/book/get-books/' + request)
             .then((results) => {
                 setBookData(results.data);
-                console.log("done")
-            });
+            }), 1000);
     }, [request]);
 
     if (bookData !== undefined)
@@ -52,7 +56,7 @@ export default function () {
     return (
         <React.Fragment>
             <CssBaseline/>
-            <PrimarySearchAppBar cartCount={cartCount}/>
+            <PrimarySearchAppBar cartCount={cartCount} onChange={handleSearch}/>
             <main>
                 <Typography variant="h6" color="inherit" noWrap>
                     Books
