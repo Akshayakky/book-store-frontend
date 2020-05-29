@@ -61,10 +61,17 @@ const useStyles = makeStyles((theme) => ({
 export default function PrimarySearchAppBar(props) {
     const classes = useStyles();
     const[state, setState] = useState("");
+
     const handleChange = (event) => {
         setState(event.target.value)
-        props.onChange(event.target.value)
     }
+
+    useEffect(()=>{
+        console.log(state)
+        props.onChange(state)
+
+    },[state])
+
     return (
         <div className={classes.grow}>
             <AppBar position="static" style={{background: '#990033'}}>

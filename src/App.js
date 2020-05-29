@@ -30,56 +30,45 @@ const useStyles = makeStyles((theme) => ({
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 export default function () {
     const [data, setData] = useState()
-    const [cart, setCart] = useState()
-    const [cartCount, setCartCount] = useState(1)
+    const [cartCount, setCartCount] = useState(0)
     const [request, setRequest] = useState("")
     const [page, setPage] = React.useState(1);
     const handleChange = (event, value) => {
         setPage(value);
     };
-    const handleCart = () => {
-        console.log(cartCount)
-        setCartCount(cartCount + 1);
+
+    const handleCart = (value) => {
+        console.log(value)
+        setCartCount(value);
     };
-    const handleSearch = async (value) => {
+
+    useEffect(() => {
+        console.log(cartCount)
+    }, [cartCount])
+
+    const handleSearch = (value) => {
         console.log(value)
         setRequest(value);
         setPage(1)
     };
 
     useEffect(() => {
-        setTimeout(() => {
-            axios.get('http://localhost:8080/book/get-books/' + request)
-                .then((results) => {
-                    setData(results.data);
-                    console.log('http://localhost:8080/book/get-books/' + request)
-                    console.log(results.data)
-                });
-        }, 1000)
+        setTimeout(() => axios.get('http://localhost:8080/book/get-books/' + request)
+            .then((results) => {
+                setData(results.data);
+                console.log('http://localhost:8080/book/get-books/' + request)
+                console.log(results.data)
+            }), 1000);
     }, [request]);
 
-    useEffect(() => {
-        setTimeout(() => {
-            axios.get('http://localhost:8080/cart/get-books/')
-                .then((results) => {
-                    setCart(results.data);
-                    console.log("cart done")
-                });
-        }, 1000)
-    }, [cartCount]);
-
-    let records;
-    let cartItems;
-    if (cart !== undefined)
-        cartItems = cart.length
-
+    var records;
     if (data !== undefined)
         records = (data.length)
     const classes = useStyles();
     return (
         <React.Fragment>
             <CssBaseline/>
-            <PrimarySearchAppBar cartItems={cartItems} onChange={handleSearch}/>
+            <PrimarySearchAppBar cartItems={cartCount} onChange={handleSearch}/>
             <main>
                 <Typography variant="h6" color="inherit" noWrap className={classes.title}>
                     Books({records} books)

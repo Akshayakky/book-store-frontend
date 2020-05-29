@@ -41,23 +41,34 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CardGrid(data) {
     const classes = useStyles();
+    const [cart, setCart] = useState(0)
+
     const addBook = (value) => {
-        axios.post('http://localhost:8080/cart/add-book/', {bookId:value,quantity:1})
-            .then((results  ) => {
+        axios.post('http://localhost:8080/cart/add-book/', {bookId: value, quantity: 1})
+            .then((results) => {
+                // console.log(results)
+                setCart(cart+1)
             });
-        data.onChange()
     }
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/cart/get-books/')
+            .then((results) => {
+                data.onChange(results.data.length)
+            });
+    }, [cart])
 
     return (
         <Container className={classes.cardGrid} maxWidth="md">
             <Grid container spacing={3}>
                 {data.cards.map((card) => <Grid item key={card} xs={12} sm={6} md={3}>
                     <Card className={classes.card}>
-                        <CardData num={card + data.cards.length * (data.pagenumber - 1)-1} data={data.data}/>
+                        <CardData num={card + data.cards.length * (data.pagenumber - 1) - 1} data={data.data}/>
                         <CardActions>
                             <MuiThemeProvider theme={theme}>
                                 <Button size={"large"} variant={"contained"} color={"secondary"}
-                                        className={classes.button} onClick={addBook.bind(this,card + data.cards.length * (data.pagenumber - 1))}>
+                                        className={classes.button}
+                                        onClick={addBook.bind(this, card + data.cards.length * (data.pagenumber - 1))}>
                                     <Typography variant={"caption"}>
                                         ADD TO BAG
                                     </Typography>
