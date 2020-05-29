@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar(props) {
     const classes = useStyles();
     return (
         <div className={classes.grow}>
@@ -80,7 +80,7 @@ export default function PrimarySearchAppBar() {
                     <div className={classes.grow}/>
                     <div>
                         <IconButton aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} className={classes.cartIcon} color="secondary">
+                            <Badge badgeContent={props.cartCount} className={classes.cartIcon} color="secondary">
                                 <ShoppingCartIcon/>
                             </Badge>
                         </IconButton>

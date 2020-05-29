@@ -28,6 +28,12 @@ export default function () {
     const [bookData, setBookData] = useState()
     const [request] = useState('get-books')
     const [page, setPage] = React.useState(1);
+    const [cartCount, setCartCount] = useState(0)
+
+    const handleCart = (value) => {
+        setCartCount(value);
+    };
+
     const handleChange = (event, value) => {
         setPage(value);
     };
@@ -46,12 +52,12 @@ export default function () {
     return (
         <React.Fragment>
             <CssBaseline/>
-            <PrimarySearchAppBar/>
+            <PrimarySearchAppBar cartCount={cartCount}/>
             <main>
                 <Typography variant="h6" color="inherit" noWrap>
                     Books
                 </Typography>
-                <CardGrid data={bookData} cards={cards} pageNumber={page}/>
+                <CardGrid onChange={handleCart} data={bookData} cards={cards} pageNumber={page}/>
             </main>
             <div className={classes.root}>
                 {/*    /!*<Typography>Page: {page}</Typography>*!/*/}
