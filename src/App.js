@@ -15,47 +15,78 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
             marginTop: theme.spacing(2),
-            // paddingLeft: '36.5%',
-            // horizontalAlign:'Middle',
             position: 'absolute',
             left: '50%',
-            transform: 'translate(-50%, -50%)'
-
-
+            transform: 'translate(-50%,-50%)'
         },
     },
+    title: {
+        marginTop: 15,
+        [theme.breakpoints.up('md')]: {
+            marginLeft: theme.spacing(24),
+        },
+    }
 }));
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 export default function () {
     const [data, setData] = useState()
-    const [request] = useState('get-books')
+    const [cart, setCart] = useState()
+    const [cartCount, setCartCount] = useState(1)
+    const [request, setRequest] = useState("")
     const [page, setPage] = React.useState(1);
     const handleChange = (event, value) => {
         setPage(value);
     };
+    const handleCart = () => {
+        console.log(cartCount)
+        setCartCount(cartCount + 1);
+    };
+    const handleSearch = async (value) => {
+        console.log(value)
+        setRequest(value);
+        setPage(1)
+    };
+
     useEffect(() => {
-        axios.get('http://localhost:8080/book/' + request)
-            .then((results) => {
-                setData(results.data);
-                console.log("done")
-            });
+        setTimeout(() => {
+            axios.get('http://localhost:8080/book/get-books/' + request)
+                .then((results) => {
+                    setData(results.data);
+                    console.log('http://localhost:8080/book/get-books/' + request)
+                    console.log(results.data)
+                });
+        }, 1000)
     }, [request]);
 
+    useEffect(() => {
+        setTimeout(() => {
+            axios.get('http://localhost:8080/cart/get-books/')
+                .then((results) => {
+                    setCart(results.data);
+                    console.log("cart done")
+                });
+        }, 1000)
+    }, [cartCount]);
+
+    let records;
+    let cartItems;
+    if (cart !== undefined)
+        cartItems = cart.length
+
     if (data !== undefined)
-        var records = (data.length)
+        records = (data.length)
     const classes = useStyles();
     return (
         <React.Fragment>
             <CssBaseline/>
-            <PrimarySearchAppBar/>
+            <PrimarySearchAppBar cartItems={cartItems} onChange={handleSearch}/>
             <main>
-                <Typography variant="h6" color="inherit" noWrap>
-                    Books
+                <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                    Books({records} books)
                 </Typography>
-                <CardGrid data={data} cards={cards} pagenumber={page}/>
+                <CardGrid onChange={handleCart} data={data} cards={cards} pagenumber={page}/>
             </main>
             <div className={classes.root}>
-            {/*    /!*<Typography>Page: {page}</Typography>*!/*/}
                 <Pagination count={Math.ceil(records / cards.length)} color="secondary" page={page}
                             onChange={handleChange}/>
             </div>
