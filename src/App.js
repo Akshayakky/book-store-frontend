@@ -20,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
             transform: 'translate(-50%, -50%)'
         },
     },
+    title: {
+        marginTop: 15,
+        [theme.breakpoints.up('md')]: {
+            marginLeft: theme.spacing(24),
+        },
+    }
 }));
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -58,8 +64,8 @@ export default function () {
             <CssBaseline/>
             <PrimarySearchAppBar cartCount={cartCount} onChange={handleSearch}/>
             <main>
-                <Typography variant="h6" color="inherit" noWrap>
-                    Books
+                <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                    Books({records} books)
                 </Typography>
                 <CardGrid onChange={handleCart} data={bookData} cards={cards} pageNumber={page}/>
             </main>
