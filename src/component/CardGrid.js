@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CardGrid(props) {
     const classes = useStyles();
-    const [cart, setCart] = useState(0)
+    const [cart, setCart] = useState()
 
     const addBook = (value) => {
         axios.post('http://localhost:8080/cart/add-book/', {bookId: value, quantity: 1})
@@ -50,10 +50,11 @@ export default function CardGrid(props) {
             });
     }
 
-    useEffect(() => {
+    useEffect((cart) => {
         axios.get('http://localhost:8080/cart/get-books/')
             .then((results) => {
                 props.onChange(results.data.length)
+                setCart(cart)
             });
     }, [cart])
 

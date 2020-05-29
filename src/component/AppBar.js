@@ -56,16 +56,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar(props) {
     const classes = useStyles();
-    const[state, setState] = useState("");
+    const [state, setState] = useState("");
 
     const handleChange = (event) => {
         setState(event.target.value)
     }
 
-    useEffect(()=>{
-        console.log(state)
+    useEffect(() => {
         props.onChange(state)
-    },[state])
+    }, [state])
 
     return (
         <div className={classes.grow}>
