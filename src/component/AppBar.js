@@ -9,6 +9,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import {Link} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -70,7 +71,9 @@ export default function PrimarySearchAppBar(props) {
         <div className={classes.grow}>
             <AppBar position="static" style={{background: '#990033'}}>
                 <Toolbar>
-                    <MenuBookIcon className={classes.bookIcon}/>
+                    <Link to={"/"}>
+                        <MenuBookIcon className={classes.bookIcon}/>
+                    </Link>
                     <Typography className={classes.title} variant="h6" noWrap>
                         Bookstore
                     </Typography>
@@ -78,21 +81,25 @@ export default function PrimarySearchAppBar(props) {
                         <div className={classes.searchIcon}>
                             <SearchIcon/>
                         </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{'aria-label': 'search'}}
-                            onChange={handleChange}
-                        />
+                        <Link to="/">
+                            <InputBase
+                                placeholder="Search…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput,
+                                }}
+                                inputProps={{'aria-label': 'search'}}
+                                onChange={handleChange}
+                            />
+                        </Link>
                     </div>
                     <div className={classes.grow}/>
                     <div>
                         <IconButton aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={props.cartCount} className={classes.cartIcon} color="secondary">
-                                <ShoppingCartIcon/>
+                            <Badge badgeContent={props.cartCount} color="secondary">
+                                <Link to={"/cart"}>
+                                    <ShoppingCartIcon/>
+                                </Link>
                             </Badge>
                         </IconButton>
                     </div>

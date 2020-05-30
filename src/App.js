@@ -1,79 +1,53 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import PrimarySearchAppBar from './component/AppBar';
+import Cart from './component/Cart'
 import CardGrid from './component/CardGrid'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
-import axios from 'axios';
-import Pagination from '@material-ui/lab/Pagination';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
     footer: {
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing(6),
     },
-    root: {
-        '& > *': {
-            marginTop: theme.spacing(2),
-            position: 'absolute',
-            left: '50%',
-            transform: 'translate(-50%, -50%)'
-        },
-    },
-    title: {
-        marginTop: 15,
-        [theme.breakpoints.up('md')]: {
-            marginLeft: theme.spacing(24),
-        },
-    }
+
 }));
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 export default function () {
-    const [bookData, setBookData] = useState()
     const [page, setPage] = React.useState(1);
     const [cartCount, setCartCount] = useState(0)
+    const [cartData, setCartData] = useState()
     const [request, setRequest] = useState("")
 
     const handleCart = (value) => {
-        setCartCount(value);
-    };
-
-    const handleChange = (event, value) => {
-        setPage(value);
+        setCartCount(value.length);
+        // setCartData(value);
     };
 
     const handleSearch = (value) => {
+        // console.log("changing")
         setRequest(value);
         setPage(1)
     };
 
-    useEffect(() => {
-        setTimeout(() => axios.get('http://localhost:8080/book/get-books/' + request)
-            .then((results) => {
-                setBookData(results.data);
-            }), 1000);
-    }, [request]);
-
-    if (bookData !== undefined)
-        var records = (bookData.length)
     const classes = useStyles();
     return (
         <React.Fragment>
             <CssBaseline/>
-            <PrimarySearchAppBar cartCount={cartCount} onChange={handleSearch}/>
-            <main>
-                <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                    Books({records} books)
-                </Typography>
-                <CardGrid onChange={handleCart} data={bookData} cards={cards} pageNumber={page}/>
-            </main>
-            <div className={classes.root}>
-                {/*    /!*<Typography>Page: {page}</Typography>*!/*/}
-                <Pagination count={Math.ceil(records / cards.length)} color="secondary" page={page}
-                            onChange={handleChange}/>
-            </div>
+            <Router>
+                <PrimarySearchAppBar cartCount={cartCount} onChange={handleSearch}/>
+                <main>
+                    <Switch>
+                        <Route path="/" exact component={() => (
+                            <CardGrid request={request} onChange={handleCart} cards={cards} pageNumber={page}/>)}/>
+                        <Route path="/cart" exact component={() => (<Cart cartCount={cartCount} data={cartData}/>)}/>
+                    </Switch>
+                </main>
+            </Router>
             <footer className={classes.footer}>
                 <Typography variant="h6" align="center" gutterBottom>
                     Footer
