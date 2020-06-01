@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         boxShadow: 'none',
         border: "thin solid #d9d9d9",
+        // display:"flex"
     },
     button: {
         width: '50%',
@@ -57,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CardGrid(props) {
     const [bookData, setBookData] = useState()
     const classes = useStyles();
-    const [cart, setCart] = useState()
+    const [cart, setCart] = useState(0)
     const [page, setPage] = React.useState(1);
 
     const addBook = (value) => {
@@ -68,12 +69,11 @@ export default function CardGrid(props) {
     }
 
     useEffect(() => {
-        // console.log("star5t"+props.request+"end")
-        setTimeout(() => axios.get('http://localhost:8080/book/get-books/' + props.request)
+        axios.get('http://localhost:8080/book/get-books/' + props.request)
             .then((results) => {
                 setBookData(results.data);
-                // console.log(results.data)
-            }), 1000);
+                console.log("once")
+            });
         setPage(1);
     }, [props.request]);
 
@@ -81,16 +81,15 @@ export default function CardGrid(props) {
         setPage(value);
     };
 
-    useEffect((cart) => {
-        axios.get('http://localhost:8080/cart/get-books/')
-            .then((results) => {
-                props.onChange(results.data)
-            });
-    }, [cart])
-
+    var cards = [];
+    const itemsPerPage = 12;
     if (bookData !== undefined) {
         var records = (bookData.length)
+        for (let bookId = 1 + itemsPerPage * (page - 1); bookId <= itemsPerPage * page && bookId <= bookData.length; bookId++) {
+            (cards.push(bookId));
+        }
     }
+
     return (
         <>
             <Typography variant="h6" color="inherit" noWrap className={classes.title}>
@@ -98,14 +97,13 @@ export default function CardGrid(props) {
             </Typography>
             <Container className={classes.cardGrid} maxWidth="md">
                 <Grid container spacing={3}>
-                    {props.cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
+                    {cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
                         <Card className={classes.card}>
-                            <CardData num={card + props.cards.length * (page - 1) - 1} data={bookData}/>
+                            <CardData num={card - 1} data={bookData}/>
                             <CardActions>
                                 <MuiThemeProvider theme={theme}>
                                     <Button size={"large"} variant={"contained"} color={"secondary"} className={classes
-                                        .button} onClick={addBook.bind(this, card + props.cards.length * (props
-                                        .pageNumber - 1))}>
+                                        .button} onClick={addBook.bind(this, card)}>
                                         <Typography variant={"caption"}>
                                             ADD TO BAG
                                         </Typography>
@@ -122,7 +120,7 @@ export default function CardGrid(props) {
                 </Grid>
             </Container>
             <div className={classes.root}>
-                <Pagination count={Math.ceil(records / props.cards.length)} color="secondary" page={page}
+                <Pagination count={Math.ceil(records / itemsPerPage)} color="secondary" page={page}
                             onChange={handleChange}/>
             </div>
         </>

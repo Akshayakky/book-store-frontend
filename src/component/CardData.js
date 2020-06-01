@@ -17,7 +17,8 @@ const useStyles = makeStyles((theme) => ({
     mediaContainer: {
         backgroundColor: '#f2f2f2',
         boxShadow: 'none',
-        borderRadius: 0
+        borderRadius: 0,
+        // display: "flex"
     },
     cardContent: {
         height: 70,
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         margin: 0,
         fontWeight: 'bold',
-    }
+    },
 }));
 
 export default function CardData(data) {

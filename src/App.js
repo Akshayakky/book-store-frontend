@@ -15,36 +15,38 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-
 export default function () {
-    const [page, setPage] = React.useState(1);
     const [cartCount, setCartCount] = useState(0)
-    const [cartData, setCartData] = useState()
+    const [latestCartCount, setLatestCartCount] = useState(0)
     const [request, setRequest] = useState("")
-
-    const handleCart = (value) => {
-        setCartCount(value.length);
-        // setCartData(value);
-    };
+    //
+    // const handleCart = (value) => {
+    //     console.log(value)
+    //     setCartCount(value);
+    // };
 
     const handleSearch = (value) => {
-        // console.log("changing")
         setRequest(value);
-        setPage(1)
     };
 
+    const updateCart = (value) => {
+        console.log(value)
+        setLatestCartCount(value)
+    }
+
     const classes = useStyles();
+    console.log(cartCount)
     return (
         <React.Fragment>
             <CssBaseline/>
             <Router>
-                <PrimarySearchAppBar cartCount={cartCount} onChange={handleSearch}/>
+                <PrimarySearchAppBar cartCount={latestCartCount} onChange={handleSearch}/>
                 <main>
                     <Switch>
                         <Route path="/" exact component={() => (
-                            <CardGrid request={request} onChange={handleCart} cards={cards} pageNumber={page}/>)}/>
-                        <Route path="/cart" exact component={() => (<Cart cartCount={cartCount} data={cartData}/>)}/>
+                            <CardGrid request={request} onChange={(value) => setCartCount(value)}/>)}/>
+                        <Route path="/cart" exact
+                               component={() => (<Cart cartCount={cartCount}/>)}/>
                     </Switch>
                 </main>
             </Router>

@@ -89,7 +89,7 @@ export default function PrimarySearchAppBar(props) {
                                     input: classes.inputInput,
                                 }}
                                 inputProps={{'aria-label': 'search'}}
-                                onChange={handleChange}
+                                onChange={handleChange.bind(this)}
                             />
                         </Link>
                     </div>
