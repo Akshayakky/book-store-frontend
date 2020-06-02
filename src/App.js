@@ -43,7 +43,9 @@ export default function () {
                 <PrimarySearchAppBar cartCount={latestCartCount} onChange={handleSearch}/>
                 <main>
                     <Switch>
-                        <Route path="/" exact component={() => (
+                        <Route path="/ZZ" exact
+                               component={() => (<Login/>)}/>
+                        <Route path="/home" exact component={() => (
                             <CardGrid request={request} onChange={(value) => setCartCount(value)}/>)}/>
                         <Route path="/cart" exact
                                component={() => (<Cart cartCount={cartCount}/>)}/>
