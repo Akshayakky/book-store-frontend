@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         boxShadow: 'none',
         border: "thin solid #d9d9d9",
-        // display:"flex"
     },
     button: {
         width: '50%',
@@ -56,15 +55,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CardGrid(props) {
-    const [bookData, setBookData] = useState()
+    const [bookData, setBookData] = useState();
     const classes = useStyles();
-    const [cart, setCart] = useState(0)
+    const [cart, setCart] = useState([])
     const [page, setPage] = React.useState(1);
+    var addedToCart = true;
 
     const addBook = (value) => {
         axios.post('http://localhost:8080/cart/add-book/', {bookId: value, quantity: 1})
             .then((results) => {
-                setCart(cart + 1)
+                setCart(() => cart.concat(results.data))
             });
     }
 
@@ -77,9 +77,21 @@ export default function CardGrid(props) {
         setPage(1);
     }, [props.request]);
 
+    useEffect(() => {
+        axios.get('http://localhost:8080/cart/get-books/')
+            .then((results) => {
+                setCart(() => cart.concat(results.data))
+            });
+        setPage(1);
+    }, []);
+
     const handleChange = (event, value) => {
         setPage(value);
     };
+
+    const updateCart = () => {
+        addedToCart = false
+    }
 
     var cards = [];
     const itemsPerPage = 12;
@@ -98,22 +110,37 @@ export default function CardGrid(props) {
             <Container className={classes.cardGrid} maxWidth="md">
                 <Grid container spacing={3}>
                     {cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
+                        {addedToCart = true}
                         <Card className={classes.card}>
-                            <CardData num={card - 1} data={bookData}/>
+                            {
+                                cart.map(num => {
+                                    if (num.bookId === bookData[card - 1].bookId)
+                                        updateCart();
+                                })}
+                            <CardData book={bookData[card - 1]}/>
                             <CardActions>
-                                <MuiThemeProvider theme={theme}>
-                                    <Button size={"large"} variant={"contained"} color={"secondary"} className={classes
-                                        .button} onClick={addBook.bind(this, card)}>
+                                {addedToCart ?
+                                    <MuiThemeProvider theme={theme}>
+                                        <Button size={"large"} variant={"contained"} color={"secondary"}
+                                                className={classes
+                                                    .button} onClick={addBook.bind(this, bookData[card - 1].bookId)}>
+                                            <Typography variant={"caption"}>
+                                                ADD TO BAG
+                                            </Typography>
+                                        </Button>
+                                        <Button size={"large"} className={classes.button}>
+                                            <Typography variant={"caption"}>
+                                                WISHLIST
+                                            </Typography>
+                                        </Button>
+                                    </MuiThemeProvider>
+                                    :
+                                    <button className={classes.button} style={{width: "100%", backgroundColor: "blue"}}>
                                         <Typography variant={"caption"}>
-                                            ADD TO BAG
+                                            ADDED TO BAG
                                         </Typography>
-                                    </Button>
-                                    <Button size={"large"} className={classes.button}>
-                                        <Typography variant={"caption"}>
-                                            WISHLIST
-                                        </Typography>
-                                    </Button>
-                                </MuiThemeProvider>
+                                    </button>
+                                }
                             </CardActions>
                         </Card>
                     </Grid>)}

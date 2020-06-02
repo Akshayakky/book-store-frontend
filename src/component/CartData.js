@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CardData(props) {
+export default function CartData(props) {
     const classes = useStyles();
     let bookTitle;
     let bookAuthor;

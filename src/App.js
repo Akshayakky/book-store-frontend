@@ -3,6 +3,7 @@ import PrimarySearchAppBar from './component/AppBar';
 import Cart from './component/Cart'
 import CardGrid from './component/CardGrid'
 import Login from './component/Login'
+import CustomerDetails from './component/CustomerDetails'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
@@ -50,6 +51,8 @@ export default function () {
                             <CardGrid request={request} onChange={(value) => setCartCount(value)}/>)}/>
                         <Route path="/cart" exact
                                component={() => (<Cart cartCount={cartCount}/>)}/>
+                        <Route path="/customer" exact
+                               component={() => (<CustomerDetails/>)}/>
                     </Switch>
                 </main>
             </Router>
