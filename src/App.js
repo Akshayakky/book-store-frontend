@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import PrimarySearchAppBar from './component/AppBar';
 import Cart from './component/Cart'
 import CardGrid from './component/CardGrid'
+import Login from './component/Login'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
@@ -43,7 +44,7 @@ export default function () {
                 <PrimarySearchAppBar cartCount={latestCartCount} onChange={handleSearch}/>
                 <main>
                     <Switch>
-                        <Route path="/ZZ" exact
+                        <Route path="/" exact
                                component={() => (<Login/>)}/>
                         <Route path="/home" exact component={() => (
                             <CardGrid request={request} onChange={(value) => setCartCount(value)}/>)}/>
