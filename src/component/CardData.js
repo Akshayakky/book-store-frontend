@@ -18,10 +18,6 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#f2f2f2',
         boxShadow: 'none',
         borderRadius: 0,
-        // minWidth:150,
-        // maxWidth:50
-        // display: "flex"
-        // height:200,
         [theme.breakpoints.up('md')]: {
             minWidth: 150,
         },
@@ -29,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     cardContent: {
         height: 70,
         flexGrow: 0,
-        // marginLeft:0
     },
     price: {
         padding: 0,
@@ -73,9 +68,16 @@ export default function CardData(props) {
                 {props.page === "cart" ?
                     <div>
                         <br/>
-                        <input style={{width: "50px", marginRight: 30}} type="number" defaultValue={1}
-                               min={1}></input>
-                        <button onClick={props.onChange}> Remove</button>
+                        <input defaultValue={props.quantity} onChange={props.updateQuantity}
+                               style={{width: "50px", marginRight: 30}} type="number" min={1}></input>
+                        <button onClick={props.onChange} style={{borderWidth: 1}}>Remove</button>
+                    </div>
+                    : <></>
+                }
+                {props.page === "summary" ?
+                    <div>
+                        <br/>
+                        ({props.quantity})
                     </div>
                     : <></>
                 }

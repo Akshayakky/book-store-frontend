@@ -9,6 +9,9 @@ export default function Cart() {
     const [cartData, setCartData] = useState()
     const [bookData, setBookData] = useState()
     const [trick, setTrick] = useState(true)
+    const [showResults, setShowResults] = React.useState(false)
+    const [showSummary, setShowSummary] = React.useState(false)
+    const [amount, setAmount] = useState(0)
 
     const style = {
         padding: 40,
@@ -23,9 +26,11 @@ export default function Cart() {
     }, [trick])
 
     var result = [];
+    var carts = [];
     if (cartData !== undefined) {
         for (let i = 0; i < cartData.data.length; i++) {
             (result.push(cartData.data[i].bookId))
+            carts.push(cartData.data[i])
         }
     }
 
@@ -35,11 +40,6 @@ export default function Cart() {
         })
     }, [cartData])
 
-    const butt = <div style={{marginLeft: 110}}>
-        <input style={{width: "50px", marginRight: 30}} type="number" defaultValue={1}
-               min={1}></input>
-        <button> Remove</button>
-    </div>
     const useStyles = makeStyles((theme) => ({
         cardGrid: {
             padding: 0,
@@ -51,13 +51,16 @@ export default function Cart() {
             boxShadow: 'none',
             display: "flex"
         },
-        button: {
-            width: '50%',
-            border: "thin solid #d5cccc",
-            padding: 0,
-            boxShadow: 'none',
+        buttons: {
+            backgroundColor: "blue",
+            borderRadius: 0,
             height: 30,
-            textAlign: 'center',
+            [theme.breakpoints.up('sm')]: {
+                marginLeft: '78%',
+            },
+            marginBottom: '5%',
+            width: 115,
+            border: "none"
         },
         root: {
             '& > *': {
@@ -90,8 +93,15 @@ export default function Cart() {
         }
     }
 
+    const updateQuantity = (quantity, bookId) => {
+        axios.put("http://localhost:8080/cart/update-book-quantity/" + quantity + "?book_id=" + bookId).then((results) => {
+            setTrick(!trick)
+        })
+    }
+
     const classes = useStyles()
 
+    let sum = 0
     return (
         <>
             <div className={classes.cart}>
@@ -99,16 +109,62 @@ export default function Cart() {
                     My Cart({result.length})
                 </Typography>
                 {bookData !== undefined ?
-                    result.map((cart, i) =>
+                    carts.map((cart, i) =>
                         <div key={i} style={{height: "100%", width: "100%"}}>
-                            <CardData book={bookData[i]} onChange={() => removeBook(cart)} backgroundcolor="none"
+                            <CardData quantity={cart.quantity} updateQuantity={(event) => {
+                                updateQuantity(event.target.value, cart.bookId)
+                            }} book={bookData[i]} onChange={() => removeBook(cart.bookId)} backgroundcolor="none"
                                       style={style} display="flex" page="cart"/>
                         </div>
                     )
                     : <h1> Data Not Available </h1>
                 }
+                {!showResults && result.length > 0 ?
+                    <button onClick={() => {
+                        setShowResults(true)
+                    }} className={classes.buttons}>
+                        PLACE ORDER
+                    </button>
+                    : null
+                }
             </div>
-            <CustomerDetails className={classes.cart}/>
+            {showResults ?
+                <div>
+                    <CustomerDetails onClick={() => {
+                        setShowSummary(true)
+                    }}/>
+                </div>
+                : null
+            }
+
+            {showSummary ?
+                <div className={classes.cart}>
+                    <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                        Order Summary
+                    </Typography>
+                    {bookData !== undefined ?
+                        carts.map((cart, i) =>
+                            <div key={i} style={{height: "100%", width: "100%"}}>
+                                <CardData quantity={cart.quantity} book={bookData[i]}
+                                          onChange={() => removeBook(cart.bookId)} backgroundcolor="none"
+                                          style={style} display="flex" page="summary"/>
+                                <div style={{display: "none"}}>
+                                    {sum = sum + cart.quantity * bookData[i].bookPrice}
+                                </div>
+                            </div>
+                        )
+                        : <h1> Data Not Available </h1>
+                    }
+                    <div style={{}}>
+                        <Typography variant="h4" color="inherit" noWrap className={classes.title}>
+                            Total Amount<br/>
+                            Rs. {sum}
+                        </Typography>
+                    </div>
+                    <button className={classes.buttons}>CHECKOUT</button>
+                </div>
+                : null
+            }
         </>
     )
 }

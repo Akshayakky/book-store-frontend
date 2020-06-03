@@ -8,12 +8,10 @@ import Radio from "@material-ui/core/Radio";
 import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button"
 import {useFormik} from "formik";
 import Axios from "axios";
 
 const useStyle = makeStyles((theme) => ({
-
     layout: {
         margin: "50px",
         [theme.breakpoints.up('md')]: {
@@ -37,17 +35,25 @@ const useStyle = makeStyles((theme) => ({
         padding: theme.spacing(1, 0, 2),
     },
     buttons: {
-        display: 'flex',
-        justifyContent: 'flex-end',
+        backgroundColor: "blue",
+        borderRadius: 0,
+        height: 30,
+        [theme.breakpoints.up('md')]: {
+            marginLeft: '80%',
+        },
+        marginBottom: '2%',
+        width: 115,
+        border: "none"
     },
     button: {
         marginTop: theme.spacing(3),
         marginLeft: theme.spacing(1),
+        backgroundColor: "blue"
     },
 }));
 
 
-export default function CustomerDetails() {
+export default function CustomerDetails(props) {
     const [edit, setEdit] = useState(false)
     const [customerId, setCustomerId] = useState()
     const [update, setUpdate] = useState(false)
@@ -67,12 +73,14 @@ export default function CustomerDetails() {
                 Axios.put('http://localhost:8080/customer/update-customer/' + customerId, formik.values)
                     .then(response => {
                         console.log("Done")
+                        props.onClick()
                     })
                 setEdit(true)
             } else {
                 Axios.post('http://localhost:8080/customer/add-customer', formik.values)
                     .then(response => {
                         setCustomerId(response.data.id)
+                        props.onClick()
                     })
                 setUpdate(true)
                 setEdit(true)
@@ -101,7 +109,8 @@ export default function CustomerDetails() {
             <main className={classes.layout}>
                 <Paper className={classes.paper} variant="outlined">
                     <React.Fragment>
-                        <Typography className={classes.heading}
+                        <Typography color="inherit"
+                                    noWrap
                                     variant="h6"
                                     gutterBottom
                                     align="left"
@@ -237,16 +246,12 @@ export default function CustomerDetails() {
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
-                        <div className={classes.buttons}>
-                            <Button
-                                disabled={edit}
-                                type="submit"
-                                variant="outlined"
-                                color="primary"
-                            >
-                                Continue
-                            </Button>
-                        </div>
+                        {!edit ?
+                            <button type="submit" className={classes.buttons}>
+                                CONTINUE
+                            </button>
+                            : null
+                        }
                     </React.Fragment>
                 </Paper>
             </main>
