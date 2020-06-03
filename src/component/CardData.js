@@ -18,11 +18,18 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#f2f2f2',
         boxShadow: 'none',
         borderRadius: 0,
+        // minWidth:150,
+        // maxWidth:50
         // display: "flex"
+        // height:200,
+        [theme.breakpoints.up('md')]: {
+            minWidth: 150,
+        },
     },
     cardContent: {
         height: 70,
         flexGrow: 0,
+        // marginLeft:0
     },
     price: {
         padding: 0,
@@ -44,12 +51,13 @@ export default function CardData(props) {
         bookImage = props.book.bookImage
     }
     return (
-        <div>
-            <Card className={classes.mediaContainer}>
+        <div style={{display: props.display}}>
+            <Card className={classes.mediaContainer} style={{background: props.backgroundcolor}}>
                 <CardMedia
                     className={classes.cardMedia}
                     image={bookImage}
                     title="Image title"
+                    style={props.style}
                 />
             </Card>
             <CardContent className={classes.cardContent}>
@@ -62,6 +70,15 @@ export default function CardData(props) {
                 <Typography variant={"caption"} className={classes.price}>
                     {bookPrice}
                 </Typography>
+                {props.page === "cart" ?
+                    <div>
+                        <br/>
+                        <input style={{width: "50px", marginRight: 30}} type="number" defaultValue={1}
+                               min={1}></input>
+                        <button onClick={props.onChange}> Remove</button>
+                    </div>
+                    : <></>
+                }
             </CardContent>
         </div>
     );

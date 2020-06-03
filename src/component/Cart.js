@@ -1,22 +1,26 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {makeStyles} from "@material-ui/core/styles";
-import Card from '@material-ui/core/Card';
-import Container from "@material-ui/core/Container";
-import {Link} from "react-router-dom";
+import CardData from "./CardData";
 import Typography from "@material-ui/core/Typography";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
+import CustomerDetails from "./CustomerDetails";
 
 export default function Cart() {
     const [cartData, setCartData] = useState()
     const [bookData, setBookData] = useState()
+    const [trick, setTrick] = useState(true)
+
+    const style = {
+        padding: 40,
+        height: 125,
+        width: 75,
+    }
 
     useEffect(() => {
         axios.get("http://localhost:8080/cart/get-books/").then((result) => {
             setCartData(result)
         })
-    }, [])
+    }, [trick])
 
     var result = [];
     if (cartData !== undefined) {
@@ -27,21 +31,25 @@ export default function Cart() {
 
     useEffect(() => {
         axios.get("http://localhost:8080/book/get-books-by-id?ids=" + result).then((result) => {
-            console.log(result)
             setBookData(result.data)
         })
     }, [cartData])
 
-    console.log(bookData)
+    const butt = <div style={{marginLeft: 110}}>
+        <input style={{width: "50px", marginRight: 30}} type="number" defaultValue={1}
+               min={1}></input>
+        <button> Remove</button>
+    </div>
     const useStyles = makeStyles((theme) => ({
         cardGrid: {
-            paddingTop: theme.spacing(2),
-            paddingBottom: theme.spacing(0),
+            padding: 0,
+            margin: 0,
         },
         card: {
             height: '100%',
+            width: 200,
             boxShadow: 'none',
-            display: "flex",
+            display: "flex"
         },
         button: {
             width: '50%',
@@ -50,58 +58,57 @@ export default function Cart() {
             boxShadow: 'none',
             height: 30,
             textAlign: 'center',
-            marginLeft: '50%'
         },
-        cardMedia: {
-            paddingTop: '100%',
+        root: {
+            '& > *': {
+                marginTop: theme.spacing(2),
+                position: 'absolute',
+                left: '50%',
+                transform: 'translate(-50%, -50%)'
+            },
         },
-        mediaContainer: {
-            padding: 100,
+        title: {
+            marginTop: 15,
+            [theme.breakpoints.up('md')]: {
+                marginLeft: theme.spacing(4.5),
+            },
+        },
+        cart: {
+            border: "thin solid #d9d9d9",
+            margin: "50px",
+            [theme.breakpoints.up('md')]: {
+                margin: "50px 200px"
+            }
         }
     }));
+
+    const removeBook = (bookIds) => {
+        if (bookIds !== undefined) {
+            axios.delete("http://localhost:8080/cart/delete-book/" + bookIds).then((results) => {
+                setTrick(!trick)
+            })
+        }
+    }
+
     const classes = useStyles()
+
     return (
         <>
-            <cart style={{padding: 0, margin: 0, border: "thin solid #d9d9d9"}}>
-                {result.map((cart, i) =>
-                    <Container key={i} className={classes.cardGrid} maxWidth="md">
-                        <Card className={classes.card}>
-                            {bookData !== undefined && bookData[i] !== undefined ?
-                                <div style={{display: "flex"}}>
-                                    <Card className={classes.mediaContainer}>
-                                        <CardMedia
-                                            className={classes.cardMedia}
-                                            image={bookData[i].bookImage}
-                                            title="Image title"
-                                        />
-                                    </Card>
-                                    <CardContent className={classes.cardContent}>
-                                        <Typography variant="body2" component="h2">
-                                            {bookData[i].bookTitle}
-                                        </Typography>
-                                        <Typography variant={"caption"} color="textSecondary" display="block">
-                                            {bookData[i].bookAuthor}
-                                        </Typography>
-                                        <Typography variant={"caption"} className={classes.price}>
-                                            {bookData[i].bookPrice}
-                                        </Typography>
-                                    </CardContent>
-                                </div>
-                                :
-                                <h1>Hello </h1>
-                            }
-                        </Card>
-                    </Container>
-                )}
-            </cart>
-
-            <Link to={"/customer"} className={classes.button}>
-                <button>
-                    <Typography variant={"caption"}>
-                        CHECKOUT
-                    </Typography>
-                </button>
-            </Link>
+            <div className={classes.cart}>
+                <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                    My Cart({result.length})
+                </Typography>
+                {bookData !== undefined ?
+                    result.map((cart, i) =>
+                        <div key={i} style={{height: "100%", width: "100%"}}>
+                            <CardData book={bookData[i]} onChange={() => removeBook(cart)} backgroundcolor="none"
+                                      style={style} display="flex" page="cart"/>
+                        </div>
+                    )
+                    : <h1> Data Not Available </h1>
+                }
+            </div>
+            <CustomerDetails className={classes.cart}/>
         </>
     )
 }

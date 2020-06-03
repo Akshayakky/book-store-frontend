@@ -21,23 +21,16 @@ export default function () {
     const [cartCount, setCartCount] = useState(0)
     const [latestCartCount, setLatestCartCount] = useState(0)
     const [request, setRequest] = useState("")
-    //
-    // const handleCart = (value) => {
-    //     console.log(value)
-    //     setCartCount(value);
-    // };
 
     const handleSearch = (value) => {
         setRequest(value);
     };
 
     const updateCart = (value) => {
-        console.log(value)
         setLatestCartCount(value)
     }
 
     const classes = useStyles();
-    console.log(cartCount)
     return (
         <React.Fragment>
             <CssBaseline/>

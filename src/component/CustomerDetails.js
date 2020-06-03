@@ -15,16 +15,15 @@ import Axios from "axios";
 const useStyle = makeStyles((theme) => ({
 
     layout: {
-        width: 'auto',
-        marginLeft: theme.spacing(2),
-        marginRight: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-            width: 700,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-        },
+        margin: "50px",
+        [theme.breakpoints.up('md')]: {
+            margin: "50px 200px"
+        }
     },
     paper: {
+        borderColor: "#d9d9d9",
+        borderRadius: 0,
+        backgroundColor: 'rgba(242, 242, 242,0.09)',
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
         padding: theme.spacing(2),
