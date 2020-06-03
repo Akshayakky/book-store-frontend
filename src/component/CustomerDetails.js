@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -34,8 +34,8 @@ const useStyle = makeStyles((theme) => ({
             padding: theme.spacing(3),
         },
     },
-    stepper: {
-        padding: theme.spacing(3, 0, 5),
+    heading: {
+        padding: theme.spacing(1, 0, 2),
     },
     buttons: {
         display: 'flex',
@@ -49,6 +49,10 @@ const useStyle = makeStyles((theme) => ({
 
 
 export default function CustomerDetails() {
+    const [edit, setEdit] = useState(false)
+    const [customerId, setCustomerId] = useState()
+    const [update, setUpdate] = useState(false)
+
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -57,13 +61,23 @@ export default function CustomerDetails() {
             address: '',
             landmark: '',
             city: '',
-            type: 'work'
+            addressType: 'work'
         },
         onSubmit: values => {
-            Axios.post('http://localhost:8080/customer/add-customer', formik.values)
-                .then(response => {
-                    console.log(response)
-                })
+            if (update) {
+                Axios.put('http://localhost:8080/customer/update-customer/' + customerId, formik.values)
+                    .then(response => {
+                        console.log("Done")
+                    })
+                setEdit(true)
+            } else {
+                Axios.post('http://localhost:8080/customer/add-customer', formik.values)
+                    .then(response => {
+                        setCustomerId(response.data.id)
+                    })
+                setUpdate(true)
+                setEdit(true)
+            }
         },
         validate: values => {
             let error = {}
@@ -78,18 +92,36 @@ export default function CustomerDetails() {
     })
 
     const classes = useStyle();
+
+    function editForm() {
+        setEdit(false)
+    }
+
     return (
         <form onSubmit={formik.handleSubmit}>
             <main className={classes.layout}>
                 <Paper className={classes.paper} variant="outlined">
                     <React.Fragment>
-                        <Typography variant="h6" gutterBottom align="left">
+                        <Typography className={classes.heading}
+                                    variant="h6"
+                                    gutterBottom
+                                    align="left"
+                        >
                             Customer Details
+                        </Typography>
+                        <Typography
+                            align="right"
+                            gutterBottom
+                            style={{cursor: "pointer"}}
+                            onClick={editForm}
+                        >
+                            {edit ? "Edit" : ""}
                         </Typography>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
+                                    disabled={edit}
                                     type="text"
                                     id="name"
                                     name="name"
@@ -98,13 +130,14 @@ export default function CustomerDetails() {
                                     value={formik.values.name}
                                     variant="outlined"
                                     onChange={formik.handleChange}
-
                                 />
                                 {formik.errors.name ? <div>{formik.errors.name}</div> : null}
+
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
+                                    disabled={edit}
                                     type="number"
                                     id="phoneNumber"
                                     name="phoneNumber"
@@ -114,11 +147,11 @@ export default function CustomerDetails() {
                                     onChange={formik.handleChange}
                                 />
                                 {formik.errors.phoneNumber ? <div>{formik.errors.phoneNumber}</div> : null}
-
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
+                                    disabled={edit}
                                     type="number"
                                     id="pincode"
                                     name="pinCode"
@@ -133,6 +166,7 @@ export default function CustomerDetails() {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
+                                    disabled={edit}
                                     id="locality"
                                     name="locality"
                                     label="Locality"
@@ -146,6 +180,7 @@ export default function CustomerDetails() {
                             <Grid item xs={12}>
                                 <TextField
                                     required
+                                    disabled={edit}
                                     id="address"
                                     name="address"
                                     label="Address"
@@ -161,6 +196,7 @@ export default function CustomerDetails() {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
+                                    disabled={edit}
                                     id="city"
                                     name="city"
                                     label="City"
@@ -174,6 +210,7 @@ export default function CustomerDetails() {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
+                                    disabled={edit}
                                     id="landmark"
                                     name="landmark"
                                     label="Landmark"
@@ -190,18 +227,20 @@ export default function CustomerDetails() {
                                 </Typography>
                             </Grid>
                             <FormControl component="fieldset">
-                                <RadioGroup name="type" value={formik.values.type} onChange={formik.handleChange}>
+                                <RadioGroup name="addressType" value={formik.values.addressType}
+                                            onChange={formik.handleChange}>
                                     <div>
-                                        <FormControlLabel value="work" control={<Radio/>} label="Work"/>
-                                        <FormControlLabel value="home" control={<Radio/>} label="Home"/>
-                                        <FormControlLabel value="other" control={<Radio/>} label="Other"/>
+                                        <FormControlLabel disabled={edit} value="work" control={<Radio/>} label="Work"/>
+                                        <FormControlLabel disabled={edit} value="home" control={<Radio/>} label="Home"/>
+                                        <FormControlLabel disabled={edit} value="other" control={<Radio/>}
+                                                          label="Other"/>
                                     </div>
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
                         <div className={classes.buttons}>
-
                             <Button
+                                disabled={edit}
                                 type="submit"
                                 variant="outlined"
                                 color="primary"
