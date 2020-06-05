@@ -107,7 +107,7 @@ export default function CustomerDetails(props) {
     return (
         <form onSubmit={formik.handleSubmit}>
             <main className={classes.layout}>
-                <Paper className={classes.paper} variant="outlined">
+                <Paper className={classes.paper} variant="outlined" square>
                     <React.Fragment>
                         <Typography color="inherit"
                                     noWrap
@@ -125,126 +125,144 @@ export default function CustomerDetails(props) {
                         >
                             {edit ? "Edit" : ""}
                         </Typography>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    disabled={edit}
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    label="Full Name"
-                                    fullWidth
-                                    value={formik.values.name}
-                                    variant="outlined"
-                                    onChange={formik.handleChange}
-                                />
-                                {formik.errors.name ? <div>{formik.errors.name}</div> : null}
+                        <Grid item xs={12} sm={9}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        disabled={edit}
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        label="Full Name"
+                                        fullWidth
+                                        value={formik.values.name}
+                                        variant="outlined"
+                                        onChange={formik.handleChange}
+                                        size="small"
+                                        margin="dense"
+                                    />
+                                    {formik.errors.name ? <div>{formik.errors.name}</div> : null}
 
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        disabled={edit}
+                                        type="number"
+                                        id="phoneNumber"
+                                        name="phoneNumber"
+                                        label="Phone Number"
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={formik.handleChange}
+                                        size="small"
+                                        margin="dense"
+                                    />
+                                    {formik.errors.phoneNumber ? <div>{formik.errors.phoneNumber}</div> : null}
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        disabled={edit}
+                                        type="number"
+                                        id="pincode"
+                                        name="pinCode"
+                                        label="Pincode"
+                                        value={formik.values.pinCode}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={formik.handleChange}
+                                        size="small"
+                                        margin="dense"
+                                    />
+                                    {formik.errors.pincode ? <div>{formik.errors.pincode}</div> : null}
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        disabled={edit}
+                                        id="locality"
+                                        name="locality"
+                                        label="Locality"
+                                        value={formik.values.locality}
+                                        fullWidth
+                                        autoComplete="locality"
+                                        variant="outlined"
+                                        onChange={formik.handleChange}
+                                        size="small"
+                                        margin="dense"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        disabled={edit}
+                                        id="address"
+                                        name="address"
+                                        label="Address"
+                                        value={formik.values.address}
+                                        fullWidth
+                                        multiline
+                                        rows={2}
+                                        autoComplete="shipping address"
+                                        variant="outlined"
+                                        onChange={formik.handleChange}
+                                        size="small"
+                                        margin="dense"
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        disabled={edit}
+                                        id="city"
+                                        name="city"
+                                        label="City"
+                                        value={formik.values.city}
+                                        fullWidth
+                                        autoComplete="shipping address-city"
+                                        variant="outlined"
+                                        onChange={formik.handleChange}
+                                        size="small"
+                                        margin="dense"
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        disabled={edit}
+                                        id="landmark"
+                                        name="landmark"
+                                        label="Landmark"
+                                        value={formik.values.landmark}
+                                        fullWidth
+                                        autoComplete="address-landmark"
+                                        variant="outlined"
+                                        onChange={formik.handleChange}
+                                        size="small"
+                                        margin="dense"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography align="left">
+                                        Type
+                                    </Typography>
+                                </Grid>
+                                <FormControl component="fieldset">
+                                    <RadioGroup name="addressType" value={formik.values.addressType}
+                                                onChange={formik.handleChange}>
+                                        <div>
+                                            <FormControlLabel disabled={edit} value="work" control={<Radio/>}
+                                                              label="Work"/>
+                                            <FormControlLabel disabled={edit} value="home" control={<Radio/>}
+                                                              label="Home"/>
+                                            <FormControlLabel disabled={edit} value="other" control={<Radio/>}
+                                                              label="Other"/>
+                                        </div>
+                                    </RadioGroup>
+                                </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    disabled={edit}
-                                    type="number"
-                                    id="phoneNumber"
-                                    name="phoneNumber"
-                                    label="Phone Number"
-                                    fullWidth
-                                    variant="outlined"
-                                    onChange={formik.handleChange}
-                                />
-                                {formik.errors.phoneNumber ? <div>{formik.errors.phoneNumber}</div> : null}
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    disabled={edit}
-                                    type="number"
-                                    id="pincode"
-                                    name="pinCode"
-                                    label="Pincode"
-                                    value={formik.values.pinCode}
-                                    fullWidth
-                                    variant="outlined"
-                                    onChange={formik.handleChange}
-                                />
-                                {formik.errors.pincode ? <div>{formik.errors.pincode}</div> : null}
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    disabled={edit}
-                                    id="locality"
-                                    name="locality"
-                                    label="Locality"
-                                    value={formik.values.locality}
-                                    fullWidth
-                                    autoComplete="locality"
-                                    variant="outlined"
-                                    onChange={formik.handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    disabled={edit}
-                                    id="address"
-                                    name="address"
-                                    label="Address"
-                                    value={formik.values.address}
-                                    fullWidth
-                                    multiline
-                                    rows={2}
-                                    autoComplete="shipping address"
-                                    variant="outlined"
-                                    onChange={formik.handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    disabled={edit}
-                                    id="city"
-                                    name="city"
-                                    label="City"
-                                    value={formik.values.city}
-                                    fullWidth
-                                    autoComplete="shipping address-city"
-                                    variant="outlined"
-                                    onChange={formik.handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    disabled={edit}
-                                    id="landmark"
-                                    name="landmark"
-                                    label="Landmark"
-                                    value={formik.values.landmark}
-                                    fullWidth
-                                    autoComplete="address-landmark"
-                                    variant="outlined"
-                                    onChange={formik.handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography align="left">
-                                    Type
-                                </Typography>
-                            </Grid>
-                            <FormControl component="fieldset">
-                                <RadioGroup name="addressType" value={formik.values.addressType}
-                                            onChange={formik.handleChange}>
-                                    <div>
-                                        <FormControlLabel disabled={edit} value="work" control={<Radio/>} label="Work"/>
-                                        <FormControlLabel disabled={edit} value="home" control={<Radio/>} label="Home"/>
-                                        <FormControlLabel disabled={edit} value="other" control={<Radio/>}
-                                                          label="Other"/>
-                                    </div>
-                                </RadioGroup>
-                            </FormControl>
                         </Grid>
                         {!edit ?
                             <button type="submit" className={classes.buttons}>
