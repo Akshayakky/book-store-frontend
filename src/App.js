@@ -23,6 +23,7 @@ export default function () {
     const [cartCount, setCartCount] = useState(0)
     const [latestCartCount, setLatestCartCount] = useState(0)
     const [request, setRequest] = useState("")
+    const [token, setToken] = useState("")
 
     const handleSearch = (value) => {
         setRequest(value);
@@ -32,6 +33,7 @@ export default function () {
         setLatestCartCount(value)
     }
 
+    console.log(token)
     const classes = useStyles();
     return (
         <React.Fragment>
@@ -43,15 +45,15 @@ export default function () {
                         <Route path="/" exact
                                component={() => (<SignUp/>)}/>
                         <Route path="/login" exact
-                               component={() => (<Login/>)}/>
+                               component={() => (<Login setToken={(token) => setToken(token)}/>)}/>
                         <Route path="/home" exact component={() => (
-                            <CardGrid request={request} onChange={(value) => setCartCount(value)}/>)}/>
+                            <CardGrid token={token} request={request} onChange={(value) => setCartCount(value)}/>)}/>
                         <Route path="/cart" exact
-                               component={() => (<Cart cartCount={cartCount}/>)}/>
+                               component={() => (<Cart token={token} cartCount={cartCount}/>)}/>
                         <Route path="/customer" exact
-                               component={() => (<CustomerDetails/>)}/>
+                               component={() => (<CustomerDetails token={token}/>)}/>
                         <Route path="/order-confirm" exact
-                               component={() => (<OrderConfirm/>)}/>
+                               component={() => (<OrderConfirm token={token}/>)}/>
                     </Switch>
                 </main>
             </Router>

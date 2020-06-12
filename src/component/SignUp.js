@@ -51,8 +51,14 @@ const validationSchema = Yup.object().shape({
 })
 
 
-export default function SignUp() {
+export default function SignUp(props) {
     const [visible, setVisible] = useState(false)
+    const [register, setRegister] = useState();
+    const headers = {
+        headers: {
+            "Authorization": "Bearer " + props.token
+        }
+    }
     const {handleSubmit, handleChange, values, errors} = useFormik({
         initialValues: {
             firstName: "",
@@ -64,13 +70,22 @@ export default function SignUp() {
         validationSchema,
         onSubmit(values) {
             Axios.all([
-                Axios.post("http://localhost:8080/user/register", values),
-                Axios.get("http://localhost:8080/mail-sender/send-mail/" + values.email + "/" + values.firstName)
+                Axios.post("http://localhost:8080/user/register", values, headers),
+                Axios.post("http://localhost:8080/mail-sender/send-mail", {
+                    name: values.firstName,
+                    email: values.email
+                }, headers)
             ])
                 .then(Axios.spread((registration, email) => {
                     console.log(registration.data)
                     console.log(email.data)
+                    setRegister(registration.data)
                 }))
+                .catch(error => {
+                    // if (error.response) {
+                    setRegister(error.response.data + '!');
+                    // }
+                })
         }
     })
 
@@ -85,6 +100,9 @@ export default function SignUp() {
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign up
+                </Typography>
+                <Typography component="h4" variant="h5" color={"secondary"}>
+                    {register}
                 </Typography>
                 <form className={classes.form} onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
@@ -179,11 +197,12 @@ export default function SignUp() {
                     <Grid container justify="flex-end">
                         <Grid item>
                             <Link href="/login" variant="body2">
-                                Already have an account? Sign i
+                                Already have an account? Sign in
                             </Link>
                         </Grid>
                     </Grid>
                 </form>
+                <h1></h1>{}
             </Paper>
         </Container>
     );

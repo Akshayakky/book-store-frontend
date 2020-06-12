@@ -59,17 +59,24 @@ export default function CardGrid(props) {
     const classes = useStyles();
     const [cart, setCart] = useState([])
     const [page, setPage] = React.useState(1);
+    const headers = {
+        headers: {
+            "Authorization": "Bearer " + props.token
+        }
+    }
+    console.log(props.token)
     var addedToCart = true;
 
     const addBook = (value) => {
-        axios.post('http://localhost:8080/cart/add-book/', {bookId: value, quantity: 1})
+        axios.post('http://localhost:8080/cart/add-book/', {bookId: value, quantity: 1}, headers)
             .then((results) => {
                 setCart(() => cart.concat(results.data))
             });
     }
 
     useEffect(() => {
-        axios.get('http://localhost:8080/book/get-books/' + props.request)
+        console.log(props.token)
+        axios.get('http://localhost:8080/book/get-books/' + props.request, headers)
             .then((results) => {
                 setBookData(results.data);
                 console.log("once")
@@ -78,7 +85,7 @@ export default function CardGrid(props) {
     }, [props.request]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/cart/get-books/')
+        axios.get('http://localhost:8080/cart/get-books/', headers)
             .then((results) => {
                 setCart(() => cart.concat(results.data))
             });

@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import CustomerDetails from "./CustomerDetails";
 import {Link} from "react-router-dom";
 
-export default function Cart() {
+export default function Cart(props) {
     const [cartData, setCartData] = useState()
     const [bookData, setBookData] = useState()
     const [trick, setTrick] = useState(true)
@@ -20,8 +20,14 @@ export default function Cart() {
         width: 75,
     }
 
+    const headers = {
+        headers: {
+            "Authorization": "Bearer " + props.token
+        }
+    }
+
     useEffect(() => {
-        axios.get("http://localhost:8080/cart/get-books/").then((result) => {
+        axios.get("http://localhost:8080/cart/get-books/", headers).then((result) => {
             setCartData(result)
         })
     }, [trick])
@@ -36,7 +42,7 @@ export default function Cart() {
     }
 
     useEffect(() => {
-        axios.get("http://localhost:8080/book/get-books-by-id?ids=" + result).then((result) => {
+        axios.get("http://localhost:8080/book/get-books-by-id?ids=" + result, headers).then((result) => {
             setBookData(result.data)
         })
     }, [cartData])
@@ -88,20 +94,20 @@ export default function Cart() {
 
     const removeBook = (bookIds) => {
         if (bookIds !== undefined) {
-            axios.delete("http://localhost:8080/cart/delete-book/" + bookIds).then((results) => {
+            axios.delete("http://localhost:8080/cart/delete-book/" + bookIds, headers).then((results) => {
                 setTrick(!trick)
             })
         }
     }
 
     const updateQuantity = (quantity, bookId) => {
-        axios.put("http://localhost:8080/cart/update-book-quantity/" + quantity + "?book_id=" + bookId).then((results) => {
+        axios.put("http://localhost:8080/cart/update-book-quantity/" + quantity + "?book_id=" + bookId, {}, headers).then((results) => {
             setTrick(!trick)
         })
     }
 
     const emptyCart = () => {
-        axios.delete("http://localhost:8080/cart/empty-cart/");
+        axios.delete("http://localhost:8080/cart/empty-cart/", headers);
     }
 
     const classes = useStyles()
@@ -135,7 +141,7 @@ export default function Cart() {
             </div>
             {showResults ?
                 <div>
-                    <CustomerDetails onClick={() => {
+                    <CustomerDetails token={props.token} onClick={() => {
                         setShowSummary(true)
                     }}/>
                 </div>

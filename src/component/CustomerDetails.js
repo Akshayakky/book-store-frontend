@@ -57,7 +57,11 @@ export default function CustomerDetails(props) {
     const [edit, setEdit] = useState(false)
     const [customerId, setCustomerId] = useState()
     const [update, setUpdate] = useState(false)
-
+    const headers = {
+        headers: {
+            "Authorization": "Bearer " + props.token
+        }
+    }
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -70,14 +74,14 @@ export default function CustomerDetails(props) {
         },
         onSubmit: values => {
             if (update) {
-                Axios.put('http://localhost:8080/customer/update-customer/' + customerId, formik.values)
+                Axios.put('http://localhost:8080/customer/update-customer/' + customerId, formik.values, headers)
                     .then(response => {
                         console.log("Done")
                         props.onClick()
                     })
                 setEdit(true)
             } else {
-                Axios.post('http://localhost:8080/customer/add-customer', formik.values)
+                Axios.post('http://localhost:8080/customer/add-customer', formik.values, headers)
                     .then(response => {
                         setCustomerId(response.data.id)
                         props.onClick()
@@ -99,6 +103,8 @@ export default function CustomerDetails(props) {
     })
 
     const classes = useStyle();
+
+    console.log(formik.values)
 
     function editForm() {
         setEdit(false)
