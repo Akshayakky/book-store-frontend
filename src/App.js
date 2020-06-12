@@ -9,6 +9,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import OrderConfirm from "./component/OrderConfirm";
 
 const useStyles = makeStyles((theme) => ({
     footer: {
@@ -49,6 +50,8 @@ export default function () {
                                component={() => (<Cart cartCount={cartCount}/>)}/>
                         <Route path="/customer" exact
                                component={() => (<CustomerDetails/>)}/>
+                        <Route path="/order-confirm" exact
+                               component={() => (<OrderConfirm/>)}/>
                     </Switch>
                 </main>
             </Router>

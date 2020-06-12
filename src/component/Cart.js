@@ -4,6 +4,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import CardData from "./CardData";
 import Typography from "@material-ui/core/Typography";
 import CustomerDetails from "./CustomerDetails";
+import {Link} from "react-router-dom";
 
 export default function Cart() {
     const [cartData, setCartData] = useState()
@@ -99,6 +100,10 @@ export default function Cart() {
         })
     }
 
+    const emptyCart = () => {
+        axios.delete("http://localhost:8080/cart/empty-cart/");
+    }
+
     const classes = useStyles()
 
     let sum = 0
@@ -161,7 +166,9 @@ export default function Cart() {
                             Rs. {sum}
                         </Typography>
                     </div>
-                    <button className={classes.buttons}>CHECKOUT</button>
+                    <Link to={"/order-confirm"}>
+                        <button className={classes.buttons} onClick={emptyCart}>CHECKOUT</button>
+                    </Link>
                 </div>
                 : null
             }

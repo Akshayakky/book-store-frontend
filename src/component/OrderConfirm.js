@@ -8,6 +8,7 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableContainer from "@material-ui/core/TableContainer";
 import Button from "@material-ui/core/Button";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
 
@@ -71,12 +72,14 @@ export default function OrderConfirm() {
                     </tbody>
                 </Table>
             </TableContainer>
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleClick}
-            >
-                Continue Shopping</Button>
+            <Link to={"/home"}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleClick}
+                >
+                    Continue Shopping</Button>
+            </Link>
         </div>
     );
 }
