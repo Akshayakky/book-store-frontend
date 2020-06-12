@@ -3,6 +3,7 @@ import PrimarySearchAppBar from './component/AppBar';
 import Cart from './component/Cart'
 import CardGrid from './component/CardGrid'
 import Login from './component/Login'
+import SignUp from './component/SignUp'
 import CustomerDetails from './component/CustomerDetails'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -39,6 +40,8 @@ export default function () {
                 <main>
                     <Switch>
                         <Route path="/" exact
+                               component={() => (<SignUp/>)}/>
+                        <Route path="/login" exact
                                component={() => (<Login/>)}/>
                         <Route path="/home" exact component={() => (
                             <CardGrid request={request} onChange={(value) => setCartCount(value)}/>)}/>
