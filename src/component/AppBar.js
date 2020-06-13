@@ -71,7 +71,7 @@ export default function PrimarySearchAppBar(props) {
         <div className={classes.grow}>
             <AppBar position="static" style={{background: '#990033'}}>
                 <Toolbar>
-                    <Link to={"/"}>
+                    <Link to={"/"} style={{color:"white",style:"none"}}>
                         <MenuBookIcon className={classes.bookIcon}/>
                     </Link>
                     <Typography className={classes.title} variant="h6" noWrap>
@@ -81,7 +81,7 @@ export default function PrimarySearchAppBar(props) {
                         <div className={classes.searchIcon}>
                             <SearchIcon/>
                         </div>
-                        <Link to="/">
+                        {/*<Link to="/">*/}
                             <InputBase
                                 placeholder="Search…"
                                 classes={{
@@ -91,13 +91,13 @@ export default function PrimarySearchAppBar(props) {
                                 inputProps={{'aria-label': 'search'}}
                                 onChange={handleChange.bind(this)}
                             />
-                        </Link>
+                        {/*</Link>*/}
                     </div>
                     <div className={classes.grow}/>
                     <div>
                         <IconButton aria-label="show 4 new mails" color="inherit">
                             <Badge badgeContent={props.cartCount} color="secondary">
-                                <Link to={"/cart"}>
+                                <Link to={"/cart"} style={{color:"white",style:"none"}}>
                                     <ShoppingCartIcon/>
                                 </Link>
                             </Badge>

@@ -31,7 +31,16 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: 'none',
         border: "thin solid #d9d9d9",
     },
-    button: {
+    addButton: {
+        width: '50%',
+        border: "thin solid #d5cccc",
+        padding: 0,
+        boxShadow: 'none',
+        height: 30,
+        textAlign: 'center',
+        backgroundColor: "#b3003b"
+    },
+    wishlistButton : {
         width: '50%',
         border: "thin solid #d5cccc",
         padding: 0,
@@ -138,20 +147,21 @@ export default function CardGrid(props) {
                                         {console.log("props.token" + props.token)}
                                         {token === "" ?
 
-                                            <Button size={"large"} variant={"contained"} color={"secondary"}
-                                                    className={classes
-                                                        .button}
-                                                    onClick={addBook.bind(this, bookData[card - 1].bookId)}>
-                                                <Link to={"/login"}>
+                                                <Button size={"large"} variant={"contained"} color={"secondary"}
+                                                        className={classes
+                                                            .addButton}
+                                                        onClick={addBook.bind(this, bookData[card - 1].bookId)}>
+                                                    <Link to="/login" style={{color:"white", textDecoration: "none"}}>
                                                     <Typography variant={"caption"}>
                                                         ADD TO BAG
                                                     </Typography>
-                                                </Link>
-                                            </Button>
+                                                    </Link>
+                                                </Button>
+
                                             :
                                             <Button size={"large"} variant={"contained"} color={"secondary"}
                                                     className={classes
-                                                        .button}
+                                                        .addButton}
                                                     onClick={addBook.bind(this, bookData[card - 1].bookId)}>
                                                 <Typography variant={"caption"}>
                                                     ADD TO BAG
@@ -159,14 +169,14 @@ export default function CardGrid(props) {
                                             </Button>
 
                                         }
-                                        <Button size={"large"} className={classes.button}>
-                                            <Typography variant={"caption"}>
+                                        <Button size={"large"} className={classes.wishlistButton}>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <Typography variant={"caption"}>
                                                 WISHLIST
                                             </Typography>
                                         </Button>
                                     </MuiThemeProvider>
                                     :
-                                    <button className={classes.button} style={{width: "100%", backgroundColor: "blue"}}>
+                                    <button className={classes.addButton} style={{width: "100%", backgroundColor: "blue"}}>
                                         <Typography variant={"caption"}>
                                             ADDED TO BAG
                                         </Typography>

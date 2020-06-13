@@ -39,11 +39,13 @@ export default function CardData(props) {
     let bookAuthor;
     let bookPrice;
     let bookImage;
+    let bookDescription;
     if (props.book !== undefined) {
         bookAuthor = props.book.bookAuthor
         bookTitle = props.book.bookTitle
         bookPrice = "Rs. " + props.book.bookPrice
         bookImage = props.book.bookImage
+        bookDescription = props.book.bookDescription
     }
     return (
         <div style={{display: props.display}}>
@@ -51,7 +53,7 @@ export default function CardData(props) {
                 <CardMedia
                     className={classes.cardMedia}
                     image={bookImage}
-                    title="Image title"
+                    title={bookDescription}
                     style={props.style}
                 />
             </Card>
