@@ -10,6 +10,7 @@ import Container from '@material-ui/core/Container';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {MuiThemeProvider} from "@material-ui/core";
 import axios from "axios";
+import {Link} from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 
 const theme = createMuiTheme({
@@ -59,6 +60,7 @@ export default function CardGrid(props) {
     const classes = useStyles();
     const [cart, setCart] = useState([])
     const [page, setPage] = React.useState(1);
+    const [token, setToken] = React.useState();
     const headers = {
         headers: {
             "Authorization": "Bearer " + props.token
@@ -76,7 +78,7 @@ export default function CardGrid(props) {
 
     useEffect(() => {
         console.log(props.token)
-        axios.get('http://localhost:8080/book/get-books/' + props.request, headers)
+        axios.get('http://localhost:8080/book/get-books/' + props.request)
             .then((results) => {
                 setBookData(results.data);
                 console.log("once")
@@ -84,6 +86,11 @@ export default function CardGrid(props) {
         setPage(1);
     }, [props.request]);
 
+    useEffect(() => {
+        setToken(props.token)
+    }, [props.token]);
+
+    console.log(token)
     useEffect(() => {
         axios.get('http://localhost:8080/cart/get-books/', headers)
             .then((results) => {
@@ -128,13 +135,30 @@ export default function CardGrid(props) {
                             <CardActions>
                                 {addedToCart ?
                                     <MuiThemeProvider theme={theme}>
-                                        <Button size={"large"} variant={"contained"} color={"secondary"}
-                                                className={classes
-                                                    .button} onClick={addBook.bind(this, bookData[card - 1].bookId)}>
-                                            <Typography variant={"caption"}>
-                                                ADD TO BAG
-                                            </Typography>
-                                        </Button>
+                                        {console.log("props.token" + props.token)}
+                                        {token === "" ?
+
+                                            <Button size={"large"} variant={"contained"} color={"secondary"}
+                                                    className={classes
+                                                        .button}
+                                                    onClick={addBook.bind(this, bookData[card - 1].bookId)}>
+                                                <Link to={"/login"}>
+                                                    <Typography variant={"caption"}>
+                                                        ADD TO BAG
+                                                    </Typography>
+                                                </Link>
+                                            </Button>
+                                            :
+                                            <Button size={"large"} variant={"contained"} color={"secondary"}
+                                                    className={classes
+                                                        .button}
+                                                    onClick={addBook.bind(this, bookData[card - 1].bookId)}>
+                                                <Typography variant={"caption"}>
+                                                    ADD TO BAG
+                                                </Typography>
+                                            </Button>
+
+                                        }
                                         <Button size={"large"} className={classes.button}>
                                             <Typography variant={"caption"}>
                                                 WISHLIST

@@ -72,7 +72,7 @@ export default function OrderConfirm() {
                     </tbody>
                 </Table>
             </TableContainer>
-            <Link to={"/home"}>
+            <Link to={"/"}>
                 <Button
                     variant="contained"
                     color="primary"

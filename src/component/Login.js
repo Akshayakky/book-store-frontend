@@ -1,29 +1,149 @@
 import React, {useState} from 'react';
 import {Link} from "react-router-dom";
-import axios from "axios";
+import Axios from "axios";
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import {makeStyles} from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import {useFormik} from "formik";
+import Redirect from "react-router-dom/es/Redirect";
+
+function Copyright() {
+    return (
+        <Typography variant="body2" color="textSecondary" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="https://material-ui.com/">
+                Your Website
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
+
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}));
 
 export default function Login(props) {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [login, setLogin] = useState(false)
-
-    console.log(email + " " + password)
-    const getToken = () => {
-        axios.post("http://localhost:8080/authenticate", {"username": email, "password": password}).then(
-            (response) => {
-                props.setToken(response.data.jwt);
-                console.log(response)
-            }
-        )
-    }
+    const classes = useStyles();
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: ''
+        },
+        onSubmit: values => {
+            console.log("out")
+            Axios.post('http://localhost:8080/authenticate', formik.values)
+                .then(response => {
+                    setLogin(true)
+                    console.log("Done")
+                    props.setToken(response.data.jwt);
+                })
+        }
+    })
 
     return (
-        <div style={{marginTop: "10%", paddingLeft: "35%"}}>
-            <h3>Username : <input type="text" onChange={(event) => setEmail(event.target.value)}/></h3>
-            <h3>Password : <input type="password" onChange={(event) => setPassword(event.target.value)}/></h3><br/>
-            <Link to={"/home"}>
-                <button style={{marginLeft: "20%"}} onClick={getToken}>Log In</button>
-            </Link>
-        </div>
-    )
+        <Container component="main" maxWidth="xs">
+            <CssBaseline/>
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon/>
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
+                <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        value={formik.values.email}
+                        autoComplete="email"
+                        autoFocus
+                        onChange={formik.handleChange}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        value={formik.values.password}
+                        autoComplete="current-password"
+                        onChange={formik.handleChange}
+                    />
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary"/>}
+                        label="Remember me"
+                    />
+                    {/*{login?*/}
+                    {/*<Link type="submit" to={login?"/home":"/login"}>*/}
+                    {login ?
+                        <Redirect to={"/"}/> :
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            // disabled={!login}
+                        >
+                            Sign In
+
+                        </Button>
+                    }
+                    <Grid container>
+                        <Grid item xs>
+                            <Link href="#" variant="body2">
+                                Forgot password?
+                            </Link>
+                        </Grid>
+                        <Grid item>
+                            <Link to={"/"} variant="body2">
+                                {"Don't have an account? Sign Up"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+            <Box mt={8}>
+                <Copyright/>
+            </Box>
+        </Container>
+    );
 }

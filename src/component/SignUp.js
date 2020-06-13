@@ -70,11 +70,11 @@ export default function SignUp(props) {
         validationSchema,
         onSubmit(values) {
             Axios.all([
-                Axios.post("http://localhost:8080/user/register", values, headers),
+                Axios.post("http://localhost:8080/user/register", values),
                 Axios.post("http://localhost:8080/mail-sender/send-mail", {
                     name: values.firstName,
                     email: values.email
-                }, headers)
+                })
             ])
                 .then(Axios.spread((registration, email) => {
                     console.log(registration.data)
