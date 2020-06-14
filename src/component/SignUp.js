@@ -70,8 +70,8 @@ export default function SignUp(props) {
         validationSchema,
         onSubmit(values) {
             Axios.all([
-                Axios.post("http://localhost:8080/user/register", values),
-                Axios.post("http://localhost:8080/mail-sender/send-mail", {
+                Axios.post("http://localhost:8080/user", values),
+                Axios.post("http://localhost:8080/mail-sender", {
                     name: values.firstName,
                     email: values.email
                 })

@@ -43,7 +43,7 @@ export default function () {
         <React.Fragment>
             <CssBaseline/>
             <Router>
-                <PrimarySearchAppBar cartCount={latestCartCount} onChange={handleSearch}/>
+                <PrimarySearchAppBar cartCount={cartCount} onChange={handleSearch}/>
                 <main>
                     <Switch>
                         <Route path="/sign-up" exact

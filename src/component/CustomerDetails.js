@@ -1,4 +1,4 @@
-import  React, {useState} from 'react';
+import React, {useState} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -35,7 +35,8 @@ const useStyle = makeStyles((theme) => ({
         padding: theme.spacing(1, 0, 2),
     },
     buttons: {
-        backgroundColor: "blue",
+        backgroundColor: "#990033",
+        color: "white",
         borderRadius: 0,
         height: 30,
         [theme.breakpoints.up('md')]: {
@@ -45,11 +46,11 @@ const useStyle = makeStyles((theme) => ({
         width: 115,
         border: "none"
     },
-    button: {
-        marginTop: theme.spacing(3),
-        marginLeft: theme.spacing(1),
-        backgroundColor: "blue"
-    },
+    // button: {
+    //     marginTop: theme.spacing(3),
+    //     marginLeft: theme.spacing(1),
+    //     backgroundColor: "#990033"
+    // },
 }));
 
 
@@ -59,7 +60,7 @@ export default function CustomerDetails(props) {
     const [update, setUpdate] = useState(false)
     const headers = {
         headers: {
-            "Authorization": "Bearer " + props.token
+            "Authorization": "Bearer " + localStorage.getItem('key')
         }
     }
     const formik = useFormik({

@@ -4,6 +4,11 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
+import {green} from '@material-ui/core/colors';
+import Icon from '@material-ui/core/Icon';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme) => ({
     cardMedia: {
@@ -30,6 +35,11 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         margin: 0,
         fontWeight: 'bold',
+    },
+    root: {
+        '& > span': {
+            margin: theme.spacing(2),
+        },
     },
 }));
 
@@ -68,11 +78,17 @@ export default function CardData(props) {
                     {bookPrice}
                 </Typography>
                 {props.page === "cart" ?
-                    <div>
+                    <div style={{display: "inline"}}>
                         <br/>
+                        {/*<div className={classes.root}>*/}
+                        <RemoveCircleOutlineIcon fontSize={"small"} color={"secondary"}/>
+                        {/*</div>*/}
                         <input defaultValue={props.quantity} onChange={props.updateQuantity}
-                               style={{width: "50px", marginRight: 30}} type="number" min={1}></input>
-                        <button onClick={props.onChange} style={{borderWidth: 1}}>Remove</button>
+                               style={{width: "30px", border: "1px solid black", height: '10'}} type="number"
+                               min={1}></input>
+                        <AddCircleOutlineIcon fontSize={"small"} color={"secondary"}/>
+                        <br/>
+                        <button onClick={props.onChange} style={{marginTop: 10, border: "none"}}>Remove</button>
                     </div>
                     : <></>
                 }

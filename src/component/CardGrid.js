@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import ReactDOM from 'react-dom';
 import CardData from './CardData'
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -12,6 +13,11 @@ import {MuiThemeProvider} from "@material-ui/core";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const theme = createMuiTheme({
     palette: {
@@ -40,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         backgroundColor: "#b3003b"
     },
-    wishlistButton : {
+    wishlistButton: {
         width: '50%',
         border: "thin solid #d5cccc",
         padding: 0,
@@ -61,7 +67,15 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('md')]: {
             marginLeft: theme.spacing(24),
         },
-    }
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        width: 200,
+        // maxHeight : 2,
+        float: "right",
+        border: "1px solid #d9d9d9",
+        borderBottom: "none"
+    },
 }));
 
 export default function CardGrid(props) {
@@ -70,18 +84,20 @@ export default function CardGrid(props) {
     const [cart, setCart] = useState([])
     const [page, setPage] = React.useState(1);
     const [token, setToken] = React.useState();
+
     const headers = {
         headers: {
-            "Authorization": "Bearer " + props.token
+            "Authorization": "Bearer " + localStorage.getItem('key')
         }
     }
-    console.log(props.token)
+    console.log(localStorage.getItem('key'))
     var addedToCart = true;
 
     const addBook = (value) => {
         axios.post('http://localhost:8080/cart/add-book/', {bookId: value, quantity: 1}, headers)
             .then((results) => {
                 setCart(() => cart.concat(results.data))
+                props.onChange(results.data.length)
             });
     }
 
@@ -99,11 +115,13 @@ export default function CardGrid(props) {
         setToken(props.token)
     }, [props.token]);
 
-    console.log(token)
+
     useEffect(() => {
         axios.get('http://localhost:8080/cart/get-books/', headers)
             .then((results) => {
                 setCart(() => cart.concat(results.data))
+                console.log(results.data.length)
+                props.onChange(results.data.length)
             });
         setPage(1);
     }, []);
@@ -111,6 +129,14 @@ export default function CardGrid(props) {
     const handleChange = (event, value) => {
         setPage(value);
     };
+
+    const handleSort = (event) => {
+        axios.get('http://localhost:8080/book/sorted/' + event.target.value, headers).then((results) => {
+            setBookData(results.data);
+            console.log(results.data)
+        });
+        setPage(1);
+    }
 
     const updateCart = () => {
         addedToCart = false
@@ -130,6 +156,19 @@ export default function CardGrid(props) {
             <Typography variant="h6" color="inherit" noWrap className={classes.title}>
                 Books({records} books)
             </Typography>
+            <FormControl className={classes.formControl}>
+                <Select
+                    defaultValue={"default"}
+                    labelId="demo-simple-select-filled-label"
+                    id="select"
+                    onChange={handleSort}
+                >
+                    <MenuItem value="default">Default</MenuItem>
+                    <MenuItem value="increasing">Price : Low to High</MenuItem>
+                    <MenuItem value="decreasing">Price : High to Low</MenuItem>
+                    <MenuItem value="newlyArrived">Newly Arrived</MenuItem>
+                </Select>
+            </FormControl>
             <Container className={classes.cardGrid} maxWidth="md">
                 <Grid container spacing={3}>
                     {cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
@@ -145,19 +184,17 @@ export default function CardGrid(props) {
                                 {addedToCart ?
                                     <MuiThemeProvider theme={theme}>
                                         {console.log("props.token" + props.token)}
-                                        {token === "" ?
-
-                                                <Button size={"large"} variant={"contained"} color={"secondary"}
-                                                        className={classes
-                                                            .addButton}
-                                                        onClick={addBook.bind(this, bookData[card - 1].bookId)}>
-                                                    <Link to="/login" style={{color:"white", textDecoration: "none"}}>
+                                        {localStorage.getItem('key') === "" ?
+                                            <Button size={"large"} variant={"contained"} color={"secondary"}
+                                                    className={classes
+                                                        .addButton}
+                                                    onClick={addBook.bind(this, bookData[card - 1].bookId)}>
+                                                <Link to="/login" style={{color: "white", textDecoration: "none"}}>
                                                     <Typography variant={"caption"}>
                                                         ADD TO BAG
                                                     </Typography>
-                                                    </Link>
-                                                </Button>
-
+                                                </Link>
+                                            </Button>
                                             :
                                             <Button size={"large"} variant={"contained"} color={"secondary"}
                                                     className={classes
@@ -167,16 +204,16 @@ export default function CardGrid(props) {
                                                     ADD TO BAG
                                                 </Typography>
                                             </Button>
-
                                         }
                                         <Button size={"large"} className={classes.wishlistButton}>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <Typography variant={"caption"}>
+                                            <Typography variant={"caption"}>
                                                 WISHLIST
                                             </Typography>
                                         </Button>
                                     </MuiThemeProvider>
                                     :
-                                    <button className={classes.addButton} style={{width: "100%", backgroundColor: "blue"}}>
+                                    <button className={classes.addButton}
+                                            style={{width: "100%", backgroundColor: "blue"}}>
                                         <Typography variant={"caption"}>
                                             ADDED TO BAG
                                         </Typography>
