@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import ReactDOM from 'react-dom';
 import CardData from './CardData'
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -13,9 +12,7 @@ import {MuiThemeProvider} from "@material-ui/core";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
@@ -71,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
         width: 200,
-        // maxHeight : 2,
         float: "right",
         border: "1px solid #d9d9d9",
         borderBottom: "none"
