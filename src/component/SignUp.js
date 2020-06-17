@@ -51,14 +51,9 @@ const validationSchema = Yup.object().shape({
 })
 
 
-export default function SignUp(props) {
-    const [visible, setVisible] = useState(false)
+export default function SignUp() {
     const [register, setRegister] = useState();
-    const headers = {
-        headers: {
-            "Authorization": "Bearer " + props.token
-        }
-    }
+
     const {handleSubmit, handleChange, values, errors} = useFormik({
         initialValues: {
             firstName: "",
@@ -77,14 +72,10 @@ export default function SignUp(props) {
                 })
             ])
                 .then(Axios.spread((registration, email) => {
-                    console.log(registration.data)
-                    console.log(email.data)
                     setRegister(registration.data)
                 }))
                 .catch(error => {
-                    // if (error.response) {
                     setRegister(error.response.data + '!');
-                    // }
                 })
         }
     })

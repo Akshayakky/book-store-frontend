@@ -1,105 +1,77 @@
+
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Grid from "@material-ui/core/Grid";
+import {makeStyles} from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button"
+import img from "../images/cracker3.png";
 import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
+import Table from "@material-ui/core/Table";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import {MuiThemeProvider} from "@material-ui/core";
-// import img from "./Asset/images/B+ook+Storefireworks-removebg-preview.png"
+import TableBody from '@material-ui/core/TableBody';
 
-const useStyles = makeStyles({
-    grow: {
-        flexGrow: 1,
+const useStyle = makeStyles((theme) => ({
+
+    layout: {
+        width: 'auto',
+        marginLeft: theme.spacing(2),
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+            width: 700,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
     },
-    root: {
-// paddingTop: '5%',
-        flexGrow: 1,
-        maxWidth: '100%',
-        maxHeight: '100%',
-        display: 'flex',
-        justify: 'center',
-    },
-    item: {
-        justify: 'centre'
+
+    table: {
+        minWidth: 500,
+        marginTop: 20,
+        marginBottom: 40
     },
     media: {
-// height: 140,
-        width: 400,
-        height: 300,
-        margin: 'auto',
-        display: 'block',
+        width: 450,
         maxWidth: '100%',
-        maxHeight: '100%',
-    },
+    }
 
-});
+}));
 
-export default function MediaCard() {
-    const classes = useStyles();
+
+export default function OrderConfirm() {
+
+    const classes = useStyle();
 
     return (
-// <div className={classes.grow}>
-        <Card className={classes.root}>
-            <CardActionArea>
-                <Grid>
-                    <Typography variant="h6" color="inherit" align={"center"}> Your Order Has Been Placed
-                        Successfully
-                    </Typography>
-                </Grid>
-                <CardMedia
-                    className={classes.media}
-                    image="https://cdn.winknews.com/wp-content/uploads/2019/07/fireworks4.jpg"
-                    // image={"src/Asset/images/B+ook+Storefireworks-removebg-preview.png"}
-                    // image={img}
-                    title="Contemplative Reptile"
-                />
-                <CardContent>
-                    <Typography align={"center"}>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            Hurray!!!
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            Your order number is #2001539. We have emailed your order confirmation, and will
-                            send you an update when your order has shipped.
-                        </Typography>
-                        <TableContainer>
-                            <Table size="small" style={{position: "center"}} border={1}>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell align="center">Email us</TableCell>
-                                        <TableCell align="center">Contact</TableCell>
-                                        <TableCell align="center">Address</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <tbody>
-                                <TableRow>
-                                    <TableCell align="center">abc@bridgelabz.com </TableCell>
-                                    <TableCell align="center">+911234567890</TableCell>
-                                    <TableCell align="left">Malhotra Complex,sector 23,RM marg,mumbai 40001
-                                    </TableCell>
-                                </TableRow>
-                                </tbody>
-                            </Table>
-                        </TableContainer>
-                        <br/>
-                        <Typography align={"center"}>
-                            <Button variant="contained" color="secondary" size={"medium"}>
-                                Continue Shopping
-                            </Button>
-                        </Typography>
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-
-        </Card>
-    )
+        <main className={classes.layout}>
+            <img className={classes.media} alt="complex" src={img}/>
+            <div>
+                <Typography variant="h6" color="inherit">Order Placed Successfully</Typography>
+            </div>
+            <Typography variant="subtitle1" color="primary">
+                Hurray!!! your order is confirmed.<br/>
+                The order id is #1234 save the order is for further communication
+            </Typography>
+            <TableContainer>
+                <Table className={classes.table} size="small" border={1.5}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">Email us</TableCell>
+                            <TableCell align="center">Contact</TableCell>
+                            <TableCell align="center">Address</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell align="center">admin@bookstore.com </TableCell>
+                            <TableCell align="center">+919876543210</TableCell>
+                            <TableCell align="left">cross,sector 4,opp to BDA complex,near Swagat hotel,
+                                Pune 400120
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <Button style={{marginBottom : 50}} variant="contained" color="primary">Continue Shopping</Button>
+        </main>
+    );
 }

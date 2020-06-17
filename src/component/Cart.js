@@ -12,8 +12,6 @@ export default function Cart(props) {
     const [trick, setTrick] = useState(true)
     const [showResults, setShowResults] = React.useState(false)
     const [showSummary, setShowSummary] = React.useState(false)
-    const [amount, setAmount] = useState(0)
-    const [token, setToken] = useState()
 
     const style = {
         padding: 40,
@@ -21,25 +19,14 @@ export default function Cart(props) {
         width: 75,
     }
 
-    useEffect(() => {
-        if (props.token !== "") {
-            console.log("set" + props.token)
-
-            localStorage.setItem('key', props.token)
-        }
-        setToken(localStorage.getItem('key'))
-    }, [props.token])
-
-
     const headers = {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('key')
         }
     }
 
-    console.log(headers.headers)
     useEffect(() => {
-        axios.get("http://localhost:8080/cart/get-books/", headers).then((result) => {
+        axios.get("http://localhost:8080/cart", headers).then((result) => {
             setCartData(result)
         })
     }, [trick])
@@ -105,22 +92,22 @@ export default function Cart(props) {
         }
     }));
 
-    const removeBook = (bookIds) => {
-        if (bookIds !== undefined) {
-            axios.delete("http://localhost:8080/cart/delete-book/" + bookIds, headers).then((results) => {
+    const removeBook = (bookId) => {
+        if (bookId !== undefined) {
+            axios.delete("http://localhost:8080/cart/delete-book/" + bookId, headers).then((results) => {
                 setTrick(!trick)
             })
         }
     }
 
     const updateQuantity = (quantity, bookId) => {
-        axios.put("http://localhost:8080/cart/update-book-quantity/" + quantity + "?book_id=" + bookId, {}, headers).then((results) => {
+        axios.put("http://localhost:8080/cart/" + quantity + "?book_id=" + bookId, {}, headers).then((results) => {
             setTrick(!trick)
         })
     }
 
     const emptyCart = () => {
-        axios.delete("http://localhost:8080/cart/empty-cart/", headers);
+        axios.delete("http://localhost:8080/cart/empty-cart", headers);
     }
 
     const classes = useStyles()
@@ -136,7 +123,7 @@ export default function Cart(props) {
                     carts.map((cart, i) =>
                         <div key={i} style={{height: "100%", width: "100%"}}>
                             <CardData quantity={cart.quantity} updateQuantity={(event) => {
-                                updateQuantity(event.target.value, cart.bookId)
+                                updateQuantity(event, cart.bookId)
                             }} book={bookData[i]} onChange={() => removeBook(cart.bookId)} backgroundcolor="none"
                                       style={style} display="flex" page="cart"/>
                         </div>
@@ -154,11 +141,16 @@ export default function Cart(props) {
             </div>
             {showResults ?
                 <div>
-                    <CustomerDetails token={props.token} onClick={() => {
+                    <CustomerDetails onClick={() => {
                         setShowSummary(true)
                     }}/>
                 </div>
-                : null
+                :
+                <div className={classes.cart}>
+                    <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                        Customer Details
+                    </Typography>
+                </div>
             }
 
             {showSummary ?
@@ -189,8 +181,18 @@ export default function Cart(props) {
                         <button className={classes.buttons} onClick={emptyCart}>CHECKOUT</button>
                     </Link>
                 </div>
-                : null
+                :
+                <div className={classes.cart}>
+                    <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                        Order Summary
+                    </Typography>
+                </div>
             }
         </>
     )
 }
+
+
+
+
+

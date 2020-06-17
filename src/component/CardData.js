@@ -6,9 +6,8 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
-import {green} from '@material-ui/core/colors';
-import Icon from '@material-ui/core/Icon';
-import TextField from '@material-ui/core/TextField';
+import ButtonBase from "@material-ui/core/ButtonBase";
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles((theme) => ({
     cardMedia: {
@@ -41,10 +40,37 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(2),
         },
     },
+    input: {
+        padding: 10,
+        margin: 3,
+        maxHeight: 1,
+        width: 20,
+        textAlign: "center"
+    },
+    textField: {
+        marginLeft: 5,
+        marginRight: 5
+    },
+    text: {
+        marginLeft: 20
+    }
 }));
 
 export default function CardData(props) {
     const classes = useStyles();
+    const [quantity, setValue] = React.useState(1);
+
+    const handleChange = (qua) => {
+        if (qua === 1) {
+            setValue(quantity-1)
+            props.updateQuantity(quantity - 1)
+        }
+        else {
+            setValue(quantity+1)
+            props.updateQuantity(quantity + 1)
+        }
+    }
+
     let bookTitle;
     let bookAuthor;
     let bookPrice;
@@ -78,17 +104,32 @@ export default function CardData(props) {
                     {bookPrice}
                 </Typography>
                 {props.page === "cart" ?
-                    <div style={{display: "inline"}}>
-                        <br/>
-                        {/*<div className={classes.root}>*/}
-                        <RemoveCircleOutlineIcon fontSize={"small"} color={"secondary"}/>
-                        {/*</div>*/}
-                        <input defaultValue={props.quantity} onChange={props.updateQuantity}
-                               style={{width: "30px", border: "1px solid black", height: '10'}} type="number"
-                               min={1}></input>
-                        <AddCircleOutlineIcon fontSize={"small"} color={"secondary"}/>
-                        <br/>
-                        <button onClick={props.onChange} style={{marginTop: 10, border: "none"}}>Remove</button>
+                    <div>
+                        <ButtonBase type="button" disabled={quantity < 2 ? true : false} centerRipple
+                                    onClick={() => handleChange(1)}>
+                            <RemoveCircleOutlineIcon color="primary"/>
+                        </ButtonBase>
+                        <TextField
+                            className={classes.textField}
+                            variant="outlined"
+                            disabled={true}
+                            inputProps={{
+                                className: classes.input,
+                            }}
+                            value={props.quantity}
+                        />
+                        <ButtonBase type="button" centerRipple onClick={() => handleChange(2)}>
+                            <AddCircleOutlineIcon color="primary"/>
+                        </ButtonBase>
+                        <Typography
+                            type = "Button"
+                            onClick={props.onChange}
+                            className={classes.text}
+                            align="left" display='inline'
+                            style={{cursor: "pointer"}}
+                        >
+                            Remove
+                        </Typography>
                     </div>
                     : <></>
                 }

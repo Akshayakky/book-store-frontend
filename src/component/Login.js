@@ -8,13 +8,13 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useFormik} from "formik";
 import Redirect from "react-router-dom/es/Redirect";
+import Box from "@material-ui/core/Box";
 
 function Copyright() {
     return (
@@ -50,9 +50,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login(props) {
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
     const [login, setLogin] = useState(false)
+    const [user, setUser] = useState()
     const classes = useStyles();
     const formik = useFormik({
         initialValues: {
@@ -60,18 +59,21 @@ export default function Login(props) {
             password: ''
         },
         onSubmit: values => {
-            console.log("out")
             Axios.post('http://localhost:8080/authenticate', formik.values)
                 .then(response => {
+                    localStorage.setItem('key', response.data.jwt)
+                    localStorage.setItem('userEmail', formik.values.email)
                     setLogin(true)
-                    console.log("Done")
-                    props.setToken(response.data.jwt);
+                    props.login(true)
                 })
         }
     })
 
     return (
         <Container component="main" maxWidth="xs">
+            {login ?
+                <Redirect to={"/"}/> : null
+            }
             <CssBaseline/>
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -111,17 +113,26 @@ export default function Login(props) {
                         control={<Checkbox value="remember" color="primary"/>}
                         label="Remember me"
                     />
-                    {/*{login?*/}
-                    {/*<Link type="submit" to={login?"/home":"/login"}>*/}
                     {login ?
-                        <Redirect to={"/"}/> :
+                        <Link to={"/"}>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Sign In
+
+                            </Button>
+                        </Link>
+                        :
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                            // disabled={!login}
                         >
                             Sign In
 
@@ -129,7 +140,7 @@ export default function Login(props) {
                     }
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
+                            <Link to={""} variant="body2">
                                 Forgot password?
                             </Link>
                         </Grid>

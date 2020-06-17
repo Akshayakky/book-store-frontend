@@ -46,11 +46,6 @@ const useStyle = makeStyles((theme) => ({
         width: 115,
         border: "none"
     },
-    // button: {
-    //     marginTop: theme.spacing(3),
-    //     marginLeft: theme.spacing(1),
-    //     backgroundColor: "#990033"
-    // },
 }));
 
 
@@ -75,14 +70,13 @@ export default function CustomerDetails(props) {
         },
         onSubmit: values => {
             if (update) {
-                Axios.put('http://localhost:8080/customer/update-customer/' + customerId, formik.values, headers)
+                Axios.put('http://localhost:8080/customer/' + customerId, formik.values, headers)
                     .then(response => {
-                        console.log("Done")
                         props.onClick()
                     })
                 setEdit(true)
             } else {
-                Axios.post('http://localhost:8080/customer/add-customer', formik.values, headers)
+                Axios.post('http://localhost:8080/customer', formik.values, headers)
                     .then(response => {
                         setCustomerId(response.data.id)
                         props.onClick()
@@ -104,8 +98,6 @@ export default function CustomerDetails(props) {
     })
 
     const classes = useStyle();
-
-    console.log(formik.values)
 
     function editForm() {
         setEdit(false)
@@ -210,7 +202,7 @@ export default function CustomerDetails(props) {
                                         label="Address"
                                         value={formik.values.address}
                                         fullWidth
-                                        multiline
+                                        // multiline
                                         rows={2}
                                         autoComplete="shipping address"
                                         variant="outlined"

@@ -27,7 +27,7 @@ const theme = createMuiTheme({
 const useStyles = makeStyles((theme) => ({
     cardGrid: {
         paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(8),
+        paddingBottom: theme.spacing(12),
     },
     card: {
         height: '100%',
@@ -54,19 +54,26 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
             marginTop: theme.spacing(2),
-            position: 'absolute',
-            left: '50%',
-            transform: 'translate(-50%, -50%)'
+            transform: 'translate(-50%, -50%)',
+            position: 'relative',
+            marginLeft: '59%',
+            bottom: 60,
+            [theme.breakpoints.down('sm')]: {
+                bottom: 20,
+                marginLeft: '50%',
+            },
         },
     },
     title: {
-        marginTop: 15,
+        marginTop: '3.1%',
+        float: "left",
         [theme.breakpoints.up('md')]: {
             marginLeft: theme.spacing(24),
         },
     },
     formControl: {
         margin: theme.spacing(1),
+        marginTop: '2.5%',
         width: 200,
         float: "right",
         border: "1px solid #d9d9d9",
@@ -79,67 +86,57 @@ export default function CardGrid(props) {
     const classes = useStyles();
     const [cart, setCart] = useState([])
     const [page, setPage] = React.useState(1);
-    const [token, setToken] = React.useState();
-
-    const headers = {
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem('key')
-        }
-    }
-    console.log(localStorage.getItem('key'))
-    var addedToCart = true;
-
-    const addBook = (value) => {
-        axios.post('http://localhost:8080/cart/add-book/', {bookId: value, quantity: 1}, headers)
-            .then((results) => {
-                setCart(() => cart.concat(results.data))
-                props.onChange(results.data.length)
-            });
-    }
+    const itemsPerPage = 12;
+    const cards = [];
 
     useEffect(() => {
-        console.log(props.token)
-        axios.get('http://localhost:8080/book/get-books/' + props.request)
+        axios.get('http://localhost:8080/book/get-books/' + props.search)
             .then((results) => {
                 setBookData(results.data);
-                console.log("once")
             });
         setPage(1);
     }, [props.request]);
 
     useEffect(() => {
-        setToken(props.token)
-    }, [props.token]);
-
-
-    useEffect(() => {
-        axios.get('http://localhost:8080/cart/get-books/', headers)
-            .then((results) => {
-                setCart(() => cart.concat(results.data))
-                console.log(results.data.length)
-                props.onChange(results.data.length)
-            });
+        if (localStorage.getItem('key') != "")
+            axios.get('http://localhost:8080/cart', headers)
+                .then((results) => {
+                    setCart(() => cart.concat(results.data))
+                });
         setPage(1);
+
     }, []);
 
     const handleChange = (event, value) => {
         setPage(value);
     };
 
-    const handleSort = (event) => {
-        axios.get('http://localhost:8080/book/sorted/' + event.target.value, headers).then((results) => {
-            setBookData(results.data);
-            console.log(results.data)
-        });
-        setPage(1);
-    }
-
     const updateCart = () => {
         addedToCart = false
     }
 
-    var cards = [];
-    const itemsPerPage = 12;
+    const headers = {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('key')
+        }
+    }
+
+    var addedToCart = true;
+
+    const addBook = (value) => {
+        axios.post('http://localhost:8080/cart', {bookId: value, quantity: 1}, headers)
+            .then((results) => {
+                setCart(() => cart.concat(results.data))
+            });
+    }
+
+    const handleSort = (event) => {
+        axios.get('http://localhost:8080/book/sorted/' + event.target.value, headers).then((results) => {
+            setBookData(results.data);
+        });
+        setPage(1);
+    }
+
     if (bookData !== undefined) {
         var records = (bookData.length)
         for (let bookId = 1 + itemsPerPage * (page - 1); bookId <= itemsPerPage * page && bookId <= bookData.length; bookId++) {
@@ -159,7 +156,7 @@ export default function CardGrid(props) {
                     id="select"
                     onChange={handleSort}
                 >
-                    <MenuItem value="default">Default</MenuItem>
+                    <MenuItem value="default"> Sort By : Default</MenuItem>
                     <MenuItem value="increasing">Price : Low to High</MenuItem>
                     <MenuItem value="decreasing">Price : High to Low</MenuItem>
                     <MenuItem value="newlyArrived">Newly Arrived</MenuItem>
@@ -179,7 +176,6 @@ export default function CardGrid(props) {
                             <CardActions>
                                 {addedToCart ?
                                     <MuiThemeProvider theme={theme}>
-                                        {console.log("props.token" + props.token)}
                                         {localStorage.getItem('key') === "" ?
                                             <Button size={"large"} variant={"contained"} color={"secondary"}
                                                     className={classes
@@ -210,7 +206,7 @@ export default function CardGrid(props) {
                                     :
                                     <button className={classes.addButton}
                                             style={{width: "100%", backgroundColor: "blue"}}>
-                                        <Typography variant={"caption"}>
+                                        <Typography variant={"caption"} style={{color: "white"}}>
                                             ADDED TO BAG
                                         </Typography>
                                     </button>

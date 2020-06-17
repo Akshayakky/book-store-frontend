@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PrimarySearchAppBar from './component/AppBar';
+import Profile from "./component/Profile";
 import Cart from './component/Cart'
 import CardGrid from './component/CardGrid'
 import Login from './component/Login'
@@ -10,63 +11,67 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import OrderConfirm from "./component/OrderConfirm";
+import Axios from "axios";
+import Admin from "./component/admin";
 
 const useStyles = makeStyles((theme) => ({
     footer: {
-        backgroundColor: theme.palette.background.paper,
-        padding: theme.spacing(6),
+        backgroundColor: "#990033",
+        padding: theme.spacing(1),
+        position:"fixed",
+        maxHeight: 40,
+        bottom:0,
+        width:'100%',
+        height:60, /* Height of the footer */
+        background:'#6cf',
     },
 
 }));
 
 export default function () {
-    const [cartCount, setCartCount] = useState(0)
-    const [latestCartCount, setLatestCartCount] = useState(0)
-    const [request, setRequest] = useState("")
-    const [token, setToken] = useState("")
-
-    const handleSearch = (value) => {
-        setRequest(value);
-    };
-
-    const updateCart = (value) => {
-        setLatestCartCount(value)
-    }
-
-    const setJwt = (token) => {
-        setToken(token)
-    }
-
-    console.log(token)
+    const [cartCount] = useState(0)
+    const [search, setSearch] = useState("")
+    const [login, setLogin] = useState("")
+    const [user, setUser] = useState("")
     const classes = useStyles();
+    useEffect(() => {
+        if(localStorage.getItem('userEmail') !== "")
+        Axios.get("http://localhost:8080/user?email=" + localStorage.getItem('userEmail'))
+            .then((response)=>{
+                console.log("loaded user")
+                setUser(response.data)
+            }
+        )
+    },[login])
     return (
         <React.Fragment>
             <CssBaseline/>
             <Router>
-                <PrimarySearchAppBar cartCount={cartCount} onChange={handleSearch}/>
+                <PrimarySearchAppBar user={user} login={login} cartCount={cartCount} setSearch={(value) => setSearch(value)}/>
                 <main>
                     <Switch>
                         <Route path="/sign-up" exact
                                component={() => (<SignUp/>)}/>
+                        <Route path="/admin" exact
+                               component={() => (<Admin/>)}/>
+                        <Route path="/profile" exact
+                               component={() => (<Profile user={user}/>)}/>
                         <Route path="/login" exact
-                               component={() => (<Login setToken={(token) => setJwt(token)}/>)}/>
+                               component={() => (<Login login={(login) => setLogin(login)}/>)}/>
                         <Route path="/" exact component={() => (
-                            <CardGrid token={token} request={request} onChange={(value) => setCartCount(value)}/>)}/>
+                            <CardGrid search={search} onChange={(value)=>(value)}/>)}/>
                         <Route path="/cart" exact
-                               component={() => (<Cart token={token} cartCount={cartCount}/>)}/>
+                               component={() => (<Cart cartCount={cartCount}/>)}/>
                         <Route path="/customer" exact
-                               component={() => (<CustomerDetails token={token}/>)}/>
+                               component={() => (<CustomerDetails/>)}/>
                         <Route path="/order-confirm" exact
-                               component={() => (<OrderConfirm token={token}/>)}/>
+                               component={() => (<OrderConfirm/>)}/>
                     </Switch>
                 </main>
             </Router>
             <footer className={classes.footer}>
-                <Typography variant="h6" align="center" gutterBottom>
-                    Footer
-                </Typography>
                 <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-                    Something here to give the footer a purpose!
+                    {new Date().getFullYear()} Copyright: <a href="https://www.bookstore.com"> TheBookStore.com </a>
                 </Typography>
             </footer>
         </React.Fragment>
