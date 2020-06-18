@@ -62,11 +62,10 @@ export default function CardData(props) {
 
     const handleChange = (qua) => {
         if (qua === 1) {
-            setValue(quantity-1)
+            setValue(quantity - 1)
             props.updateQuantity(quantity - 1)
-        }
-        else {
-            setValue(quantity+1)
+        } else {
+            setValue(quantity + 1)
             props.updateQuantity(quantity + 1)
         }
     }
@@ -122,7 +121,7 @@ export default function CardData(props) {
                             <AddCircleOutlineIcon color="primary"/>
                         </ButtonBase>
                         <Typography
-                            type = "Button"
+                            type="Button"
                             onClick={props.onChange}
                             className={classes.text}
                             align="left" display='inline'

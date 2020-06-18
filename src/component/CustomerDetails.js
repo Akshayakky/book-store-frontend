@@ -142,7 +142,6 @@ export default function CustomerDetails(props) {
                                         margin="dense"
                                     />
                                     {formik.errors.name ? <div>{formik.errors.name}</div> : null}
-
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField

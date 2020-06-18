@@ -14,7 +14,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useFormik} from "formik";
 import Redirect from "react-router-dom/es/Redirect";
-import Box from "@material-ui/core/Box";
 
 function Copyright() {
     return (
@@ -31,10 +30,11 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(6),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+
     },
     avatar: {
         margin: theme.spacing(1),
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login(props) {
     const [login, setLogin] = useState(false)
-    const [user, setUser] = useState()
+    const [register, setRegister] = useState(" ")
     const classes = useStyles();
     const formik = useFormik({
         initialValues: {
@@ -65,7 +65,10 @@ export default function Login(props) {
                     localStorage.setItem('userEmail', formik.values.email)
                     setLogin(true)
                     props.login(true)
-                })
+                }).catch(error => {
+                if (error.response.data.status === 403)
+                    setRegister("Invalid Username Or Password!");
+            })
         }
     })
 
@@ -82,7 +85,10 @@ export default function Login(props) {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
+                <Typography component="h3" variant="h6" style={{color: "#e60000"}}>
+                    {register}
+                </Typography>
+                <form className={classes.form} onSubmit={formik.handleSubmit}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -140,7 +146,7 @@ export default function Login(props) {
                     }
                     <Grid container>
                         <Grid item xs>
-                            <Link to={""} variant="body2">
+                            <Link to={"/forgot-password"} variant="body2">
                                 Forgot password?
                             </Link>
                         </Grid>
@@ -152,9 +158,6 @@ export default function Login(props) {
                     </Grid>
                 </form>
             </div>
-            <Box mt={8}>
-                <Copyright/>
-            </Box>
         </Container>
     );
 }

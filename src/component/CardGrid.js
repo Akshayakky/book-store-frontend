@@ -86,6 +86,7 @@ export default function CardGrid(props) {
     const classes = useStyles();
     const [cart, setCart] = useState([])
     const [page, setPage] = React.useState(1);
+    const [error, setError] = useState();
     const itemsPerPage = 12;
     const cards = [];
 
@@ -93,7 +94,10 @@ export default function CardGrid(props) {
         axios.get('http://localhost:8080/book/get-books/' + props.search)
             .then((results) => {
                 setBookData(results.data);
-            });
+            }).catch((error) => {
+            if (error.response.status === 404)
+                setError("No Books Found!")
+        });
         setPage(1);
     }, [props.request]);
 
@@ -214,6 +218,9 @@ export default function CardGrid(props) {
                             </CardActions>
                         </Card>
                     </Grid>)}
+                    <Grid container justify="center">
+                        <Typography component="h3" variant="h4">{error}</Typography>
+                    </Grid>
                 </Grid>
             </Container>
             <div className={classes.root}>

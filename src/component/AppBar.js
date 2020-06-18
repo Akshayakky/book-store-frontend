@@ -61,7 +61,6 @@ export default function PrimarySearchAppBar(props) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    // const name = props.user.firstName
 
     const handleChange = (event) => {
         props.setSearch(event.target.value)
@@ -77,12 +76,12 @@ export default function PrimarySearchAppBar(props) {
 
     const setTokenInStorage = () => {
         localStorage.setItem('key', "")
-        localStorage.setItem('userEmail',"")
+        localStorage.setItem('userEmail', "")
         // eslint-disable-next-line no-restricted-globals
         location.reload()
     }
 
-    const cartIconRedirect = props.login || localStorage.getItem('key') !== "" ? "/cart" : "/login"
+    const isLoggedIn = props.login || localStorage.getItem('key') !== ""
 
     return (
         <div className={classes.grow}>
@@ -112,7 +111,7 @@ export default function PrimarySearchAppBar(props) {
                     <div style={{marginTop: 5}}>
                         <IconButton aria-label="show 4 new mails" color="inherit">
                             <Badge badgeContent={props.cartCount} color="secondary">
-                                <Link to={cartIconRedirect}
+                                <Link to={isLoggedIn ? "/cart" : "/login"}
                                       style={{color: "white", style: "none"}}>
                                     <ShoppingCartIcon/>
                                 </Link>
@@ -145,7 +144,7 @@ export default function PrimarySearchAppBar(props) {
                             onClose={handleClose}
                         >
                             {console.log(props.user)}
-                            {props.user != "" ?
+                            {isLoggedIn ?
                                 <MenuItem disabled={true}><b>Hello {props.user.firstName}!</b></MenuItem> : null
                             }
                             <Link to={"/profile"} style={{textDecoration: "none", color: "black"}}>

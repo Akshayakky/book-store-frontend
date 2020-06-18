@@ -107,6 +107,13 @@ export default function Cart(props) {
     }
 
     const emptyCart = () => {
+        carts.map((cart, i) => (
+            axios.post("http://localhost:8080/order?user-id=" + props.user.userId, {
+                bookId: cart.bookId, bookQuantity: cart.quantity
+                , user: props.user.userId, totalPrice: (bookData[i].bookPrice * cart.quantity)
+            }, headers)
+        ))
+        axios.post("http://localhost:8080/mail-sender/order-confirm?user-id=" + props.user.userId, carts, headers)
         axios.delete("http://localhost:8080/cart/empty-cart", headers);
     }
 
@@ -161,6 +168,7 @@ export default function Cart(props) {
                     {bookData !== undefined ?
                         carts.map((cart, i) =>
                             <div key={i} style={{height: "100%", width: "100%"}}>
+                                {console.log(carts)}
                                 <CardData quantity={cart.quantity} book={bookData[i]}
                                           onChange={() => removeBook(cart.bookId)} backgroundcolor="none"
                                           style={style} display="flex" page="summary"/>
