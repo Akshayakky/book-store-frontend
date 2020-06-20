@@ -10,7 +10,7 @@ import Container from '@material-ui/core/Container';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {MuiThemeProvider} from "@material-ui/core";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -87,6 +87,7 @@ export default function CardGrid(props) {
     const [cart, setCart] = useState([])
     const [page, setPage] = React.useState(1);
     const [error, setError] = useState();
+    const [expired, setExpired] = useState(false);
     const itemsPerPage = 12;
     const cards = [];
 
@@ -97,13 +98,15 @@ export default function CardGrid(props) {
             }).catch((error) => {
             if (error.response.status === 404)
                 setError("No Books Found!")
+            if (error.response.status === 403)
+                setExpired(true);
         });
         setPage(1);
-    }, [props.request]);
+    }, [props.search]);
 
     useEffect(() => {
         if (localStorage.getItem('key') != "")
-            axios.get('http://localhost:8080/cart', headers)
+            axios.get('http://localhost:8080/cart?user_id=' + props.user.userId, headers)
                 .then((results) => {
                     setCart(() => cart.concat(results.data))
                 });
@@ -128,10 +131,14 @@ export default function CardGrid(props) {
     var addedToCart = true;
 
     const addBook = (value) => {
-        axios.post('http://localhost:8080/cart', {bookId: value, quantity: 1}, headers)
+        axios.post('http://localhost:8080/cart', {userId : props.user.userId, bookId: value, quantity: 1}
+        , headers)
             .then((results) => {
                 setCart(() => cart.concat(results.data))
-            });
+            }).catch(error => {
+            if (error.response.status === 403)
+                setExpired(true);
+        });
     }
 
     const handleSort = (event) => {
@@ -150,6 +157,9 @@ export default function CardGrid(props) {
 
     return (
         <>
+            {expired?
+                <Redirect to={"/login"} /> : null
+            }
             <Typography variant="h6" color="inherit" noWrap className={classes.title}>
                 Books({records} books)
             </Typography>

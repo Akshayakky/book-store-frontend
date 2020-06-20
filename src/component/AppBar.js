@@ -97,15 +97,17 @@ export default function PrimarySearchAppBar(props) {
                         <div className={classes.searchIcon}>
                             <SearchIcon/>
                         </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{'aria-label': 'search'}}
-                            onChange={handleChange.bind(this)}
-                        />
+                        <Link to={"/"} style={{textDecoration: "none"}}>
+                            <InputBase
+                                placeholder="Search…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput,
+                                }}
+                                inputProps={{'aria-label': 'search'}}
+                                onChange={handleChange.bind(this)}
+                            />
+                        </Link>
                     </div>
                     <div className={classes.grow}/>
                     <div style={{marginTop: 5}}>
@@ -147,9 +149,23 @@ export default function PrimarySearchAppBar(props) {
                             {isLoggedIn ?
                                 <MenuItem disabled={true}><b>Hello {props.user.firstName}!</b></MenuItem> : null
                             }
-                            <Link to={"/profile"} style={{textDecoration: "none", color: "black"}}>
+                            <Link to={!isLoggedIn ? "/login" : "/profile"}
+                                  style={{textDecoration: "none", color: "black"}}>
                                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                             </Link>
+                            {isLoggedIn ?
+                                <Link to={"/my-order"} style={{textDecoration: "none", color: "black"}}>
+                                    <MenuItem>My Orders</MenuItem>
+                                </Link>
+                                : null
+                            }
+                            {props.user.role == "admin" ?
+                                <Link to={"/admin"}
+                                      style={{textDecoration: "none", color: "red"}}>
+                                    <MenuItem>Add Books</MenuItem>
+                                </Link> :
+                                null
+                            }
                             {localStorage.getItem('key') != "" ?
                                 <MenuItem onClick={setTokenInStorage.bind(this)}>Sign Out</MenuItem>
                                 :

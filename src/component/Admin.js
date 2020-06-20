@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -8,6 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Axios from "axios";
 import {useFormik} from "formik";
+import LinearIndeterminate from "./loading";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -38,6 +39,8 @@ const headers = {
 
 export default function Admin() {
     const classes = useStyles();
+    const [bookAdd, setBookAdd] = useState(false)
+    const [loading, setLoading] = useState(false)
     const formik = useFormik({
         initialValues: {
             bookTitle: '',
@@ -48,7 +51,13 @@ export default function Admin() {
             bookImage: '',
         },
         onSubmit: values => {
-            Axios.post("http://localhost:8080/book", formik.values, headers)
+            setLoading(true)
+            Axios.post("http://localhost:8080/book", formik.values, headers).then((response) => {
+                if (response.status === 200) {
+                    setBookAdd(true)
+                    setLoading(false)
+                }
+            })
         },
         validate: values => {
             let error = {}
@@ -59,10 +68,16 @@ export default function Admin() {
             if (values.bookDescription.length < 3)
                 error.bookDescription = 'title at least have 3 character'
             if (values.bookQuantity < 1)
-                error.bookQuantity = 'minimum book quantity is 1'
+                error.bookQuantity = 'enter no greater than 0'
             return error
         }
     })
+
+    const reload = () => {
+        // eslint-disable-next-line no-restricted-globals
+        location.reload()
+    }
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline/>
@@ -70,6 +85,15 @@ export default function Admin() {
                 <Typography component="h1" variant="h5">
                     <b>ADD BOOK</b>
                 </Typography>
+                {loading ?
+                    <LinearIndeterminate/>
+                    : null
+                }
+                {bookAdd ?
+                    <Typography component="h3" variant="h6" style={{color: "green"}}>
+                        <b>Book Added Successfully!</b>
+                    </Typography> : null
+                }
                 <form className={classes.form} onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
@@ -130,7 +154,7 @@ export default function Admin() {
                                 name="bookQuantity"
                                 label="Quantity"
                                 id="bookQuantity"
-                                minimumValue="1"
+                                // minimumValue=1
                                 value={formik.values.bookQuantity}
                                 onChange={formik.handleChange}
                                 autoComplete="locality"
@@ -164,7 +188,6 @@ export default function Admin() {
                                 name="bookImage"
                                 value={formik.values.bookImage}
                                 onChange={formik.handleChange}
-
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -185,6 +208,7 @@ export default function Admin() {
                                 variant="contained"
                                 color="secondary"
                                 className={classes.submit}
+                                onClick={reload}
                             >
                                 Reset
                             </Button>

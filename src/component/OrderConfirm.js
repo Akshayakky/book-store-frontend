@@ -73,31 +73,32 @@ export default function MediaCard() {
                         </Typography>
                         <TableContainer>
                             <Typography align="center"  className={classes.table}>
-                            <Table size="small" border={1} style={{width : 300, flex:"center"}}>
-                                <TableHead>
+                                <Table size="small" border={1} style={{width : 400, flex:"center"}}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell align="center">Email us</TableCell>
+                                            <TableCell align="center">Contact</TableCell>
+                                            <TableCell align="center">Address</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <tbody>
                                     <TableRow>
-                                        <TableCell align="center">Email us</TableCell>
-                                        <TableCell align="center">Contact</TableCell>
-                                        <TableCell align="center">Address</TableCell>
+                                        <TableCell align="center">abc@bridgelabz.com </TableCell>
+                                        <TableCell align="center">+911234567890</TableCell>
+                                        <TableCell align="left">Malhotra Complex,sector 23,RM marg,mumbai 40001
+                                        </TableCell>
                                     </TableRow>
-                                </TableHead>
-                                <tbody>
-                                <TableRow>
-                                    <TableCell align="center">abc@bridgelabz.com </TableCell>
-                                    <TableCell align="center">+911234567890</TableCell>
-                                    <TableCell align="left">Malhotra Complex,sector 23,RM marg,mumbai 40001
-                                    </TableCell>
-                                </TableRow>
-                                </tbody>
-                            </Table>
+                                    </tbody>
+                                </Table>
                             </Typography>
                         </TableContainer>
                         <br/>
                         <Typography align={"center"}>
-                            <Link to={"/"}>
-                            <Button variant="contained" color="secondary" size={"medium"} >
-                                Continue Shopping
-                            </Button>
+                            <Link to={"/"} style={{textDecoration : "none"}}>
+                                <Button style={{marginBottom : 40, backgroundColor : "#990033", color : "white"}}
+                                        variant="contained" color="secondary" size={"medium"} >
+                                    Continue Shopping
+                                </Button>
                             </Link>
                         </Typography>
                     </Typography>

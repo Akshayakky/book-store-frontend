@@ -26,7 +26,7 @@ export default function Cart(props) {
     }
 
     useEffect(() => {
-        axios.get("http://localhost:8080/cart", headers).then((result) => {
+        axios.get("http://localhost:8080/cart?user_id=" + props.user.userId, headers).then((result) => {
             setCartData(result)
         })
     }, [trick])
@@ -94,14 +94,16 @@ export default function Cart(props) {
 
     const removeBook = (bookId) => {
         if (bookId !== undefined) {
-            axios.delete("http://localhost:8080/cart/delete-book/" + bookId, headers).then((results) => {
+            axios.delete("http://localhost:8080/cart/delete-book/" + bookId + "?user_id=" + props.user.userId
+                , headers).then((results) => {
                 setTrick(!trick)
             })
         }
     }
 
     const updateQuantity = (quantity, bookId) => {
-        axios.put("http://localhost:8080/cart/" + quantity + "?book_id=" + bookId, {}, headers).then((results) => {
+        axios.put("http://localhost:8080/cart/" + quantity + "?book_id=" + bookId + "&user_id=" + props.user.userId
+            , {}, headers).then((results) => {
             setTrick(!trick)
         })
     }
@@ -114,7 +116,7 @@ export default function Cart(props) {
             }, headers)
         ))
         axios.post("http://localhost:8080/mail-sender/order-confirm?user-id=" + props.user.userId, carts, headers)
-        axios.delete("http://localhost:8080/cart/empty-cart", headers);
+        axios.delete("http://localhost:8080/cart/empty-cart?user_id=" + props.user.userId, headers);
     }
 
     const classes = useStyles()

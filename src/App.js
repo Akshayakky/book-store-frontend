@@ -15,6 +15,7 @@ import Axios from "axios";
 import Admin from "./component/Admin";
 import ForgotPassword from "./component/ForgotPassword";
 import ResetPassword from "./component/ResetPassword";
+import MyOrder from "./component/MyOrder";
 
 const useStyles = makeStyles((theme) => ({
     footer: {
@@ -49,7 +50,7 @@ export default function () {
         setJwt(localStorage.getItem('jwt'))
     }, [login])
 
-    console.log(jwt)
+    console.log(user)
     console.log(localStorage.getItem('jwt'))
     return (
         <React.Fragment>
@@ -59,8 +60,12 @@ export default function () {
                                      setSearch={(value) => setSearch(value)}/>
                 <main>
                     <Switch>
+                        <Route path="/" exact component={() => (
+                            <CardGrid user={user} search={search}/>)}/>
                         <Route path="/sign-up" exact
                                component={() => (<SignUp/>)}/>
+                        <Route path="/my-order" exact
+                               component={() => (<MyOrder user={user}/>)}/>
                         <Route path={jwt} exact
                                component={() => (<ResetPassword user={user}/>)}/>
                         <Route path="/forgot-password" exact
@@ -72,8 +77,6 @@ export default function () {
                                component={() => (<Profile user={user}/>)}/>
                         <Route path="/login" exact
                                component={() => (<Login login={(login) => setLogin(login)}/>)}/>
-                        <Route path="/" exact component={() => (
-                            <CardGrid search={search}/>)}/>
                         <Route path="/cart" exact
                                component={() => (<Cart user={user} cartCount={cartCount}/>)}/>
                         <Route path="/customer" exact
