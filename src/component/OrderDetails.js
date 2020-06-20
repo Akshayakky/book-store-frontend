@@ -59,7 +59,7 @@ export default function OrderDetails(props) {
                             <Grid>
                                 <Typography gutterBottom variant="subtitle1" align="left">
                                     <b>
-                                    Rs. {props.price}
+                                        Rs. {props.price}
                                     </b>
                                 </Typography>
                             </Grid>

@@ -30,16 +30,12 @@ const useStyles = makeStyles({
         justify: 'centre'
     },
     media: {
-// height: 140,
         width: 400,
         height: 300,
         margin: 'auto',
         display: 'block',
         maxWidth: '100%',
         maxHeight: '100%',
-    },
-    table: {
-        width :'50%'
     }
 });
 
@@ -47,7 +43,6 @@ export default function MediaCard() {
     const classes = useStyles();
 
     return (
-// <div className={classes.grow}>
         <Card className={classes.root}>
             <CardActionArea>
                 <Grid>
@@ -57,8 +52,6 @@ export default function MediaCard() {
                 </Grid>
                 <CardMedia
                     className={classes.media}
-                    // image="https://cdn.winknews.com/wp-content/uploads/2019/07/fireworks4.jpg"
-                    // image={"src/Asset/images/B+ook+Storefireworks-removebg-preview.png"}
                     image={img}
                     title="Contemplative Reptile"
                 />
@@ -72,8 +65,8 @@ export default function MediaCard() {
                             send you an update when your order has shipped.
                         </Typography>
                         <TableContainer>
-                            <Typography align="center"  className={classes.table}>
-                                <Table size="small" border={1} style={{width : 400, flex:"center"}}>
+                            <Typography align="center" className={classes.table}>
+                                <Table size="small" border={1} style={{flex: "center"}}>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell align="center">Email us</TableCell>
@@ -94,9 +87,9 @@ export default function MediaCard() {
                         </TableContainer>
                         <br/>
                         <Typography align={"center"}>
-                            <Link to={"/"} style={{textDecoration : "none"}}>
-                                <Button style={{marginBottom : 40, backgroundColor : "#990033", color : "white"}}
-                                        variant="contained" color="secondary" size={"medium"} >
+                            <Link to={"/"} style={{textDecoration: "none"}}>
+                                <Button style={{marginBottom: 40, backgroundColor: "#990033", color: "white"}}
+                                        variant="contained" color="secondary" size={"medium"}>
                                     Continue Shopping
                                 </Button>
                             </Link>

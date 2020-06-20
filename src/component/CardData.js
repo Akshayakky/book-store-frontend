@@ -58,14 +58,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CardData(props) {
     const classes = useStyles();
-    const [quantity, setValue] = React.useState(1);
+    const [quantity, setQuantity] = React.useState(props.quantity);
 
     const handleChange = (qua) => {
         if (qua === 1) {
-            setValue(quantity - 1)
+            setQuantity(quantity - 1)
             props.updateQuantity(quantity - 1)
         } else {
-            setValue(quantity + 1)
+            setQuantity(quantity + 1)
             props.updateQuantity(quantity + 1)
         }
     }

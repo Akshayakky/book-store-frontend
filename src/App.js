@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
         height: 60, /* Height of the footer */
         background: '#6cf',
     },
-
 }));
 
 export default function () {
@@ -37,7 +36,6 @@ export default function () {
     const [login, setLogin] = useState("")
     const [user, setUser] = useState("")
     const [jwt, setJwt] = useState("")
-    const [userEmail, setUserEmail] = useState("")
     const classes = useStyles();
     useEffect(() => {
         if (localStorage.getItem('userEmail') !== "")
@@ -50,8 +48,6 @@ export default function () {
         setJwt(localStorage.getItem('jwt'))
     }, [login])
 
-    console.log(user)
-    console.log(localStorage.getItem('jwt'))
     return (
         <React.Fragment>
             <CssBaseline/>
@@ -60,8 +56,8 @@ export default function () {
                                      setSearch={(value) => setSearch(value)}/>
                 <main>
                     <Switch>
-                        <Route path="/" exact component={() => (
-                            <CardGrid user={user} search={search}/>)}/>
+                        <Route path="/" exact
+                               component={() => (<CardGrid user={user} search={search}/>)}/>
                         <Route path="/sign-up" exact
                                component={() => (<SignUp/>)}/>
                         <Route path="/my-order" exact

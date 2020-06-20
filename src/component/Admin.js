@@ -182,7 +182,6 @@ export default function Admin() {
                                 type="url"
                                 variant="outlined"
                                 fullWidth
-                                type="text"
                                 id="bookImage"
                                 label="Book Image Url"
                                 name="bookImage"

@@ -170,7 +170,6 @@ export default function Cart(props) {
                     {bookData !== undefined ?
                         carts.map((cart, i) =>
                             <div key={i} style={{height: "100%", width: "100%"}}>
-                                {console.log(carts)}
                                 <CardData quantity={cart.quantity} book={bookData[i]}
                                           onChange={() => removeBook(cart.bookId)} backgroundcolor="none"
                                           style={style} display="flex" page="summary"/>

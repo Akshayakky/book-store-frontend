@@ -145,7 +145,6 @@ export default function PrimarySearchAppBar(props) {
                             open={open}
                             onClose={handleClose}
                         >
-                            {console.log(props.user)}
                             {isLoggedIn ?
                                 <MenuItem disabled={true}><b>Hello {props.user.firstName}!</b></MenuItem> : null
                             }
@@ -159,14 +158,14 @@ export default function PrimarySearchAppBar(props) {
                                 </Link>
                                 : null
                             }
-                            {props.user.role == "admin" ?
+                            {props.user.role === "admin" ?
                                 <Link to={"/admin"}
                                       style={{textDecoration: "none", color: "red"}}>
                                     <MenuItem>Add Books</MenuItem>
                                 </Link> :
                                 null
                             }
-                            {localStorage.getItem('key') != "" ?
+                            {localStorage.getItem('key') !== "" ?
                                 <MenuItem onClick={setTokenInStorage.bind(this)}>Sign Out</MenuItem>
                                 :
                                 <Link to="/login" style={{textDecoration: "none", color: "black"}}>

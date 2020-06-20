@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         border: "thin solid #d9d9d9",
     },
     addButton: {
-        width: '50%',
+        width: '100%',
         border: "thin solid #d5cccc",
         padding: 0,
         boxShadow: 'none',
@@ -105,7 +105,7 @@ export default function CardGrid(props) {
     }, [props.search]);
 
     useEffect(() => {
-        if (localStorage.getItem('key') != "")
+        if (localStorage.getItem('key') !== "" && props.user.userId !== undefined)
             axios.get('http://localhost:8080/cart?user_id=' + props.user.userId, headers)
                 .then((results) => {
                     setCart(() => cart.concat(results.data))
@@ -131,8 +131,8 @@ export default function CardGrid(props) {
     var addedToCart = true;
 
     const addBook = (value) => {
-        axios.post('http://localhost:8080/cart', {userId : props.user.userId, bookId: value, quantity: 1}
-        , headers)
+        axios.post('http://localhost:8080/cart', {userId: props.user.userId, bookId: value, quantity: 1}
+            , headers)
             .then((results) => {
                 setCart(() => cart.concat(results.data))
             }).catch(error => {
@@ -142,7 +142,8 @@ export default function CardGrid(props) {
     }
 
     const handleSort = (event) => {
-        axios.get('http://localhost:8080/book/sorted/' + event.target.value, headers).then((results) => {
+        axios.get('http://localhost:8080/book/sorted/' + event.target.value, headers).then((results
+        ) => {
             setBookData(results.data);
         });
         setPage(1);
@@ -150,15 +151,16 @@ export default function CardGrid(props) {
 
     if (bookData !== undefined) {
         var records = (bookData.length)
-        for (let bookId = 1 + itemsPerPage * (page - 1); bookId <= itemsPerPage * page && bookId <= bookData.length; bookId++) {
+        for (let bookId = 1 + itemsPerPage * (page - 1); bookId <= itemsPerPage * page && bookId <= bookData.length
+            ; bookId++) {
             (cards.push(bookId));
         }
     }
 
     return (
         <>
-            {expired?
-                <Redirect to={"/login"} /> : null
+            {expired ?
+                <Redirect to={"/login"}/> : null
             }
             <Typography variant="h6" color="inherit" noWrap className={classes.title}>
                 Books({records} books)
@@ -211,11 +213,6 @@ export default function CardGrid(props) {
                                                 </Typography>
                                             </Button>
                                         }
-                                        <Button size={"large"} className={classes.wishlistButton}>
-                                            <Typography variant={"caption"}>
-                                                WISHLIST
-                                            </Typography>
-                                        </Button>
                                     </MuiThemeProvider>
                                     :
                                     <button className={classes.addButton}
@@ -233,10 +230,14 @@ export default function CardGrid(props) {
                     </Grid>
                 </Grid>
             </Container>
-            <div className={classes.root}>
-                <Pagination count={Math.ceil(records / itemsPerPage)} color="secondary" page={page}
-                            onChange={handleChange}/>
-            </div>
+            {bookData !== undefined ?
+                <div className={classes.root}>
+                    <Pagination count={Math.ceil(records / itemsPerPage)} color="secondary" page={page}
+                                onChange={handleChange}/>
+                </div>
+                :
+                null
+            }
         </>
     )
 }

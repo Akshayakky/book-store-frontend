@@ -83,7 +83,7 @@ export default function MyOrder(props) {
                 {orderData.length !== 0 && books !== undefined ?
                     orderData.reverse().map((data, i) =>
                         <div key={i}>
-                            <OrderDetails book={books[findById(bookId[orderData.length - i ])]}
+                            <OrderDetails book={books[findById(bookId[orderData.length - i])]}
                                           price={data.totalPrice}
                                           quantity={data.bookQuantity}/>
                         </div>

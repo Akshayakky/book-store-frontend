@@ -141,7 +141,6 @@ export default function Profile(props) {
                         </Button>
                     }
                 </form>
-                <h1></h1>{}
             </Paper>
         </Container>
     );
