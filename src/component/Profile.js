@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(0),
     },
     submit: {
-        margin: theme.spacing(6, 0, 0),
+        margin: theme.spacing(6, 0, 5),
     },
 }));
 
@@ -122,7 +122,7 @@ export default function Profile(props) {
                     {edit ?
                         <Button
                             fullWidth
-                            variant="outlined"
+                            variant="contained"
                             color="primary"
                             className={classes.submit}
                             onClick={handleChange}
@@ -132,7 +132,7 @@ export default function Profile(props) {
                         :
                         <Button
                             fullWidth
-                            variant="outlined"
+                            variant="contained"
                             color="primary"
                             className={classes.submit}
                             onClick={handleChange}

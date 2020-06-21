@@ -62,8 +62,6 @@ export default function () {
                                component={() => (<SignUp/>)}/>
                         <Route path="/my-order" exact
                                component={() => (<MyOrder user={user}/>)}/>
-                        <Route path={jwt} exact
-                               component={() => (<ResetPassword user={user}/>)}/>
                         <Route path="/forgot-password" exact
                                component={() => (<ForgotPassword
                                    setForgetPasswordJwt={(jwt) => localStorage.setItem('jwt', "/reset-password/" + jwt)}/>)}/>
@@ -79,6 +77,8 @@ export default function () {
                                component={() => (<CustomerDetails/>)}/>
                         <Route path="/order-confirm" exact
                                component={() => (<OrderConfirm/>)}/>
+                        <Route path={jwt} exact
+                               component={() => (<ResetPassword user={user}/>)}/>
                     </Switch>
                 </main>
             </Router>

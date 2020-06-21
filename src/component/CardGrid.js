@@ -92,7 +92,7 @@ export default function CardGrid(props) {
     const cards = [];
 
     useEffect(() => {
-        axios.get('http://localhost:8080/book/get-books/' + props.search)
+        axios.get('http://localhost:8080/book/sorted/default/' + props.search)
             .then((results) => {
                 setBookData(results.data);
             }).catch((error) => {
@@ -142,7 +142,7 @@ export default function CardGrid(props) {
     }
 
     const handleSort = (event) => {
-        axios.get('http://localhost:8080/book/sorted/' + event.target.value, headers).then((results
+        axios.get('http://localhost:8080/book/sorted/' + event.target.value + "/" + props.search, headers).then((results
         ) => {
             setBookData(results.data);
         });

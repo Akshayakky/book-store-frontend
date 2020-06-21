@@ -15,7 +15,7 @@ import TableCell from "@material-ui/core/TableCell";
 import img from "../images/cracker3.png";
 import {Link} from "react-router-dom";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     grow: {
         flexGrow: 1,
     },
@@ -36,18 +36,23 @@ const useStyles = makeStyles({
         display: 'block',
         maxWidth: '100%',
         maxHeight: '100%',
+    },
+    table: {
+        [theme.breakpoints.up("md")]: {
+            marginLeft: "24%"
+        }
     }
-});
+}));
 
 export default function MediaCard() {
     const classes = useStyles();
 
     return (
         <Card className={classes.root}>
-            <CardActionArea>
+            <CardActionArea style={{paddingTop: 20, marginBottom: 30}}>
                 <Grid>
                     <Typography variant="h6" color="inherit" align={"center"}> Your Order Has Been Placed
-                        Successfully
+                        Successfully!
                     </Typography>
                 </Grid>
                 <CardMedia
@@ -56,16 +61,17 @@ export default function MediaCard() {
                     title="Contemplative Reptile"
                 />
                 <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2" align={"center"}>
+                        Hurray!!!
+                    </Typography>
                     <Typography align={"center"}>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            Hurray!!!
-                        </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
                             Your order number is #2001539. We have emailed your order confirmation, and will
                             send you an update when your order has shipped.
                         </Typography>
+
                         <TableContainer>
-                            <Typography align="center" className={classes.table}>
+                            <Typography align="center" style={{width: 700}} className={classes.table}>
                                 <Table size="small" border={1} style={{flex: "center"}}>
                                     <TableHead>
                                         <TableRow>
@@ -85,15 +91,15 @@ export default function MediaCard() {
                                 </Table>
                             </Typography>
                         </TableContainer>
-                        <br/>
-                        <Typography align={"center"}>
-                            <Link to={"/"} style={{textDecoration: "none"}}>
-                                <Button style={{marginBottom: 40, backgroundColor: "#990033", color: "white"}}
-                                        variant="contained" color="secondary" size={"medium"}>
-                                    Continue Shopping
-                                </Button>
-                            </Link>
-                        </Typography>
+                    </Typography>
+                    <br/>
+                    <Typography align={"center"}>
+                        <Link to={"/"} style={{textDecoration: "none"}}>
+                            <Button style={{marginBottom: 40, backgroundColor: "#990033", color: "white"}}
+                                    variant="contained" color="secondary" size={"medium"}>
+                                Continue Shopping
+                            </Button>
+                        </Link>
                     </Typography>
                 </CardContent>
             </CardActionArea>
