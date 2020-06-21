@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Axios from "axios";
 import Button from "@material-ui/core/Button"
 import OrderDetails from "./OrderDetails";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
@@ -76,32 +76,38 @@ export default function MyOrder(props) {
 
     return (
         <div>
-            <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                My Orders({bookId.length} items)
-            </Typography>
-            <Grid style={{marginBottom: 100}}>
-                {orderData.length !== 0 && books !== undefined ?
-                    orderData.reverse().map((data, i) =>
-                        <div key={i}>
-                            <OrderDetails book={books[findById(bookId[orderData.length - i - 1])]}
-                                          price={data.totalPrice}
-                                          quantity={data.bookQuantity}/>
-                        </div>
-                    )
-                    :
-                    <div>
-                        <h3> Data Not Available </h3>
-                        <Link to={"/"} style={{textDecoration: "none"}}>
-                            <Button
-                                variant="contained"
-                                style={{backgroundColor: "#990033", color: "white"}}
-                            >
-                                SHOP NOW
-                            </Button>
-                        </Link>
-                    </div>
-                }
-            </Grid>
+            {localStorage.getItem('key') === "" ?
+                <Redirect to={"/login"}/>
+                :
+                <div>
+                    <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                        My Orders({bookId.length} items)
+                    </Typography>
+                    <Grid style={{marginBottom: 100}}>
+                        {orderData.length !== 0 && books !== undefined ?
+                            orderData.reverse().map((data, i) =>
+                                <div key={i}>
+                                    <OrderDetails book={books[findById(bookId[orderData.length - i - 1])]}
+                                                  price={data.totalPrice}
+                                                  quantity={data.bookQuantity}/>
+                                </div>
+                            )
+                            :
+                            <div>
+                                <br/>
+                                <Link to={"/"} style={{textDecoration: "none"}}>
+                                    <Button
+                                        variant="contained"
+                                        style={{backgroundColor: "#990033", color: "white", marginLeft: 30}}
+                                    >
+                                        SHOP NOW
+                                    </Button>
+                                </Link>
+                            </div>
+                        }
+                    </Grid>
+                </div>
+            }
         </div>
     );
 }

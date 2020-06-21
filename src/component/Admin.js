@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import Axios from "axios";
 import {useFormik} from "formik";
 import LinearIndeterminate from "./loading";
+import {Redirect} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -79,142 +80,148 @@ export default function Admin() {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline/>
-            <div className={classes.paper}>
-                <Typography component="h1" variant="h5">
-                    <b>ADD BOOK</b>
-                </Typography>
-                {loading ?
-                    <LinearIndeterminate/>
-                    : null
-                }
-                {bookAdd ?
-                    <Typography component="h3" variant="h6" style={{color: "green"}}>
-                        <b>Book Added Successfully!</b>
-                    </Typography> : null
-                }
-                <form className={classes.form} onSubmit={formik.handleSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
-                                name="bookTitle"
-                                variant="outlined"
-                                type="text"
-                                fullWidth
-                                id="bookTitle"
-                                label="Book Title"
-                                value={formik.values.bookTitle}
-                                onChange={formik.handleChange}
-                                autoComplete="locality"
-                            />
-                            {formik.errors.bookTitle ?
-                                <error style={{color: "red"}}>{formik.errors.bookTitle}</error> : null}
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
-                                variant="outlined"
-                                fullWidth
-                                type="text"
-                                id="bookAuthor"
-                                label="Book Author"
-                                name="bookAuthor"
-                                value={formik.values.bookAuthor}
-                                onChange={formik.handleChange}
-                                autoComplete="locality"
-                            />
-                            {formik.errors.bookAuthor && !formik.errors.bookTitle ?
-                                <error style={{color: "red"}}>{formik.errors.bookAuthor}</error> : null}
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                variant="outlined"
-                                fullWidth
-                                type="text"
-                                id="bookDescription"
-                                label="Book Description"
-                                name="bookDescription"
-                                value={formik.values.bookDescription}
-                                onChange={formik.handleChange}
-                                autoComplete="locality"
-                            />
-                            {formik.errors.bookDescription && !formik.errors.bookAuthor
-                            && !formik.errors.bookTitle ?
-                                <error style={{color: "red"}}>{formik.errors.bookDescription}</error> : null}
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
-                                variant="outlined"
-                                fullWidth
-                                type="number"
-                                name="bookQuantity"
-                                label="Quantity"
-                                id="bookQuantity"
-                                // minimumValue=1
-                                value={formik.values.bookQuantity}
-                                onChange={formik.handleChange}
-                                autoComplete="locality"
-                            />
-                            {formik.errors.bookQuantity && !formik.errors.bookDescription && !formik.errors.bookAuthor
-                            && !formik.errors.bookTitle ?
-                                <error style={{color: "red"}}>{formik.errors.bookQuantity}</error> : null}
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
-                                variant="outlined"
-                                fullWidth
-                                type="number"
-                                name="bookPrice"
-                                label="Price"
-                                id="bookPrice"
-                                value={formik.values.bookPrice}
-                                onChange={formik.handleChange}
-                                autoComplete="locality"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                type="url"
-                                variant="outlined"
-                                fullWidth
-                                id="bookImage"
-                                label="Book Image Url"
-                                name="bookImage"
-                                value={formik.values.bookImage}
-                                onChange={formik.handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Save
-                            </Button>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Button
-                                type="reset"
-                                fullWidth
-                                variant="contained"
-                                color="secondary"
-                                className={classes.submit}
-                                onClick={reload}
-                            >
-                                Reset
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-            </div>
-        </Container>
+        <div>
+            {localStorage.getItem('key') === "" ?
+                <Redirect to={"/login"}/>
+                :
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline/>
+                    <div className={classes.paper}>
+                        <Typography component="h1" variant="h5">
+                            <b>ADD BOOK</b>
+                        </Typography>
+                        {loading ?
+                            <LinearIndeterminate/>
+                            : null
+                        }
+                        {bookAdd ?
+                            <Typography component="h3" variant="h6" style={{color: "green"}}>
+                                <b>Book Added Successfully!</b>
+                            </Typography> : null
+                        }
+                        <form className={classes.form} onSubmit={formik.handleSubmit}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        name="bookTitle"
+                                        variant="outlined"
+                                        type="text"
+                                        fullWidth
+                                        id="bookTitle"
+                                        label="Book Title"
+                                        value={formik.values.bookTitle}
+                                        onChange={formik.handleChange}
+                                        autoComplete="locality"
+                                    />
+                                    {formik.errors.bookTitle ?
+                                        <error style={{color: "red"}}>{formik.errors.bookTitle}</error> : null}
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        variant="outlined"
+                                        fullWidth
+                                        type="text"
+                                        id="bookAuthor"
+                                        label="Book Author"
+                                        name="bookAuthor"
+                                        value={formik.values.bookAuthor}
+                                        onChange={formik.handleChange}
+                                        autoComplete="locality"
+                                    />
+                                    {formik.errors.bookAuthor && !formik.errors.bookTitle ?
+                                        <error style={{color: "red"}}>{formik.errors.bookAuthor}</error> : null}
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        variant="outlined"
+                                        fullWidth
+                                        type="text"
+                                        id="bookDescription"
+                                        label="Book Description"
+                                        name="bookDescription"
+                                        value={formik.values.bookDescription}
+                                        onChange={formik.handleChange}
+                                        autoComplete="locality"
+                                    />
+                                    {formik.errors.bookDescription && !formik.errors.bookAuthor
+                                    && !formik.errors.bookTitle ?
+                                        <error style={{color: "red"}}>{formik.errors.bookDescription}</error> : null}
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        variant="outlined"
+                                        fullWidth
+                                        type="number"
+                                        name="bookQuantity"
+                                        label="Quantity"
+                                        id="bookQuantity"
+                                        // minimumValue=1
+                                        value={formik.values.bookQuantity}
+                                        onChange={formik.handleChange}
+                                        autoComplete="locality"
+                                    />
+                                    {formik.errors.bookQuantity && !formik.errors.bookDescription && !formik.errors.bookAuthor
+                                    && !formik.errors.bookTitle ?
+                                        <error style={{color: "red"}}>{formik.errors.bookQuantity}</error> : null}
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        variant="outlined"
+                                        fullWidth
+                                        type="number"
+                                        name="bookPrice"
+                                        label="Price"
+                                        id="bookPrice"
+                                        value={formik.values.bookPrice}
+                                        onChange={formik.handleChange}
+                                        autoComplete="locality"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        type="url"
+                                        variant="outlined"
+                                        fullWidth
+                                        id="bookImage"
+                                        label="Book Image Url"
+                                        name="bookImage"
+                                        value={formik.values.bookImage}
+                                        onChange={formik.handleChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.submit}
+                                    >
+                                        Save
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Button
+                                        type="reset"
+                                        fullWidth
+                                        variant="contained"
+                                        color="secondary"
+                                        className={classes.submit}
+                                        onClick={reload}
+                                    >
+                                        Reset
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    </div>
+                </Container>
+            }
+        </div>
     );
 }

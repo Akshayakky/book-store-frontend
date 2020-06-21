@@ -154,14 +154,14 @@ export default function PrimarySearchAppBar(props) {
                             </Link>
                             {isLoggedIn ?
                                 <Link to={"/my-order"} style={{textDecoration: "none", color: "black"}}>
-                                    <MenuItem>My Orders</MenuItem>
+                                    <MenuItem onClick={handleClose}>My Orders</MenuItem>
                                 </Link>
                                 : null
                             }
-                            {props.user.role === "admin" ?
+                            {props.user.role === "admin" && isLoggedIn?
                                 <Link to={"/admin"}
                                       style={{textDecoration: "none", color: "red"}}>
-                                    <MenuItem>Add Books</MenuItem>
+                                    <MenuItem onClick={handleClose}>Add Books</MenuItem>
                                 </Link> :
                                 null
                             }
@@ -169,7 +169,7 @@ export default function PrimarySearchAppBar(props) {
                                 <MenuItem onClick={setTokenInStorage.bind(this)}>Sign Out</MenuItem>
                                 :
                                 <Link to="/login" style={{textDecoration: "none", color: "black"}}>
-                                    <MenuItem>Sign In</MenuItem>
+                                    <MenuItem onClick={handleClose}>Sign In</MenuItem>
                                 </Link>
                             }
                         </Menu>

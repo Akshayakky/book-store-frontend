@@ -59,8 +59,21 @@ const useStyles = makeStyles((theme) => ({
             marginLeft: '59%',
             bottom: 60,
             [theme.breakpoints.down('sm')]: {
-                bottom: 20,
+                bottom: 40,
                 marginLeft: '50%',
+            },
+        },
+    },
+    center: {
+        '& > *': {
+            marginTop: theme.spacing(2),
+            transform: 'translate(-50%, -50%)',
+            position: 'relative',
+            marginLeft: '63.5%',
+            bottom: 60,
+            [theme.breakpoints.down('sm')]: {
+                bottom: 40,
+                marginLeft: '56%',
             },
         },
     },
@@ -142,10 +155,11 @@ export default function CardGrid(props) {
     }
 
     const handleSort = (event) => {
-        axios.get('http://localhost:8080/book/sorted/' + event.target.value + "/" + props.search, headers).then((results
-        ) => {
-            setBookData(results.data);
-        });
+        axios.get('http://localhost:8080/book/sorted/' + event.target.value + "/" + props.search, headers)
+            .then((results
+            ) => {
+                setBookData(results.data);
+            });
         setPage(1);
     }
 
@@ -231,7 +245,7 @@ export default function CardGrid(props) {
                 </Grid>
             </Container>
             {bookData !== undefined ?
-                <div className={classes.root}>
+                <div className={records / itemsPerPage >=3? classes.root : classes.center}>
                     <Pagination count={Math.ceil(records / itemsPerPage)} color="secondary" page={page}
                                 onChange={handleChange}/>
                 </div>

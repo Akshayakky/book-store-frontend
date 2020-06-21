@@ -4,7 +4,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import CardData from "./CardData";
 import Typography from "@material-ui/core/Typography";
 import CustomerDetails from "./CustomerDetails";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
 export default function Cart(props) {
     const [cartData, setCartData] = useState()
@@ -110,9 +110,9 @@ export default function Cart(props) {
 
     const emptyCart = () => {
         carts.map((cart, i) => (
-            axios.post("http://localhost:8080/order?user-id=" + props.user.userId, {
+            axios.post("http://localhost:8080/order", {
                 bookId: cart.bookId, bookQuantity: cart.quantity
-                , user: props.user.userId, totalPrice: (bookData[i].bookPrice * cart.quantity)
+                , userId: props.user.userId, totalPrice: (bookData[i].bookPrice * cart.quantity)
             }, headers)
         ))
         axios.post("http://localhost:8080/mail-sender/order-confirm?user-id=" + props.user.userId, carts, headers)
@@ -123,81 +123,88 @@ export default function Cart(props) {
 
     let sum = 0
     return (
-        <>
-            <div className={classes.cart}>
-                <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                    My Cart({result.length})
-                </Typography>
-                {bookData !== undefined ?
-                    carts.map((cart, i) =>
-                        <div key={i} style={{height: "100%", width: "100%"}}>
-                            <CardData quantity={cart.quantity} updateQuantity={(event) => {
-                                updateQuantity(event, cart.bookId)
-                            }} book={bookData[i]} onChange={() => removeBook(cart.bookId)} backgroundcolor="none"
-                                      style={style} display="flex" page="cart"/>
-                        </div>
-                    )
-                    : <h1> Data Not Available </h1>
-                }
-                {!showResults && result.length > 0 ?
-                    <button onClick={() => {
-                        setShowResults(true)
-                    }} className={classes.buttons}>
-                        PLACE ORDER
-                    </button>
-                    : null
-                }
-            </div>
-            {showResults ?
+        <div>
+            {localStorage.getItem('key') === "" ?
+                <Redirect to={"/login"}/>
+                :
                 <div>
-                    <CustomerDetails onClick={() => {
-                        setShowSummary(true)
-                    }}/>
-                </div>
-                :
-                <div className={classes.cart}>
-                    <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                        Customer Details
-                    </Typography>
-                </div>
-            }
-
-            {showSummary ?
-                <div className={classes.cart}>
-                    <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                        Order Summary
-                    </Typography>
-                    {bookData !== undefined ?
-                        carts.map((cart, i) =>
-                            <div key={i} style={{height: "100%", width: "100%"}}>
-                                <CardData quantity={cart.quantity} book={bookData[i]}
-                                          onChange={() => removeBook(cart.bookId)} backgroundcolor="none"
-                                          style={style} display="flex" page="summary"/>
-                                <div style={{display: "none"}}>
-                                    {sum = sum + cart.quantity * bookData[i].bookPrice}
-                                </div>
-                            </div>
-                        )
-                        : <h1> Data Not Available </h1>
-                    }
-                    <div style={{}}>
-                        <Typography variant="h4" color="inherit" noWrap className={classes.title}>
-                            Total Amount<br/>
-                            Rs. {sum}
+                    <div className={classes.cart}>
+                        <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                            My Cart({result.length})
                         </Typography>
+                        {bookData !== undefined ?
+                            carts.map((cart, i) =>
+                                <div key={i} style={{height: "100%", width: "100%"}}>
+                                    <CardData quantity={cart.quantity} updateQuantity={(event) => {
+                                        updateQuantity(event, cart.bookId)
+                                    }} book={bookData[i]} onChange={() => removeBook(cart.bookId)}
+                                              backgroundcolor="none"
+                                              style={style} display="flex" page="cart"/>
+                                </div>
+                            )
+                            : <h1> Data Not Available </h1>
+                        }
+                        {!showResults && result.length > 0 ?
+                            <button onClick={() => {
+                                setShowResults(true)
+                            }} className={classes.buttons}>
+                                PLACE ORDER
+                            </button>
+                            : null
+                        }
                     </div>
-                    <Link to={"/order-confirm"}>
-                        <button className={classes.buttons} onClick={emptyCart}>CHECKOUT</button>
-                    </Link>
-                </div>
-                :
-                <div className={classes.cart}>
-                    <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                        Order Summary
-                    </Typography>
+                    {showResults ?
+                        <div>
+                            <CustomerDetails onClick={() => {
+                                setShowSummary(true)
+                            }}/>
+                        </div>
+                        :
+                        <div className={classes.cart}>
+                            <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                                Customer Details
+                            </Typography>
+                        </div>
+                    }
+
+                    {showSummary ?
+                        <div className={classes.cart}>
+                            <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                                Order Summary
+                            </Typography>
+                            {bookData !== undefined ?
+                                carts.map((cart, i) =>
+                                    <div key={i} style={{height: "100%", width: "100%"}}>
+                                        <CardData quantity={cart.quantity} book={bookData[i]}
+                                                  onChange={() => removeBook(cart.bookId)} backgroundcolor="none"
+                                                  style={style} display="flex" page="summary"/>
+                                        <div style={{display: "none"}}>
+                                            {sum = sum + cart.quantity * bookData[i].bookPrice}
+                                        </div>
+                                    </div>
+                                )
+                                : <h1> Data Not Available </h1>
+                            }
+                            <div style={{}}>
+                                <Typography variant="h4" color="inherit" noWrap className={classes.title}>
+                                    Total Amount<br/>
+                                    Rs. {sum}
+                                </Typography>
+                            </div>
+                            <Link to={"/order-confirm"}>
+                                <button className={classes.buttons} onClick={emptyCart}>CHECKOUT</button>
+                            </Link>
+                        </div>
+                        :
+                        <div className={classes.cart}>
+                            <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                                Order Summary
+                            </Typography>
+                        </div>
+                    }
                 </div>
             }
-        </>
+        </div>
     )
 }
 

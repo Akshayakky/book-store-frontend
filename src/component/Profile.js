@@ -8,6 +8,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Paper from "@material-ui/core/Paper";
 import Axios from "axios";
+import {Redirect} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -44,7 +45,7 @@ export default function Profile(props) {
         if (edit)
             Axios.put("http://localhost:8080/user?id=" + props.user.userId, {
                 firstName: firstName, lastName: lastName, email: props.user.email
-                , password: props.user.password
+                , password: props.user.password, role : props.user.role
             }).then((response) => {
                 // eslint-disable-next-line no-restricted-globals
                 location.reload()
@@ -52,96 +53,102 @@ export default function Profile(props) {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline/>
-            <Paper className={classes.paper} variant="elevation">
-                <Typography component="h1" variant="h5">
-                    My Profile
-                </Typography>
-                <form className={classes.form}>
-                    <Grid container spacing={5}>
-                        <Grid item xs={12}>
-                            <TextField
-                                name="firstName"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="firstName"
-                                label="First Name"
-                                autoFocus
-                                size="small"
-                                defaultValue={props.user.firstName}
-                                onChange={(event) => setFirstName(event.target.value)}
-                                disabled={!edit}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="lname"
-                                size="small"
-                                onChange={(event) => setLastName(event.target.value)}
-                                defaultValue={props.user.lastName}
-                                disabled={!edit}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                                size="small"
-                                defaultValue={props.user.email}
-                                disabled={true}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="role"
-                                label="Role"
-                                type="role"
-                                id="role"
-                                size="small"
-                                defaultValue={props.user.role}
-                                disabled={true}
-                            />
-                        </Grid>
-                    </Grid>
-                    {edit ?
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={handleChange}
-                        >
-                            SAVE
-                        </Button>
-                        :
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={handleChange}
-                        >
-                            CHANGE
-                        </Button>
-                    }
-                </form>
-            </Paper>
-        </Container>
+        <div>
+            {localStorage.getItem('key') === "" ?
+                <Redirect to={"/login"}/>
+                :
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline/>
+                    <Paper className={classes.paper} variant="elevation">
+                        <Typography component="h1" variant="h5">
+                            My Profile
+                        </Typography>
+                        <form className={classes.form}>
+                            <Grid container spacing={5}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        name="firstName"
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="firstName"
+                                        label="First Name"
+                                        autoFocus
+                                        size="small"
+                                        defaultValue={props.user.firstName}
+                                        onChange={(event) => setFirstName(event.target.value)}
+                                        disabled={!edit}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="lastName"
+                                        label="Last Name"
+                                        name="lastName"
+                                        autoComplete="lname"
+                                        size="small"
+                                        onChange={(event) => setLastName(event.target.value)}
+                                        defaultValue={props.user.lastName}
+                                        disabled={!edit}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="Email Address"
+                                        name="email"
+                                        autoComplete="email"
+                                        size="small"
+                                        defaultValue={props.user.email}
+                                        disabled={true}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        name="role"
+                                        label="Role"
+                                        type="role"
+                                        id="role"
+                                        size="small"
+                                        defaultValue={props.user.role}
+                                        disabled={true}
+                                    />
+                                </Grid>
+                            </Grid>
+                            {edit ?
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submit}
+                                    onClick={handleChange}
+                                >
+                                    SAVE
+                                </Button>
+                                :
+                                <Button
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submit}
+                                    onClick={handleChange}
+                                >
+                                    CHANGE
+                                </Button>
+                            }
+                        </form>
+                    </Paper>
+                </Container>
+            }
+        </div>
     );
 }
