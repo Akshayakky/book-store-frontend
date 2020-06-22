@@ -85,12 +85,16 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     formControl: {
+        borderRadius: "5px",
         margin: theme.spacing(1),
         marginTop: '2.5%',
+        marginRight: '3.5%',
         width: 200,
+        height: 30,
         float: "right",
-        border: "1px solid #d9d9d9",
-        borderBottom: "none"
+        border: "2px solid darkred",
+        borderBottom: "none",
+        textDecoration: "none"
     },
 }));
 
@@ -108,12 +112,12 @@ export default function CardGrid(props) {
         axios.get('http://localhost:8080/book/sorted/default/' + props.search)
             .then((results) => {
                 setBookData(results.data);
-            }).catch((error) => {
+            })/*.catch((error) => {
             if (error.response.status === 404)
                 setError("No Books Found!")
             if (error.response.status === 403)
                 setExpired(true);
-        });
+        });*/
         setPage(1);
     }, [props.search]);
 
