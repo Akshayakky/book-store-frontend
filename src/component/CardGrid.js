@@ -144,7 +144,7 @@ export default function CardGrid(props) {
     var addedToCart = true;
 
     const addBook = (value) => {
-        axios.post('http://localhost:8080/cart', {userId: props.user.userId, bookId: value, quantity: 1}
+        axios.post('http://localhost:8080/cart', {user: props.user, book: value, quantity: 1}
             , headers)
             .then((results) => {
                 setCart(() => cart.concat(results.data))
@@ -199,7 +199,7 @@ export default function CardGrid(props) {
                         <Card className={classes.card}>
                             {
                                 cart.map(num => {
-                                    if (num.bookId === bookData[card - 1].bookId)
+                                    if (JSON.stringify(num.book) === JSON.stringify(bookData[card - 1]))
                                         updateCart();
                                 })}
                             <CardData book={bookData[card - 1]}/>
@@ -213,7 +213,7 @@ export default function CardGrid(props) {
                                                     onClick={addBook.bind(this, bookData[card - 1].bookId)}>
                                                 <Link to="/login" style={{color: "white", textDecoration: "none"}}>
                                                     <Typography variant={"caption"}>
-                                                        ADD TO BAG
+                                                        ADD TO CART
                                                     </Typography>
                                                 </Link>
                                             </Button>
@@ -221,9 +221,9 @@ export default function CardGrid(props) {
                                             <Button size={"large"} variant={"contained"} color={"secondary"}
                                                     className={classes
                                                         .addButton}
-                                                    onClick={addBook.bind(this, bookData[card - 1].bookId)}>
+                                                    onClick={addBook.bind(this, bookData[card - 1])}>
                                                 <Typography variant={"caption"}>
-                                                    ADD TO BAG
+                                                    ADD TO CART
                                                 </Typography>
                                             </Button>
                                         }
@@ -245,7 +245,7 @@ export default function CardGrid(props) {
                 </Grid>
             </Container>
             {bookData !== undefined ?
-                <div className={records / itemsPerPage >=3? classes.root : classes.center}>
+                <div className={records / itemsPerPage >= 3 ? classes.root : classes.center}>
                     <Pagination count={Math.ceil(records / itemsPerPage)} color="secondary" page={page}
                                 onChange={handleChange}/>
                 </div>

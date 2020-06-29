@@ -12,6 +12,7 @@ export default function Cart(props) {
     const [trick, setTrick] = useState(true)
     const [showResults, setShowResults] = React.useState(false)
     const [showSummary, setShowSummary] = React.useState(false)
+    const [customer, setCustomer] = useState("");
 
     const style = {
         padding: 40,
@@ -35,7 +36,7 @@ export default function Cart(props) {
     var carts = [];
     if (cartData !== undefined) {
         for (let i = 0; i < cartData.data.length; i++) {
-            (result.push(cartData.data[i].bookId))
+            (result.push(cartData.data[i].book.bookId))
             carts.push(cartData.data[i])
         }
     }
@@ -92,27 +93,37 @@ export default function Cart(props) {
         }
     }));
 
-    const removeBook = (bookId) => {
-        if (bookId !== undefined) {
-            axios.delete("http://localhost:8080/cart/delete-book/" + bookId + "?user_id=" + props.user.userId
+    const removeBook = (book) => {
+        console.log(book.bookId)
+        if (book !== undefined) {
+            axios.delete("http://localhost:8080/cart/delete-book/" + book.bookId + "?user_id=" + props.user.userId
                 , headers).then((results) => {
                 setTrick(!trick)
             })
         }
     }
 
-    const updateQuantity = (quantity, bookId) => {
-        axios.put("http://localhost:8080/cart/" + quantity + "?book_id=" + bookId + "&user_id=" + props.user.userId
+    const updateQuantity = (quantity, book) => {
+        axios.put("http://localhost:8080/cart/" + quantity + "?book_id=" + JSON.stringify(book.bookId) + "&user_id=" + props.user.userId
             , {}, headers).then((results) => {
             setTrick(!trick)
         })
     }
 
+    const findById = (id) => {
+        for (var i = 0; i < bookData.length; i++) {
+            if (bookData[i].bookId == id)
+                return i;
+        }
+        return 2;
+    }
+
     const emptyCart = () => {
         carts.map((cart, i) => (
             axios.post("http://localhost:8080/order", {
-                bookId: cart.bookId, bookQuantity: cart.quantity
-                , userId: props.user.userId, totalPrice: (bookData[i].bookPrice * cart.quantity)
+                book: cart.book, bookQuantity: cart.quantity
+                , user: props.user, totalPrice: (bookData[findById(cart.book.bookId)].bookPrice * cart.quantity),
+                customer: customer
             }, headers)
         ))
         axios.post("http://localhost:8080/mail-sender/order-confirm?user-id=" + props.user.userId, carts, headers)
@@ -136,8 +147,8 @@ export default function Cart(props) {
                             carts.map((cart, i) =>
                                 <div key={i} style={{height: "100%", width: "100%"}}>
                                     <CardData quantity={cart.quantity} updateQuantity={(event) => {
-                                        updateQuantity(event, cart.bookId)
-                                    }} book={bookData[i]} onChange={() => removeBook(cart.bookId)}
+                                        updateQuantity(event, cart.book)
+                                    }} book={cart.book} onChange={() => removeBook(cart.book)}
                                               backgroundcolor="none"
                                               style={style} display="flex" page="cart"/>
                                 </div>
@@ -155,7 +166,7 @@ export default function Cart(props) {
                     </div>
                     {showResults ?
                         <div>
-                            <CustomerDetails onClick={() => {
+                            <CustomerDetails setCustomer={(customer) => setCustomer(customer)} onClick={() => {
                                 setShowSummary(true)
                             }}/>
                         </div>
@@ -207,8 +218,3 @@ export default function Cart(props) {
         </div>
     )
 }
-
-
-
-
-

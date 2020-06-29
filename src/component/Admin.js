@@ -32,16 +32,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const headers = {
-    headers: {
-        "Authorization": "Bearer " + localStorage.getItem('key')
-    }
-}
-
 export default function Admin() {
     const classes = useStyles();
     const [bookAdd, setBookAdd] = useState(false)
     const [loading, setLoading] = useState(false)
+    const headers = {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('key')
+        }
+    }
     const formik = useFormik({
         initialValues: {
             bookTitle: '',
@@ -70,10 +69,13 @@ export default function Admin() {
                 error.bookDescription = 'title at least have 3 character'
             if (values.bookQuantity < 1)
                 error.bookQuantity = 'enter no greater than 0'
+            if (values.bookPrice < 0)
+                error.bookPrice = 'enter positive number'
             return error
         }
     })
 
+    // useEffect(()=>{reload()},[localStorage.getItem('key')])
     const reload = () => {
         // eslint-disable-next-line no-restricted-globals
         location.reload()
@@ -81,6 +83,7 @@ export default function Admin() {
 
     return (
         <div>
+            {console.log(headers)}
             {localStorage.getItem('key') === "" ?
                 <Redirect to={"/login"}/>
                 :
@@ -181,6 +184,9 @@ export default function Admin() {
                                         onChange={formik.handleChange}
                                         autoComplete="locality"
                                     />
+                                    {formik.errors.bookPrice && !formik.errors.bookDescription && !formik.errors.bookAuthor
+                                    && !formik.errors.bookTitle && !formik.errors.bookQuantity ?
+                                        <error style={{color: "red"}}>{formik.errors.bookPrice}</error> : null}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField

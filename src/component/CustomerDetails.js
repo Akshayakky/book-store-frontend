@@ -78,8 +78,9 @@ export default function CustomerDetails(props) {
             } else {
                 Axios.post('http://localhost:8080/customer', formik.values, headers)
                     .then(response => {
-                        setCustomerId(response.data.id)
+                        setCustomerId(response.data.customerId)
                         props.onClick()
+                        props.setCustomer(response.data)
                     })
                 setUpdate(true)
                 setEdit(true)

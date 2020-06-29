@@ -45,7 +45,7 @@ export default function Profile(props) {
         if (edit)
             Axios.put("http://localhost:8080/user?id=" + props.user.userId, {
                 firstName: firstName, lastName: lastName, email: props.user.email
-                , password: props.user.password, role : props.user.role
+                , password: props.user.password, role: props.user.role
             }).then((response) => {
                 // eslint-disable-next-line no-restricted-globals
                 location.reload()

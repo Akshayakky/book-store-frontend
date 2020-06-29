@@ -47,6 +47,7 @@ export default function MyOrder(props) {
         if (props.user.userId !== undefined)
             Axios.get('http://localhost:8080/order/' + props.user.userId, headers)
                 .then((response) => {
+                    console.log(response)
                     setOrderDetails(response)
                 })
     }, []);
@@ -55,7 +56,7 @@ export default function MyOrder(props) {
     let orderData = []
     if (orderDetails !== undefined) {
         for (let i = 0; i < orderDetails.data.length; i++) {
-            (bookId.push(orderDetails.data[i].bookId))
+            (bookId.push(orderDetails.data[i].book.bookId))
             orderData.push(orderDetails.data[i])
         }
     }
@@ -70,6 +71,7 @@ export default function MyOrder(props) {
 
     useEffect(() => {
         Axios.get("http://localhost:8080/book/get-books-by-id?ids=" + bookId, headers).then((result) => {
+            console.log(result)
             setBooks(result.data)
         })
     }, [orderDetails]);
@@ -87,6 +89,7 @@ export default function MyOrder(props) {
                         {orderData.length !== 0 && books !== undefined ?
                             orderData.reverse().map((data, i) =>
                                 <div key={i}>
+                                    {console.log(books)}
                                     <OrderDetails book={books[findById(bookId[orderData.length - i - 1])]}
                                                   price={data.totalPrice}
                                                   quantity={data.bookQuantity}/>

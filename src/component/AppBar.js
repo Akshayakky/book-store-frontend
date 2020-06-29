@@ -158,7 +158,7 @@ export default function PrimarySearchAppBar(props) {
                                 </Link>
                                 : null
                             }
-                            {props.user.role === "admin" && isLoggedIn?
+                            {props.user.role === "admin" && isLoggedIn ?
                                 <Link to={"/admin"}
                                       style={{textDecoration: "none", color: "red"}}>
                                     <MenuItem onClick={handleClose}>Add Books</MenuItem>
