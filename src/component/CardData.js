@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     cardContent: {
-        height: 87,
+        height: 70,
         flexGrow: 0,
     },
     price: {
