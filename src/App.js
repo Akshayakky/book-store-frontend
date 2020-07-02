@@ -57,11 +57,11 @@ export default function () {
                 <main>
                     <Switch>
                         <Route path="/" exact
-                               component={() => (<CardGrid user={user} search={search}/>)}/>
+                               component={() => (<CardGrid search={search}/>)}/>
                         <Route path="/sign-up" exact
                                component={() => (<SignUp/>)}/>
                         <Route path="/my-order" exact
-                               component={() => (<MyOrder user={user}/>)}/>
+                               component={() => (<MyOrder/>)}/>
                         <Route path="/forgot-password" exact
                                component={() => (<ForgotPassword
                                    setForgetPasswordJwt={(jwt) => localStorage.setItem('jwt', "/reset-password/" + jwt)}/>)}/>
@@ -72,7 +72,7 @@ export default function () {
                         <Route path="/login" exact
                                component={() => (<Login login={(login) => setLogin(login)}/>)}/>
                         <Route path="/cart" exact
-                               component={() => (<Cart user={user} cartCount={cartCount}/>)}/>
+                               component={() => (<Cart cartCount={cartCount}/>)}/>
                         <Route path="/customer" exact
                                component={() => (<CustomerDetails/>)}/>
                         <Route path="/order-confirm" exact

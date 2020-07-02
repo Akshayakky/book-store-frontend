@@ -60,6 +60,7 @@ export default function ForgotPassword(props) {
                         }).then((response) => {
                             props.setForgetPasswordJwt(response.data.jwt);
                             localStorage.setItem('userEmail', values.email)
+                            localStorage.setItem('key', response.data.jwt)
                             setLoading(false)
                             setMailSent(true)
                             setError()

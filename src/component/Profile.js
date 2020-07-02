@@ -37,16 +37,19 @@ export default function Profile(props) {
     const [edit, setEdit] = useState(false)
     const [firstName, setFirstName] = useState(props.user.firstName)
     const [lastName, setLastName] = useState(props.user.lastName)
-
     const classes = useStyles();
+    const headers = {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('key')
+        }
+    }
 
     const handleChange = () => {
         setEdit(!edit)
         if (edit)
-            Axios.put("http://localhost:8080/user?id=" + props.user.userId, {
-                firstName: firstName, lastName: lastName, email: props.user.email
-                , password: props.user.password, role: props.user.role
-            }).then((response) => {
+            Axios.put("http://localhost:8080/user", {
+                firstName: firstName, lastName: lastName, password: props.user.password, role: props.user.role
+            }, headers).then((response) => {
                 // eslint-disable-next-line no-restricted-globals
                 location.reload()
             })

@@ -118,13 +118,12 @@ export default function CardGrid(props) {
     }, [props.search]);
 
     useEffect(() => {
-        if (localStorage.getItem('key') !== "" && props.user.userId !== undefined)
-            axios.get('http://localhost:8080/cart?user_id=' + props.user.userId, headers)
+        if (localStorage.getItem('key') !== "")
+            axios.get('http://localhost:8080/cart', headers)
                 .then((results) => {
                     setCart(() => cart.concat(results.data))
                 });
         setPage(1);
-
     }, []);
 
     const handleChange = (event, value) => {
@@ -144,7 +143,7 @@ export default function CardGrid(props) {
     var addedToCart = true;
 
     const addBook = (value) => {
-        axios.post('http://localhost:8080/cart', {user: props.user, book: value, quantity: 1}
+        axios.post('http://localhost:8080/cart', {book: value, quantity: 1}
             , headers)
             .then((results) => {
                 setCart(() => cart.concat(results.data))
@@ -155,7 +154,7 @@ export default function CardGrid(props) {
     }
 
     const handleSort = (event) => {
-        axios.get('http://localhost:8080/book/sorted/' + event.target.value + "/" + props.search, headers)
+        axios.get('http://localhost:8080/book/sorted/' + event.target.value + "/" + props.search)
             .then((results
             ) => {
                 setBookData(results.data);

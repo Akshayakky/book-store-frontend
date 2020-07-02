@@ -27,7 +27,7 @@ export default function Cart(props) {
     }
 
     useEffect(() => {
-        axios.get("http://localhost:8080/cart?user_id=" + props.user.userId, headers).then((result) => {
+        axios.get("http://localhost:8080/cart", headers).then((result) => {
             setCartData(result)
         })
     }, [trick])
@@ -96,16 +96,16 @@ export default function Cart(props) {
     const removeBook = (book) => {
         console.log(book.bookId)
         if (book !== undefined) {
-            axios.delete("http://localhost:8080/cart/delete-book/" + book.bookId + "?user_id=" + props.user.userId
-                , headers).then((results) => {
-                setTrick(!trick)
-            })
+            axios.delete("http://localhost:8080/cart/delete-book/" + book.bookId, headers)
+                .then((results) => {
+                    setTrick(!trick)
+                })
         }
     }
 
     const updateQuantity = (quantity, book) => {
-        axios.put("http://localhost:8080/cart/" + quantity + "?book_id=" + JSON.stringify(book.bookId) + "&user_id=" + props.user.userId
-            , {}, headers).then((results) => {
+        axios.put("http://localhost:8080/cart/" + quantity + "?book_id=" + JSON.stringify(book.bookId), {}
+            , headers).then((results) => {
             setTrick(!trick)
         })
     }
@@ -122,12 +122,12 @@ export default function Cart(props) {
         carts.map((cart, i) => (
             axios.post("http://localhost:8080/order", {
                 book: cart.book, bookQuantity: cart.quantity
-                , user: props.user, totalPrice: (bookData[findById(cart.book.bookId)].bookPrice * cart.quantity),
+                , totalPrice: (bookData[findById(cart.book.bookId)].bookPrice * cart.quantity),
                 customer: customer
             }, headers)
         ))
-        axios.post("http://localhost:8080/mail-sender/order-confirm?user-id=" + props.user.userId, carts, headers)
-        axios.delete("http://localhost:8080/cart/empty-cart?user_id=" + props.user.userId, headers);
+        axios.post("http://localhost:8080/mail-sender/order-confirm", carts, headers)
+        axios.delete("http://localhost:8080/cart/empty-cart", headers);
     }
 
     const classes = useStyles()
