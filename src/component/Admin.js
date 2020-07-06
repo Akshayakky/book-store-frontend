@@ -75,7 +75,6 @@ export default function Admin() {
         }
     })
 
-    // useEffect(()=>{reload()},[localStorage.getItem('key')])
     const reload = () => {
         // eslint-disable-next-line no-restricted-globals
         location.reload()
