@@ -47,7 +47,6 @@ export default function MyOrder(props) {
         if (localStorage.getItem('key') !== undefined)
             Axios.get('http://localhost:8080/order', headers)
                 .then((response) => {
-                    console.log(response)
                     setOrderDetails(response)
                 })
     }, []);
@@ -71,7 +70,6 @@ export default function MyOrder(props) {
 
     useEffect(() => {
         Axios.get("http://localhost:8080/book/get-books-by-id?ids=" + bookId, headers).then((result) => {
-            console.log(result)
             setBooks(result.data)
         })
     }, [orderDetails]);
@@ -89,7 +87,6 @@ export default function MyOrder(props) {
                         {orderData.length !== 0 && books !== undefined ?
                             orderData.reverse().map((data, i) =>
                                 <div key={i}>
-                                    {console.log(books)}
                                     <OrderDetails book={books[findById(bookId[orderData.length - i - 1])]}
                                                   price={data.totalPrice}
                                                   quantity={data.bookQuantity}/>

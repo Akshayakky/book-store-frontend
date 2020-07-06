@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,6 +13,7 @@ import {Link} from 'react-router-dom';
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -61,6 +62,7 @@ export default function PrimarySearchAppBar(props) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const isLoggedIn = props.login || localStorage.getItem('key') !== ""
 
     const handleChange = (event) => {
         props.setSearch(event.target.value)
@@ -80,8 +82,6 @@ export default function PrimarySearchAppBar(props) {
         // eslint-disable-next-line no-restricted-globals
         location.reload()
     }
-
-    const isLoggedIn = props.login || localStorage.getItem('key') !== ""
 
     return (
         <div className={classes.grow}>

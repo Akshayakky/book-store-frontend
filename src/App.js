@@ -37,9 +37,11 @@ export default function () {
     const [user, setUser] = useState("")
     const [jwt, setJwt] = useState("")
     const classes = useStyles();
+    const jwtDecoder = require("jsonwebtoken")
+
     useEffect(() => {
-        if (localStorage.getItem('userEmail') !== "")
-            Axios.get("http://localhost:8080/user?email=" + localStorage.getItem('userEmail'))
+        if (localStorage.getItem('key') !== "")
+            Axios.get("http://localhost:8080/user?email=" + jwtDecoder.decode(localStorage.getItem('key')).sub)
                 .then((response) => {
                         console.log("loaded user")
                         setUser(response.data)

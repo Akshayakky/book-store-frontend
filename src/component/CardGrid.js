@@ -103,6 +103,7 @@ export default function CardGrid(props) {
     const [expired, setExpired] = useState(false);
     const itemsPerPage = 12;
     const cards = [];
+    const jwtDecoder = require("jsonwebtoken")
 
     useEffect(() => {
         axios.get('http://localhost:8080/book/sorted/default/' + props.search)
@@ -160,6 +161,12 @@ export default function CardGrid(props) {
                 setBookData(results.data);
             });
         setPage(1);
+    }
+
+    if(localStorage.getItem('key') !== "" && jwtDecoder.decode(localStorage.getItem('key')).exp< Date.now() / 1000) {
+        localStorage.setItem('key', "")
+        // eslint-disable-next-line no-restricted-globals
+        location.reload()
     }
 
     if (bookData !== undefined) {
