@@ -163,7 +163,7 @@ export default function CardGrid(props) {
         setPage(1);
     }
 
-    if(localStorage.getItem('key') !== "" && jwtDecoder.decode(localStorage.getItem('key')).exp< Date.now() / 1000) {
+    if (localStorage.getItem('key') !== "" && jwtDecoder.decode(localStorage.getItem('key')).exp < Date.now() / 1000) {
         localStorage.setItem('key', "")
         // eslint-disable-next-line no-restricted-globals
         location.reload()

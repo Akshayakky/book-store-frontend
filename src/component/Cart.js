@@ -29,6 +29,8 @@ export default function Cart(props) {
     useEffect(() => {
         axios.get("http://localhost:8080/cart", headers).then((result) => {
             setCartData(result)
+        }).catch(error => {
+            console.log(error)
         })
     }, [trick])
 

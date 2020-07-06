@@ -72,7 +72,7 @@ export default function ForgotPassword(props) {
     return (
         <Container component="main" maxWidth="xs">
             {login ?
-                <Redirect to={"/"}/> : null
+                <Redirect to={"/login"}/> : null
             }
             <CssBaseline/>
             <div className={classes.paper}>
@@ -82,14 +82,19 @@ export default function ForgotPassword(props) {
                 <Typography component="h1" variant="h5">
                     New Password
                 </Typography>
-                {console.log(reset)}
-                <Typography component="h3" variant="h6" style={{color: "green"}}>
-                    {reset !== undefined ?
-                        reset
-                        :
-                        null
-                    }
-                </Typography>
+                {reset !== undefined ?
+                    (
+                        setTimeout(() => {
+                                setLogin(true)
+                            },
+                            1000),
+                            <Typography component="h3" variant="h6" style={{color: "green"}}>
+                                {reset}
+                            </Typography>
+                    )
+                    :
+                    null
+                }
                 <form className={classes.form} noValidate onSubmit={handleSubmit}>
                     {console.log("helo")}
                     <Grid container spacing={2}>
