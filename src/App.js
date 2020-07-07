@@ -58,7 +58,7 @@ export default function () {
                                      setSearch={(value) => setSearch(value)}/>
                 <main>
                     <Switch>
-                        <Route path="/" exact
+                        <Route path="/book-store-frontend" exact
                                component={() => (<CardGrid search={search}/>)}/>
                         <Route path="/sign-up" exact
                                component={() => (<SignUp/>)}/>
