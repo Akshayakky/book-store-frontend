@@ -238,7 +238,7 @@ export default function CardGrid(props) {
                                     <button className={classes.addButton}
                                             style={{width: "100%", backgroundColor: "blue"}}>
                                         <Typography variant={"caption"} style={{color: "white"}}>
-                                            ADDED TO BAG
+                                            ADDED TO CART
                                         </Typography>
                                     </button>
                                 }

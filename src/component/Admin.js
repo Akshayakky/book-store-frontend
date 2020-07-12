@@ -82,7 +82,6 @@ export default function Admin() {
 
     return (
         <div>
-            {console.log(headers)}
             {localStorage.getItem('key') === "" ?
                 <Redirect to={"/login"}/>
                 :

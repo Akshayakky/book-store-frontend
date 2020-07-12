@@ -88,6 +88,7 @@ export default function Cart(props) {
         },
         cart: {
             border: "thin solid #d9d9d9",
+            paddingLeft : 10,
             margin: "50px",
             [theme.breakpoints.up('md')]: {
                 margin: "50px 200px"
