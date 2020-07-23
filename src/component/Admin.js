@@ -89,8 +89,8 @@ export default function Admin() {
                 <Container component="main" maxWidth="xs">
                     <CssBaseline/>
                     <div className={classes.paper}>
-                        <Typography component="h1" variant="h5">
-                            <b>ADD BOOK</b>
+                        <Typography variant="h5" color="inherit" noWrap className={classes.title}>
+                            Add Book
                         </Typography>
                         {loading ?
                             <LinearIndeterminate/>

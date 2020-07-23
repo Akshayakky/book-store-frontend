@@ -55,12 +55,12 @@ export default function () {
         <React.Fragment>
             <CssBaseline/>
             <Router>
-                <PrimarySearchAppBar user={user} login={login} cartCount={cartCount}
+                <PrimarySearchAppBar user={user} search={search} login={login} cartCount={cartCount}
                                      setSearch={(value) => setSearch(value)}/>
                 <main>
                     <Switch>
                         <Route path="/" exact
-                               component={() => (<CardGrid search={search}/>)}/>
+                               component={() => (<CardGrid user={user} search={search}/>)}/>
                         <Route path="/sign-up" exact
                                component={() => (<SignUp/>)}/>
                         <Route path="/my-order" exact

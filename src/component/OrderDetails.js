@@ -39,7 +39,7 @@ export default function OrderDetails(props) {
 
     return (
         <div className={classes.root}>
-            <Paper className={classes.paper} >
+            <Paper className={classes.paper} variant="outlined">
                 <div>
                     <Grid item direction="column">
                         <h3>{props.orderDate}</h3>

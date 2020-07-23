@@ -31,7 +31,10 @@ const useStyles = makeStyles((theme) => ({
     },
     media: {
         width: 400,
-        height: 300,
+        [theme.breakpoints.up("md")]: {
+            height: 250
+        },
+        height: 200,
         margin: 'auto',
         display: 'block',
         maxWidth: '100%',
@@ -48,61 +51,60 @@ export default function MediaCard() {
     const classes = useStyles();
 
     return (
-        <Card className={classes.root}>
-            <CardActionArea style={{paddingTop: 20, marginBottom: 30}}>
-                <Grid>
-                    <Typography variant="h6" color="inherit" align={"center"}> Your Order Has Been Placed
-                        Successfully!
+        // <Card className={classes.root}>
+        <CardActionArea style={{paddingTop: 20}}>
+            <Grid>
+                <Typography variant="h6" color="inherit" align={"center"}> Your Order Has Been Placed
+                    Successfully!
+                </Typography>
+            </Grid>
+            <CardMedia
+                className={classes.media}
+                image={img}
+                title="Contemplative Reptile"
+            />
+            <CardContent>
+                <Typography variant="h5" component="h2" align={"center"}>
+                    Hurray!!!
+                </Typography>
+                <Typography align={"center"}>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        Your order number is #2001539. We have emailed your order confirmation, and will
+                        send you an update when your order has shipped.
                     </Typography>
-                </Grid>
-                <CardMedia
-                    className={classes.media}
-                    image={img}
-                    title="Contemplative Reptile"
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2" align={"center"}>
-                        Hurray!!!
-                    </Typography>
-                    <Typography align={"center"}>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            Your order number is #2001539. We have emailed your order confirmation, and will
-                            send you an update when your order has shipped.
-                        </Typography>
 
-                        <TableContainer>
-                            <Typography align="center" style={{width: 700}} className={classes.table}>
-                                <Table size="small" border={1} style={{flex: "center"}}>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell align="center">Email us</TableCell>
-                                            <TableCell align="center">Contact</TableCell>
-                                            <TableCell align="center">Address</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <tbody>
+                    <TableContainer>
+                        <Typography align="center" style={{width: 700}} className={classes.table}>
+                            <Table size="small" border={1} style={{flex: "center"}}>
+                                <TableHead>
                                     <TableRow>
-                                        <TableCell align="center">abc@bridgelabz.com </TableCell>
-                                        <TableCell align="center">+911234567890</TableCell>
-                                        <TableCell align="left">Malhotra Complex,sector 23,RM marg,mumbai 40001
-                                        </TableCell>
+                                        <TableCell align="center">Email us</TableCell>
+                                        <TableCell align="center">Contact</TableCell>
+                                        <TableCell align="center">Address</TableCell>
                                     </TableRow>
-                                    </tbody>
-                                </Table>
-                            </Typography>
-                        </TableContainer>
-                    </Typography>
-                    <br/>
-                    <Typography align={"center"}>
-                        <Link to={"/"} style={{textDecoration: "none"}}>
-                            <Button style={{ backgroundColor: "#990033", color: "white"}}
-                                    variant="contained" color="secondary" size={"medium"}>
-                                Continue Shopping
-                            </Button>
-                        </Link>
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Card>
+                                </TableHead>
+                                <tbody>
+                                <TableRow>
+                                    <TableCell align="center">abc@bridgelabz.com </TableCell>
+                                    <TableCell align="center">+911234567890</TableCell>
+                                    <TableCell align="left">Malhotra Complex,sector 23,RM marg,mumbai 40001
+                                    </TableCell>
+                                </TableRow>
+                                </tbody>
+                            </Table>
+                        </Typography>
+                    </TableContainer>
+                </Typography>
+                <br/>
+                <Typography align={"center"}>
+                    <Link to={"/"} style={{textDecoration: "none"}}>
+                        <Button style={{marginBottom: 40, backgroundColor: "#990033", color: "white"}}
+                                variant="contained" color="secondary" size={"medium"}>
+                            Continue Shopping
+                        </Button>
+                    </Link>
+                </Typography>
+            </CardContent>
+        </CardActionArea>
     )
 }

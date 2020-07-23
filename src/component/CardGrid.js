@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         backgroundColor: "#b3003b"
     },
+
     wishlistButton: {
         width: '50%',
         border: "thin solid #d5cccc",
@@ -80,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
     title: {
         marginTop: '3.1%',
         float: "left",
-        paddingLeft : 15,
+        paddingLeft: 15,
         [theme.breakpoints.up('md')]: {
             marginLeft: theme.spacing(24),
         },
@@ -102,7 +103,7 @@ export default function CardGrid(props) {
     const [page, setPage] = React.useState(1);
     const [error, setError] = useState();
     const [expired, setExpired] = useState(false);
-    const itemsPerPage = 12;
+    const itemsPerPage = 4;
     const cards = [];
     const jwtDecoder = require("jsonwebtoken")
 
@@ -133,7 +134,7 @@ export default function CardGrid(props) {
     }, []);
 
     const handleChange = (event, value) => {
-        setPage(value);
+        setPage(value)
     };
 
     const updateCart = () => {
@@ -215,37 +216,41 @@ export default function CardGrid(props) {
                                 })}
                             <CardData book={bookData[card - 1]}/>
                             <CardActions>
-                                {addedToCart ?
-                                    <MuiThemeProvider theme={theme}>
-                                        {localStorage.getItem('key') === "" ?
-                                            <Button size={"large"} variant={"contained"} color={"secondary"}
-                                                    className={classes
-                                                        .addButton}
-                                                    onClick={addBook.bind(this, bookData[card - 1].bookId)}>
-                                                <Link to="/login" style={{color: "white", textDecoration: "none"}}>
+                                {(props.user.role !== "admin") ?
+                                    (addedToCart) ?
+                                        <MuiThemeProvider theme={theme}>
+                                            {localStorage.getItem('key') === "" ?
+                                                <Button size={"large"} variant={"contained"} color={"secondary"}
+                                                        className={classes
+                                                            .addButton}
+                                                        onClick={addBook.bind(this, bookData[card - 1].bookId)}>
+                                                    <Link to="/login"
+                                                          style={{color: "white", textDecoration: "none"}}>
+                                                        <Typography variant={"caption"}>
+                                                            ADD TO CART
+                                                        </Typography>
+                                                    </Link>
+                                                </Button>
+                                                :
+                                                <Button size={"large"} variant={"contained"} color={"secondary"}
+                                                        className={classes
+                                                            .addButton}
+                                                        onClick={addBook.bind(this, bookData[card - 1])}>
                                                     <Typography variant={"caption"}>
                                                         ADD TO CART
                                                     </Typography>
-                                                </Link>
-                                            </Button>
-                                            :
-                                            <Button size={"large"} variant={"contained"} color={"secondary"}
-                                                    className={classes
-                                                        .addButton}
-                                                    onClick={addBook.bind(this, bookData[card - 1])}>
-                                                <Typography variant={"caption"}>
-                                                    ADD TO CART
-                                                </Typography>
-                                            </Button>
-                                        }
-                                    </MuiThemeProvider>
+                                                </Button>
+                                            }
+                                        </MuiThemeProvider>
+                                        :
+                                        <button className={classes.addButton}
+                                                style={{width: "100%", backgroundColor: "blue"}}>
+                                            <Typography variant={"caption"} style={{color: "white"}}>
+                                                ADDED TO BAG
+                                            </Typography>
+                                        </button>
                                     :
-                                    <button className={classes.addButton}
-                                            style={{width: "100%", backgroundColor: "blue"}}>
-                                        <Typography variant={"caption"} style={{color: "white"}}>
-                                            ADDED TO BAG
-                                        </Typography>
-                                    </button>
+                                    null
                                 }
                             </CardActions>
                         </Card>

@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom'
+import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,7 +9,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -60,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar(props) {
     const classes = useStyles();
+    const [login, setLogin] = useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const isLoggedIn = props.login || (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "")
@@ -77,11 +77,12 @@ export default function PrimarySearchAppBar(props) {
     };
 
     const handleIcon = () => {
-        // redirect
-        window.setTimeout(() => {
-            // eslint-disable-next-line no-restricted-globals
-            location.reload()
-        }, 0)
+        // // redirect
+        // // window.setTimeout(() => {
+        //     // eslint-disable-next-line no-restricted-globals
+        //     location.reload()
+        // // }, 0)
+        setLogin(true);
     };
 
     const setTokenInStorage = () => {
@@ -93,6 +94,13 @@ export default function PrimarySearchAppBar(props) {
 
     return (
         <div className={classes.grow}>
+            {login ?
+                <Redirect to={"/"}/> : null
+            }
+            {login && (props.search!=="") ?
+                // eslint-disable-next-line no-restricted-globals
+                location.reload() : null
+            }
             <AppBar position="static" style={{background: '#990033'}}>
                 <Toolbar>
                     <Link to={"/"} style={{color: "white"}}>
@@ -119,14 +127,21 @@ export default function PrimarySearchAppBar(props) {
                     </div>
                     <div className={classes.grow}/>
                     <div style={{marginTop: 5}}>
-                        <IconButton aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={props.cartCount} color="secondary">
-                                <Link to={isLoggedIn ? "/cart" : "/login"}
-                                      style={{color: "white", style: "none"}}>
-                                    <ShoppingCartIcon/>
-                                </Link>
-                            </Badge>
-                        </IconButton>
+                        {
+                            (props.user.role !== "admin") ?
+                                <IconButton aria-label="show 4 new mails" color="inherit">
+                                    <Badge badgeContent={props.cartCount} color="secondary">
+
+                                        <Link to={isLoggedIn ? "/cart" : "/login"}
+                                              style={{color: "white", style: "none"}}>
+                                            <ShoppingCartIcon/>
+                                        </Link>
+
+                                    </Badge>
+                                </IconButton>
+                                :
+                                null
+                        }
                     </div>
                     <div>
                         <IconButton
@@ -160,9 +175,15 @@ export default function PrimarySearchAppBar(props) {
                                   style={{textDecoration: "none", color: "black"}}>
                                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                             </Link>
-                            {isLoggedIn ?
+                            {props.user.role === "user" && isLoggedIn ?
                                 <Link to={"/my-order"} style={{textDecoration: "none", color: "black"}}>
                                     <MenuItem onClick={handleClose}>My Orders</MenuItem>
+                                </Link>
+                                : null
+                            }
+                            {props.user.role === "admin" && isLoggedIn ?
+                                <Link to={"/order-data"} style={{textDecoration: "none", color: "red"}}>
+                                    <MenuItem onClick={handleClose}>Orders</MenuItem>
                                 </Link>
                                 : null
                             }
