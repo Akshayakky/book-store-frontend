@@ -13,7 +13,7 @@ import Axios from "axios";
 
 const useStyle = makeStyles((theme) => ({
     layout: {
-        margin: "50px",
+        margin: "20px",
         [theme.breakpoints.up('md')]: {
             margin: "50px 200px"
         }
@@ -37,6 +37,7 @@ const useStyle = makeStyles((theme) => ({
     buttons: {
         backgroundColor: "#990033",
         color: "white",
+        marginTop : 20,
         borderRadius: 0,
         height: 30,
         [theme.breakpoints.up('md')]: {

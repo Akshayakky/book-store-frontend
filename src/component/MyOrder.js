@@ -29,7 +29,14 @@ const useStyles = makeStyles((theme) => ({
         width: 100,
         height: 128,
     },
-
+    cart: {
+        border: "thin solid #d9d9d9",
+        // margin: "50px",
+        // paddingLeft : 20,
+        [theme.breakpoints.up('md')]: {
+            margin: "50px 200px"
+        }
+    }
 }));
 
 export default function MyOrder(props) {
@@ -44,7 +51,7 @@ export default function MyOrder(props) {
     }
 
     useEffect(() => {
-        if (localStorage.getItem('key') !== undefined)
+        if (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "")
             Axios.get('http://localhost:8080/order', headers)
                 .then((response) => {
                     setOrderDetails(response)
@@ -80,15 +87,17 @@ export default function MyOrder(props) {
                 <Redirect to={"/login"}/>
                 :
                 <div>
+                    <Grid className={classes.cart}>
                     <Typography variant="h6" color="inherit" noWrap className={classes.title}>
                         My Orders({bookId.length} items)
                     </Typography>
-                    <Grid style={{marginBottom: 100}}>
+                    <Grid style={{marginBottom: 20}}>
                         {orderData.length !== 0 && books !== undefined ?
                             orderData.reverse().map((data, i) =>
                                 <div key={i}>
                                     <OrderDetails book={books[findById(bookId[orderData.length - i - 1])]}
                                                   price={data.totalPrice}
+                                                  orderDate = {orderData[i].date}
                                                   quantity={data.bookQuantity}/>
                                 </div>
                             )
@@ -105,6 +114,7 @@ export default function MyOrder(props) {
                                 </Link>
                             </div>
                         }
+                    </Grid>
                     </Grid>
                 </div>
             }

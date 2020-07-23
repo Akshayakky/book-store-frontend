@@ -80,6 +80,7 @@ const useStyles = makeStyles((theme) => ({
     title: {
         marginTop: '3.1%',
         float: "left",
+        paddingLeft : 15,
         [theme.breakpoints.up('md')]: {
             marginLeft: theme.spacing(24),
         },
@@ -106,9 +107,11 @@ export default function CardGrid(props) {
     const jwtDecoder = require("jsonwebtoken")
 
     useEffect(() => {
+        setError("Loading Books...")
         axios.get('http://localhost:8080/book/sorted/default/' + props.search)
             .then((results) => {
                 setBookData(results.data);
+                setError("")
             }).catch((error) => {
             if (error.response.status === 404)
                 setError("No Books Found!")
@@ -119,7 +122,9 @@ export default function CardGrid(props) {
     }, [props.search]);
 
     useEffect(() => {
-        if (localStorage.getItem('key') !== "")
+        // eslint-disable-next-line no-restricted-globals
+        // location.reload()
+        if (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "")
             axios.get('http://localhost:8080/cart', headers)
                 .then((results) => {
                     setCart(() => cart.concat(results.data))
@@ -163,7 +168,7 @@ export default function CardGrid(props) {
         setPage(1);
     }
 
-    if (localStorage.getItem('key') !== "" && jwtDecoder.decode(localStorage.getItem('key')).exp < Date.now() / 1000) {
+    if (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "" && jwtDecoder.decode(localStorage.getItem('key')).exp < Date.now() / 1000) {
         localStorage.setItem('key', "")
         // eslint-disable-next-line no-restricted-globals
         location.reload()

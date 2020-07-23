@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom'
 import {makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -61,7 +62,7 @@ export default function PrimarySearchAppBar(props) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const isLoggedIn = props.login || localStorage.getItem('key') !== ""
+    const isLoggedIn = props.login || (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "")
 
     const handleChange = (event) => {
         props.setSearch(event.target.value)
@@ -73,6 +74,14 @@ export default function PrimarySearchAppBar(props) {
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleIcon = () => {
+        // redirect
+        window.setTimeout(() => {
+            // eslint-disable-next-line no-restricted-globals
+            location.reload()
+        }, 0)
     };
 
     const setTokenInStorage = () => {
@@ -87,7 +96,7 @@ export default function PrimarySearchAppBar(props) {
             <AppBar position="static" style={{background: '#990033'}}>
                 <Toolbar>
                     <Link to={"/"} style={{color: "white"}}>
-                        <MenuBookIcon className={classes.bookIcon}/>
+                        <MenuBookIcon onClick={handleIcon} className={classes.bookIcon}/>
                     </Link>
                     <Typography className={classes.title} variant="h6" noWrap>
                         The Bookstore
@@ -164,7 +173,7 @@ export default function PrimarySearchAppBar(props) {
                                 </Link> :
                                 null
                             }
-                            {localStorage.getItem('key') !== "" ?
+                            {localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "" ?
                                 <MenuItem onClick={setTokenInStorage.bind(this)}>Sign Out</MenuItem>
                                 :
                                 <Link to="/login" style={{textDecoration: "none", color: "black"}}>

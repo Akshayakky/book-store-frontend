@@ -95,7 +95,7 @@ export default function MediaCard() {
                     <br/>
                     <Typography align={"center"}>
                         <Link to={"/"} style={{textDecoration: "none"}}>
-                            <Button style={{marginBottom: 40, backgroundColor: "#990033", color: "white"}}
+                            <Button style={{ backgroundColor: "#990033", color: "white"}}
                                     variant="contained" color="secondary" size={"medium"}>
                                 Continue Shopping
                             </Button>

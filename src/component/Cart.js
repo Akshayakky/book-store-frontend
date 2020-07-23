@@ -5,6 +5,7 @@ import CardData from "./CardData";
 import Typography from "@material-ui/core/Typography";
 import CustomerDetails from "./CustomerDetails";
 import {Link, Redirect} from "react-router-dom";
+import CartData from "./CartData";
 
 export default function Cart(props) {
     const [cartData, setCartData] = useState()
@@ -88,7 +89,9 @@ export default function Cart(props) {
         },
         cart: {
             border: "thin solid #d9d9d9",
-            margin: "50px",
+            margin: "20px",
+            marginBottom : 50,
+            paddingLeft : 20,
             [theme.breakpoints.up('md')]: {
                 margin: "50px 200px"
             }
@@ -148,7 +151,7 @@ export default function Cart(props) {
                         {bookData !== undefined ?
                             carts.map((cart, i) =>
                                 <div key={i} style={{height: "100%", width: "100%"}}>
-                                    <CardData quantity={cart.quantity} updateQuantity={(event) => {
+                                    <CartData quantity={cart.quantity} updateQuantity={(event) => {
                                         updateQuantity(event, cart.book)
                                     }} book={cart.book} onChange={() => removeBook(cart.book)}
                                               backgroundcolor="none"

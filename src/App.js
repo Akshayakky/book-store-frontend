@@ -16,6 +16,7 @@ import Admin from "./component/Admin";
 import ForgotPassword from "./component/ForgotPassword";
 import ResetPassword from "./component/ResetPassword";
 import MyOrder from "./component/MyOrder";
+import OrderData from "./component/OrderData";
 
 const useStyles = makeStyles((theme) => ({
     footer: {
@@ -40,7 +41,7 @@ export default function () {
     const jwtDecoder = require("jsonwebtoken")
 
     useEffect(() => {
-        if (localStorage.getItem('key') !== "")
+        if (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "")
             Axios.get("http://localhost:8080/user?email=" + jwtDecoder.decode(localStorage.getItem('key')).sub)
                 .then((response) => {
                         console.log("loaded user")
@@ -69,6 +70,8 @@ export default function () {
                                    setForgetPasswordJwt={(jwt) => localStorage.setItem('jwt', "/reset-password/" + jwt)}/>)}/>
                         <Route path="/admin" exact
                                component={() => (<Admin/>)}/>
+                        <Route path="/order-data" exact
+                               component={() => (<OrderData/>)}/>
                         <Route path="/profile" exact
                                component={() => (<Profile user={user}/>)}/>
                         <Route path="/login" exact

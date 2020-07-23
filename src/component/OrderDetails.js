@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
         width: 100,
         height: 128,
     },
+    cart: {
+        paddingLeft: 20
+    }
 }));
 
 export default function OrderDetails(props) {
@@ -36,35 +39,40 @@ export default function OrderDetails(props) {
 
     return (
         <div className={classes.root}>
-            <Paper className={classes.paper} variant="outlined">
+            <Paper className={classes.paper} >
                 <div>
-                    <Grid container spacing={3}>
+                    <Grid item direction="column">
+                        <h3>{props.orderDate}</h3>
+                    </Grid>
+                    <Grid container spacing={3} className={(props.page === "orderSummary") ? classes.cart : null}>
                         <Grid item>
                             <img className={classes.img} alt="complex" src={image}/>
                         </Grid>
-                        <Grid item xs={12} sm container>
-                            <Grid item xs container direction="column" spacing={4}>
-                                <Grid item xs>
-                                    <Typography gutterBottom variant="subtitle1" align="justify">
-                                        {title}
-                                    </Typography>
-                                    <Typography gutterBottom variant="body2" color="textSecondary" align="left">
-                                        By {author}
-                                    </Typography>
-                                    <Typography gutterBottom variant="body2" align="left">
-                                        ({props.quantity})
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                            <Grid>
-                                <Typography gutterBottom variant="subtitle1" align="left">
-                                    <b>
-                                        Rs. {props.price}
-                                    </b>
+
+                        {/*<Grid item xs={12} sm container>*/}
+                        <Grid item xs container direction="column" spacing={4}>
+                            <Grid item xs>
+                                <Typography gutterBottom variant="subtitle1" align="justify">
+                                    {title}
+                                </Typography>
+                                <Typography gutterBottom variant="body2" color="textSecondary" align="left">
+                                    By {author}
+                                </Typography>
+                                <Typography gutterBottom variant="body2" align="left">
+                                    ({props.quantity})
                                 </Typography>
                             </Grid>
                         </Grid>
+
+                        <Grid>
+                            <Typography style={{marginTop : 12}} variant="subtitle1" align="left">
+                                <b>
+                                    Rs. {props.price}
+                                </b>
+                            </Typography>
+                        </Grid>
                     </Grid>
+                    {/*</Grid>*/}
                 </div>
             </Paper>
         </div>
