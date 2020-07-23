@@ -51,7 +51,6 @@ export default function MediaCard() {
     const classes = useStyles();
 
     return (
-        // <Card className={classes.root}>
         <CardActionArea style={{paddingTop: 20}}>
             <Grid>
                 <Typography variant="h6" color="inherit" align={"center"}> Your Order Has Been Placed

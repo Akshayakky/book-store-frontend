@@ -97,7 +97,7 @@ export default function PrimarySearchAppBar(props) {
             {login ?
                 <Redirect to={"/"}/> : null
             }
-            {login && (props.search!=="") ?
+            {login && (props.search !== "") ?
                 // eslint-disable-next-line no-restricted-globals
                 location.reload() : null
             }
@@ -140,7 +140,10 @@ export default function PrimarySearchAppBar(props) {
                                     </Badge>
                                 </IconButton>
                                 :
-                                null
+                                <Link to={"/profile"}
+                                      style={{textDecoration: "none", color: "red"}}>
+                                    <MenuItem onClick={handleClose}>Admin</MenuItem>
+                                </Link>
                         }
                     </div>
                     <div>
@@ -171,10 +174,14 @@ export default function PrimarySearchAppBar(props) {
                             {isLoggedIn ?
                                 <MenuItem disabled={true}><b>Hello {props.user.firstName}!</b></MenuItem> : null
                             }
-                            <Link to={!isLoggedIn ? "/login" : "/profile"}
-                                  style={{textDecoration: "none", color: "black"}}>
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            </Link>
+                            {props.user.role !== "admin" ?
+                                <Link to={!isLoggedIn ? "/login" : "/profile"}
+                                      style={{textDecoration: "none", color: "black"}}>
+                                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                </Link>
+                                :
+                                null
+                            }
                             {props.user.role === "user" && isLoggedIn ?
                                 <Link to={"/my-order"} style={{textDecoration: "none", color: "black"}}>
                                     <MenuItem onClick={handleClose}>My Orders</MenuItem>
@@ -195,7 +202,9 @@ export default function PrimarySearchAppBar(props) {
                                 null
                             }
                             {localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "" ?
-                                <MenuItem onClick={setTokenInStorage.bind(this)}>Sign Out</MenuItem>
+                                <Link to="/" style={{textDecoration: "none", color: "black"}}>
+                                    <MenuItem onClick={setTokenInStorage.bind(this)}>Sign Out</MenuItem>
+                                </Link>
                                 :
                                 <Link to="/login" style={{textDecoration: "none", color: "black"}}>
                                     <MenuItem onClick={handleClose}>Sign In</MenuItem>
