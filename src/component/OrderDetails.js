@@ -65,7 +65,7 @@ export default function OrderDetails(props) {
                         </Grid>
 
                         <Grid>
-                            <Typography style={{marginTop : 12}} variant="subtitle1" align="left">
+                            <Typography style={{marginTop: 12}} variant="subtitle1" align="left">
                                 <b>
                                     Rs. {props.price}
                                 </b>

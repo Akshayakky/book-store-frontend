@@ -6,7 +6,6 @@ import Button from "@material-ui/core/Button"
 import OrderDetails from "./OrderDetails";
 import {Link, Redirect} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import LinearIndeterminate from "./loading";
 import CircularIndeterminate from "./CircularLoader";
 
 const useStyles = makeStyles((theme) => ({
@@ -124,13 +123,13 @@ export default function MyOrder(props) {
                         </Grid>
                     </div>
                     :
-                    <div style={{paddingTop : 100}}>
+                    <div style={{paddingTop: 100}}>
                         <Grid container justify="center">
                             <Grid justify="center" item>
                                 <CircularIndeterminate/>
                             </Grid>
                         </Grid>
-                        <Grid container justify="center" >
+                        <Grid container justify="center">
                             <Typography component="h3" variant="h7">Loading Orders...</Typography>
                         </Grid>
                     </div>

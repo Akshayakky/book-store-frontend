@@ -79,9 +79,9 @@ export default function PrimarySearchAppBar(props) {
 
     const handleIcon = () => {
         // eslint-disable-next-line no-restricted-globals
-        if(search !== "" || location.pathname=="/")
-        // eslint-disable-next-line no-restricted-globals
-        location.assign("/")
+        if (search !== "" || location.pathname == "/")
+            // eslint-disable-next-line no-restricted-globals
+            location.assign("/")
     };
 
     const setTokenInStorage = () => {

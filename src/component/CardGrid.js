@@ -108,7 +108,7 @@ export default function CardGrid(props) {
     const jwtDecoder = require("jsonwebtoken")
 
     useEffect(() => {
-        setError("Loading Books..." )
+        setError("Loading Books...")
         axios.get('https://d-bookstore.herokuapp.com/book/sorted/default/' + props.search)
             .then((results) => {
                 setBookData(results.data);
@@ -253,14 +253,14 @@ export default function CardGrid(props) {
                             </CardActions>
                         </Card>
                     </Grid>)}
-                    <Grid container justify="center" >
+                    <Grid container justify="center">
                         {error === "Loading Books..." ?
                             <CircularIndeterminate/>
                             :
                             null
                         }
                     </Grid>
-                    <Grid container justify="center" >
+                    <Grid container justify="center">
                         <Typography component="h3" variant="h7">{error}</Typography>
                     </Grid>
                 </Grid>

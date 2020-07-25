@@ -40,7 +40,7 @@ export default function Cart(props) {
 
     useEffect(() => {
         setError("Loading Cart...")
-    },[])
+    }, [])
 
     var result = [];
     var carts = [];
@@ -230,13 +230,13 @@ export default function Cart(props) {
                         }
                     </div>
                     :
-                    <div style={{paddingTop : 100}}>
+                    <div style={{paddingTop: 100}}>
                         <Grid container justify="center">
                             <Grid justify="center" item>
                                 <CircularIndeterminate/>
                             </Grid>
                         </Grid>
-                        <Grid container justify="center" >
+                        <Grid container justify="center">
                             <Typography component="h3" variant="h7">Loading Cart...</Typography>
                         </Grid>
                     </div>
