@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link} from "react-router-dom";
+import Link from '@material-ui/core/Link';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -71,7 +71,6 @@ export default function SignUp() {
         validationSchema,
         onSubmit: values => {
             setLoading(true)
-            // console.log(values.firstName + "ksdnfh" )
             Axios.all([
                 Axios.post("https://d-bookstore.herokuapp.com/user", values),
                 Axios.post("https://d-bookstore.herokuapp.com/mail-sender/register", {
@@ -214,7 +213,7 @@ export default function SignUp() {
                     </Button>
                     <Grid container justify="center">
                         <Grid item>
-                            <Link to={"/login"} variant="body2">
+                            <Link href="/login" variant="body2">
                                 {"Already have an account? Sign in"}
                             </Link>
                         </Grid>
