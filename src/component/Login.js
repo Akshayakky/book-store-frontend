@@ -46,7 +46,7 @@ export default function Login(props) {
         onSubmit: values => {
             setLoading(true)
             formik.values.email = formik.values.email.split(" ")[0]
-            Axios.post('http://localhost:8080/authenticate', formik.values)
+            Axios.post('https://d-bookstore.herokuapp.com/authenticate', formik.values)
                 .then(response => {
                     // eslint-disable-next-line no-restricted-globals
                     location.assign("/")

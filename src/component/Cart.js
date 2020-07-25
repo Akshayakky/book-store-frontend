@@ -30,7 +30,7 @@ export default function Cart(props) {
     }
 
     useEffect(() => {
-        axios.get("http://localhost:8080/cart", headers).then((result) => {
+        axios.get("https://d-bookstore.herokuapp.com/cart", headers).then((result) => {
             setCartData(result)
         }).catch(error => {
             console.log(error)
@@ -48,7 +48,7 @@ export default function Cart(props) {
 
     useEffect(() => {
         setError("Loading Cart...")
-        axios.get("http://localhost:8080/book/get-books-by-id?ids=" + result, headers).then((result) => {
+        axios.get("https://d-bookstore.herokuapp.com/book/get-books-by-id?ids=" + result, headers).then((result) => {
             setBookData(result.data)
             setError("")
         })
@@ -105,7 +105,7 @@ export default function Cart(props) {
     const removeBook = (book) => {
         console.log(book.bookId)
         if (book !== undefined) {
-            axios.delete("http://localhost:8080/cart/delete-book/" + book.bookId, headers)
+            axios.delete("https://d-bookstore.herokuapp.com/cart/delete-book/" + book.bookId, headers)
                 .then((results) => {
                     setTrick(!trick)
                 })
@@ -113,7 +113,7 @@ export default function Cart(props) {
     }
 
     const updateQuantity = (quantity, book) => {
-        axios.put("http://localhost:8080/cart/" + quantity + "?book_id=" + JSON.stringify(book.bookId), {}
+        axios.put("https://d-bookstore.herokuapp.com/cart/" + quantity + "?book_id=" + JSON.stringify(book.bookId), {}
             , headers).then((results) => {
             setTrick(!trick)
         })
@@ -129,14 +129,14 @@ export default function Cart(props) {
 
     const emptyCart = () => {
         carts.map((cart, i) => (
-            axios.post("http://localhost:8080/order", {
+            axios.post("https://d-bookstore.herokuapp.com/order", {
                 book: cart.book, bookQuantity: cart.quantity
                 , totalPrice: (bookData[findById(cart.book.bookId)].bookPrice * cart.quantity),
                 customer: customer
             }, headers)
         ))
-        axios.post("http://localhost:8080/mail-sender/order-confirm", carts, headers)
-        axios.delete("http://localhost:8080/cart/empty-cart", headers);
+        axios.post("https://d-bookstore.herokuapp.com/mail-sender/order-confirm", carts, headers)
+        axios.delete("https://d-bookstore.herokuapp.com/cart/empty-cart", headers);
     }
 
     const classes = useStyles()

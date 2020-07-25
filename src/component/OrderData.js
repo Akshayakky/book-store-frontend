@@ -56,7 +56,7 @@ export default function OrderData() {
         }
     }
     useEffect(() => {
-        axios.get("http://localhost:8080/order/all", headers).then((response) =>
+        axios.get("https://d-bookstore.herokuapp.com/order/all", headers).then((response) =>
             setOrderData(response.data),
         )
     }, [])

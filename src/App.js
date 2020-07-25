@@ -41,7 +41,7 @@ export default function () {
 
     useEffect(() => {
         if (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "")
-            Axios.get("http://localhost:8080/user?email=" + jwtDecoder.decode(localStorage.getItem('key')).sub)
+            Axios.get("https://d-bookstore.herokuapp.com/user?email=" + jwtDecoder.decode(localStorage.getItem('key')).sub)
                 .then((response) => {
                         console.log("loaded user")
                         setUser(response.data)

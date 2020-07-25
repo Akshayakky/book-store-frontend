@@ -111,7 +111,7 @@ export default function CardGrid(props) {
 
     useEffect(() => {
         setWait("loading books please wait...")
-        axios.get('http://localhost:8080/book/sorted/default/' + props.search)
+        axios.get('https://d-bookstore.herokuapp.com/book/sorted/default/' + props.search)
             .then((results) => {
                 setBookData(results.data);
                 setWait("")
@@ -127,7 +127,7 @@ export default function CardGrid(props) {
 
     useEffect(() => {
         if (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "")
-            axios.get('http://localhost:8080/cart', headers)
+            axios.get('https://d-bookstore.herokuapp.com/cart', headers)
                 .then((results) => {
                     setCart(() => cart.concat(results.data))
                 });
@@ -151,7 +151,7 @@ export default function CardGrid(props) {
     var addedToCart = true;
 
     const addBook = (value) => {
-        axios.post('http://localhost:8080/cart', {book: value, quantity: 1}
+        axios.post('https://d-bookstore.herokuapp.com/cart', {book: value, quantity: 1}
             , headers)
             .then((results) => {
                 setCart(() => cart.concat(results.data))
@@ -162,7 +162,7 @@ export default function CardGrid(props) {
     }
 
     const handleSort = (event) => {
-        axios.get('http://localhost:8080/book/sorted/' + event.target.value + "/" + props.search)
+        axios.get('https://d-bookstore.herokuapp.com/book/sorted/' + event.target.value + "/" + props.search)
             .then((results
             ) => {
                 setBookData(results.data);
