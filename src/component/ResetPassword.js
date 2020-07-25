@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
 const validationSchema = Yup.object().shape({
     password: Yup.string()
         .matches(
-            "^(?=.{4,})(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*$",
-            "Must Contain 4 Characters, at least One Uppercase and One Number"
+            "^(?=.{4,})(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*[^A-Za-z0-9][A-Za-z0-9]*$",
+            "Must contain at least One Uppercase, One Lowercase, One Special Character and One Number"
         ),
     confirmedPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'password must match')
@@ -112,7 +112,9 @@ export default function ForgotPassword(props) {
                                 onChange={handleChange}
                                 value={values.password}
                             />
-                            {errors.password ? errors.password : null}
+                            <div style={{color: "red"}}>
+                                {errors.password ? errors.password : null}
+                            </div>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
@@ -128,7 +130,9 @@ export default function ForgotPassword(props) {
                                 onChange={handleChange}
                                 value={values.confirmedPassword}
                             />
-                            {errors.confirmedPassword ? errors.confirmedPassword : null}
+                            <div style={{color: "red"}}>
+                                {errors.confirmedPassword ? errors.confirmedPassword : null}
+                            </div>
                         </Grid>
                     </Grid>
                     <Button
