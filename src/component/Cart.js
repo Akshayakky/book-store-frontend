@@ -6,7 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import CustomerDetails from "./CustomerDetails";
 import {Link, Redirect} from "react-router-dom";
 import CartData from "./CartData";
-import LinearIndeterminate from "./loading";
+import CircularIndeterminate from "./CircularLoader";
+import Grid from "@material-ui/core/Grid";
 
 export default function Cart(props) {
     const [cartData, setCartData] = useState()
@@ -37,6 +38,10 @@ export default function Cart(props) {
         })
     }, [trick])
 
+    useEffect(() => {
+        setError("Loading Cart...")
+    },[])
+
     var result = [];
     var carts = [];
     if (cartData !== undefined) {
@@ -47,7 +52,6 @@ export default function Cart(props) {
     }
 
     useEffect(() => {
-        setError("Loading Cart...")
         axios.get("https://d-bookstore.herokuapp.com/book/get-books-by-id?ids=" + result, headers).then((result) => {
             setBookData(result.data)
             setError("")
@@ -148,7 +152,7 @@ export default function Cart(props) {
             {localStorage.getItem('key') === "" ?
                 <Redirect to={"/login"}/>
                 :
-                error == "" ?
+                error === "" ?
                     <div>
                         <div className={classes.cart}>
                             <Typography variant="h6" color="inherit" noWrap className={classes.title}>
@@ -226,10 +230,16 @@ export default function Cart(props) {
                         }
                     </div>
                     :
-                    <wait>
-                        <LinearIndeterminate/>
-                        loading cart please wait...
-                    </wait>
+                    <div style={{paddingTop : 100}}>
+                        <Grid container justify="center">
+                            <Grid justify="center" item>
+                                <CircularIndeterminate/>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" >
+                            <Typography component="h3" variant="h7">Loading Cart...</Typography>
+                        </Grid>
+                    </div>
             }
         </div>
     )

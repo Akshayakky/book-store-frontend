@@ -68,7 +68,6 @@ export default function OrderData() {
                     Orders({rows.length} items)
                 </Typography>
                 <TableContainer component={Paper}>
-                    {/*<h1>Orders</h1>*/}
                     <Table className={classes.table} size="small" aria-label="a dense table">
                         <TableHead>
                             <TableRow>

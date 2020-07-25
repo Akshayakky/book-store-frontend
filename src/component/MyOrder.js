@@ -7,6 +7,7 @@ import OrderDetails from "./OrderDetails";
 import {Link, Redirect} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import LinearIndeterminate from "./loading";
+import CircularIndeterminate from "./CircularLoader";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -123,10 +124,16 @@ export default function MyOrder(props) {
                         </Grid>
                     </div>
                     :
-                    <wait>
-                        <LinearIndeterminate/>
-                        {wait}
-                    </wait>
+                    <div style={{paddingTop : 100}}>
+                        <Grid container justify="center">
+                            <Grid justify="center" item>
+                                <CircularIndeterminate/>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" >
+                            <Typography component="h3" variant="h7">Loading Orders...</Typography>
+                        </Grid>
+                    </div>
             }
         </div>
     );
