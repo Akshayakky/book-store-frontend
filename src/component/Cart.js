@@ -6,10 +6,12 @@ import Typography from "@material-ui/core/Typography";
 import CustomerDetails from "./CustomerDetails";
 import {Link, Redirect} from "react-router-dom";
 import CartData from "./CartData";
+import LinearIndeterminate from "./loading";
 
 export default function Cart(props) {
     const [cartData, setCartData] = useState()
     const [bookData, setBookData] = useState()
+    const [error, setError] = useState();
     const [trick, setTrick] = useState(true)
     const [showResults, setShowResults] = React.useState(false)
     const [showSummary, setShowSummary] = React.useState(false)
@@ -45,8 +47,10 @@ export default function Cart(props) {
     }
 
     useEffect(() => {
+        setError("Loading Cart...")
         axios.get("http://localhost:8080/book/get-books-by-id?ids=" + result, headers).then((result) => {
             setBookData(result.data)
+            setError("")
         })
     }, [cartData])
 
@@ -90,8 +94,8 @@ export default function Cart(props) {
         cart: {
             border: "thin solid #d9d9d9",
             margin: "20px",
-            marginBottom : 50,
-            paddingLeft : 20,
+            marginBottom: 50,
+            paddingLeft: 20,
             [theme.breakpoints.up('md')]: {
                 margin: "50px 200px"
             }
@@ -140,85 +144,92 @@ export default function Cart(props) {
     let sum = 0
     return (
         <div>
+
             {localStorage.getItem('key') === "" ?
                 <Redirect to={"/login"}/>
                 :
-                <div>
-                    <div className={classes.cart}>
-                        <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                            My Cart({result.length})
-                        </Typography>
-                        {bookData !== undefined ?
-                            carts.map((cart, i) =>
-                                <div key={i} style={{height: "100%", width: "100%"}}>
-                                    <CartData quantity={cart.quantity} updateQuantity={(event) => {
-                                        updateQuantity(event, cart.book)
-                                    }} book={cart.book} onChange={() => removeBook(cart.book)}
-                                              backgroundcolor="none"
-                                              style={style} display="flex" page="cart"/>
-                                </div>
-                            )
-                            : <h1> Data Not Available </h1>
-                        }
-                        {!showResults && result.length > 0 ?
-                            <button onClick={() => {
-                                setShowResults(true)
-                            }} className={classes.buttons}>
-                                PLACE ORDER
-                            </button>
-                            : null
-                        }
-                    </div>
-                    {showResults ?
-                        <div>
-                            <CustomerDetails setCustomer={(customer) => setCustomer(customer)} onClick={() => {
-                                setShowSummary(true)
-                            }}/>
-                        </div>
-                        :
+                error == "" ?
+                    <div>
                         <div className={classes.cart}>
                             <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                                Customer Details
-                            </Typography>
-                        </div>
-                    }
-
-                    {showSummary ?
-                        <div className={classes.cart}>
-                            <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                                Order Summary
+                                My Cart({result.length})
                             </Typography>
                             {bookData !== undefined ?
                                 carts.map((cart, i) =>
                                     <div key={i} style={{height: "100%", width: "100%"}}>
-                                        <CardData quantity={cart.quantity} book={bookData[i]}
-                                                  onChange={() => removeBook(cart.bookId)} backgroundcolor="none"
-                                                  style={style} display="flex" page="summary"/>
-                                        <div style={{display: "none"}}>
-                                            {sum = sum + cart.quantity * bookData[i].bookPrice}
-                                        </div>
+                                        <CartData quantity={cart.quantity} updateQuantity={(event) => {
+                                            updateQuantity(event, cart.book)
+                                        }} book={cart.book} onChange={() => removeBook(cart.book)}
+                                                  backgroundcolor="none"
+                                                  style={style} display="flex" page="cart"/>
                                     </div>
                                 )
                                 : <h1> Data Not Available </h1>
                             }
-                            <div style={{}}>
-                                <Typography variant="h4" color="inherit" noWrap className={classes.title}>
-                                    Total Amount<br/>
-                                    Rs. {sum}
+                            {!showResults && result.length > 0 ?
+                                <button onClick={() => {
+                                    setShowResults(true)
+                                }} className={classes.buttons}>
+                                    PLACE ORDER
+                                </button>
+                                : null
+                            }
+                        </div>
+                        {showResults ?
+                            <div>
+                                <CustomerDetails setCustomer={(customer) => setCustomer(customer)} onClick={() => {
+                                    setShowSummary(true)
+                                }}/>
+                            </div>
+                            :
+                            <div className={classes.cart}>
+                                <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                                    Customer Details
                                 </Typography>
                             </div>
-                            <Link to={"/order-confirm"}>
-                                <button className={classes.buttons} onClick={emptyCart}>CHECKOUT</button>
-                            </Link>
-                        </div>
-                        :
-                        <div className={classes.cart}>
-                            <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                                Order Summary
-                            </Typography>
-                        </div>
-                    }
-                </div>
+                        }
+
+                        {showSummary ?
+                            <div className={classes.cart}>
+                                <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                                    Order Summary
+                                </Typography>
+                                {bookData !== undefined ?
+                                    carts.map((cart, i) =>
+                                        <div key={i} style={{height: "100%", width: "100%"}}>
+                                            <CardData quantity={cart.quantity} book={bookData[i]}
+                                                      onChange={() => removeBook(cart.bookId)} backgroundcolor="none"
+                                                      style={style} display="flex" page="summary"/>
+                                            <div style={{display: "none"}}>
+                                                {sum = sum + cart.quantity * bookData[i].bookPrice}
+                                            </div>
+                                        </div>
+                                    )
+                                    : <h1> Data Not Available </h1>
+                                }
+                                <div style={{}}>
+                                    <Typography variant="h4" color="inherit" noWrap className={classes.title}>
+                                        Total Amount<br/>
+                                        Rs. {sum}
+                                    </Typography>
+                                </div>
+                                <Link to={"/order-confirm"}>
+                                    <button className={classes.buttons} onClick={emptyCart}>CHECKOUT</button>
+                                </Link>
+                            </div>
+                            :
+                            <div className={classes.cart}>
+                                <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                                    Order Summary
+                                </Typography>
+                            </div>
+                        }
+                    </div>
+                    :
+                    <wait>
+                        <LinearIndeterminate/>
+                        loading cart please wait...
+                    </wait>
             }
         </div>
     )

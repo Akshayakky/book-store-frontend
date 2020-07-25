@@ -6,15 +6,16 @@ import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {MuiThemeProvider} from "@material-ui/core";
 import axios from "axios";
 import {Link, Redirect} from "react-router-dom";
-import Pagination from "@material-ui/lab/Pagination";
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import LinearIndeterminate from "./loading";
+import Pagination from "@material-ui/lab/Pagination";
+import Container from "@material-ui/core/Container";
 
 const theme = createMuiTheme({
     palette: {
@@ -102,29 +103,29 @@ export default function CardGrid(props) {
     const [cart, setCart] = useState([])
     const [page, setPage] = React.useState(1);
     const [error, setError] = useState();
+    const [wait, setWait] = useState();
     const [expired, setExpired] = useState(false);
-    const itemsPerPage = 4;
+    const itemsPerPage = 12;
     const cards = [];
     const jwtDecoder = require("jsonwebtoken")
 
     useEffect(() => {
-        setError("Loading Books...")
+        setWait("loading books please wait...")
         axios.get('http://localhost:8080/book/sorted/default/' + props.search)
             .then((results) => {
                 setBookData(results.data);
-                setError("")
+                setWait("")
             }).catch((error) => {
             if (error.response.status === 404)
                 setError("No Books Found!")
             if (error.response.status === 403)
                 setExpired(true);
+            setWait("")
         });
         setPage(1);
     }, [props.search]);
 
     useEffect(() => {
-        // eslint-disable-next-line no-restricted-globals
-        // location.reload()
         if (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "")
             axios.get('http://localhost:8080/cart', headers)
                 .then((results) => {
@@ -188,85 +189,97 @@ export default function CardGrid(props) {
             {expired ?
                 <Redirect to={"/login"}/> : null
             }
-            <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                Books({records} books)
-            </Typography>
-            <FormControl className={classes.formControl}>
-                <Select
-                    defaultValue={"default"}
-                    labelId="demo-simple-select-filled-label"
-                    id="select"
-                    onChange={handleSort}
-                >
-                    <MenuItem value="default"> Sort By : Default</MenuItem>
-                    <MenuItem value="increasing">Price : Low to High</MenuItem>
-                    <MenuItem value="decreasing">Price : High to Low</MenuItem>
-                    <MenuItem value="newlyArrived">Newly Arrived</MenuItem>
-                </Select>
-            </FormControl>
-            <Container className={classes.cardGrid} maxWidth="md">
-                <Grid container spacing={3}>
-                    {cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
-                        {addedToCart = true}
-                        <Card className={classes.card}>
-                            {
-                                cart.map(num => {
-                                    if (JSON.stringify(num.book) === JSON.stringify(bookData[card - 1]))
-                                        updateCart();
-                                })}
-                            <CardData book={bookData[card - 1]}/>
-                            <CardActions>
-                                {(props.user.role !== "admin") ?
-                                    (addedToCart) ?
-                                        <MuiThemeProvider theme={theme}>
-                                            {localStorage.getItem('key') === "" ?
-                                                <Button size={"large"} variant={"contained"} color={"secondary"}
-                                                        className={classes
-                                                            .addButton}
-                                                        onClick={addBook.bind(this, bookData[card - 1].bookId)}>
-                                                    <Link to="/login"
-                                                          style={{color: "white", textDecoration: "none"}}>
-                                                        <Typography variant={"caption"}>
-                                                            ADD TO CART
+            {
+                wait === "" ?
+                    <div>
+                        <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                            Books({records} books)
+                        </Typography>
+                        <FormControl className={classes.formControl}>
+                            <Select
+                                defaultValue={"default"}
+                                labelId="demo-simple-select-filled-label"
+                                id="select"
+                                onChange={handleSort}
+                            >
+                                <MenuItem value="default"> Sort By : Default</MenuItem>
+                                <MenuItem value="increasing">Price : Low to High</MenuItem>
+                                <MenuItem value="decreasing">Price : High to Low</MenuItem>
+                                <MenuItem value="newlyArrived">Newly Arrived</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Container className={classes.cardGrid} maxWidth="md">
+                            <Grid container spacing={3}>
+                                {cards.map((card, i) => <Grid item key={card} xs={12} sm={6} md={3}>
+                                    {addedToCart = true}
+                                    <Card className={classes.card}>
+                                        {
+                                            cart.map(num => {
+                                                if (JSON.stringify(num.book) === JSON.stringify(bookData[card - 1]))
+                                                    updateCart();
+                                            })}
+                                        <CardData book={bookData[card - 1]}/>
+                                        <CardActions>
+                                            {(props.user.role !== "admin") ?
+                                                (addedToCart) ?
+                                                    <MuiThemeProvider theme={theme}>
+                                                        {localStorage.getItem('key') === "" ?
+                                                            <Button size={"large"} variant={"contained"}
+                                                                    color={"secondary"}
+                                                                    className={classes
+                                                                        .addButton}
+                                                                    onClick={addBook.bind(this, bookData[card - 1].bookId)}>
+                                                                <Link to="/login"
+                                                                      style={{color: "white", textDecoration: "none"}}>
+                                                                    <Typography variant={"caption"}>
+                                                                        ADD TO CART
+                                                                    </Typography>
+                                                                </Link>
+                                                            </Button>
+                                                            :
+                                                            <Button size={"large"} variant={"contained"}
+                                                                    color={"secondary"}
+                                                                    className={classes
+                                                                        .addButton}
+                                                                    onClick={addBook.bind(this, bookData[card - 1])}>
+                                                                <Typography variant={"caption"}>
+                                                                    ADD TO CART
+                                                                </Typography>
+                                                            </Button>
+                                                        }
+                                                    </MuiThemeProvider>
+                                                    :
+                                                    <button className={classes.addButton}
+                                                            style={{width: "100%", backgroundColor: "blue"}}>
+                                                        <Typography variant={"caption"} style={{color: "white"}}>
+                                                            ADDED TO BAG
                                                         </Typography>
-                                                    </Link>
-                                                </Button>
+                                                    </button>
                                                 :
-                                                <Button size={"large"} variant={"contained"} color={"secondary"}
-                                                        className={classes
-                                                            .addButton}
-                                                        onClick={addBook.bind(this, bookData[card - 1])}>
-                                                    <Typography variant={"caption"}>
-                                                        ADD TO CART
-                                                    </Typography>
-                                                </Button>
+                                                null
                                             }
-                                        </MuiThemeProvider>
-                                        :
-                                        <button className={classes.addButton}
-                                                style={{width: "100%", backgroundColor: "blue"}}>
-                                            <Typography variant={"caption"} style={{color: "white"}}>
-                                                ADDED TO BAG
-                                            </Typography>
-                                        </button>
-                                    :
-                                    null
-                                }
-                            </CardActions>
-                        </Card>
-                    </Grid>)}
-                    <Grid container justify="center">
-                        <Typography component="h3" variant="h4">{error}</Typography>
-                    </Grid>
-                </Grid>
-            </Container>
-            {bookData !== undefined ?
-                <div className={records / itemsPerPage >= 3 ? classes.root : classes.center}>
-                    <Pagination count={Math.ceil(records / itemsPerPage)} color="secondary" page={page}
-                                onChange={handleChange}/>
-                </div>
-                :
-                null
+                                        </CardActions>
+                                    </Card>
+                                </Grid>)}
+                                <Grid container justify="center">
+                                    <Typography component="h3" variant="h4">{error}</Typography>
+                                </Grid>
+                            </Grid>
+                        </Container>
+                        {bookData !== undefined ?
+                            <div className={records / itemsPerPage >= 3 ? classes.root : classes.center}>
+                                <Pagination count={Math.ceil(records / itemsPerPage)} color="secondary" page={page}
+                                            onChange={handleChange}/>
+                            </div>
+                            :
+                            null
+                        }
+                    </div>
+                    :
+                    <wait>
+                        <LinearIndeterminate/>
+                        {wait}
+                    </wait>
             }
         </>
     )

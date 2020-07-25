@@ -49,8 +49,8 @@ const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid"),
     password: Yup.string()
         .matches(
-            "^(?=.{4,})(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*$",
-            "Must Contain 4 Characters, at least One Uppercase and One Number"
+            "^(?=.{4,})(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*[^A-Za-z0-9][A-Za-z0-9]*$",
+            "Must contain at least 4 Characters with at least One Uppercase, One Lowercase, One Special Character and One Number"
         ),
     confirmedPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'password must match')
@@ -71,6 +71,7 @@ export default function SignUp() {
         validationSchema,
         onSubmit: values => {
             setLoading(true)
+            // console.log(values.firstName + "ksdnfh" )
             Axios.all([
                 Axios.post("http://localhost:8080/user", values),
                 Axios.post("http://localhost:8080/mail-sender/register", {

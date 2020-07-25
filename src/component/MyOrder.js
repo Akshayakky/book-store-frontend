@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button"
 import OrderDetails from "./OrderDetails";
 import {Link, Redirect} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
+import LinearIndeterminate from "./loading";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,6 +44,7 @@ export default function MyOrder(props) {
     const classes = useStyles();
     const [orderDetails, setOrderDetails] = useState();
     const [books, setBooks] = useState()
+    const [wait, setWait] = useState()
 
     const headers = {
         headers: {
@@ -51,10 +53,12 @@ export default function MyOrder(props) {
     }
 
     useEffect(() => {
+        setWait("loading orders please wait...")
         if (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "")
             Axios.get('http://localhost:8080/order', headers)
                 .then((response) => {
                     setOrderDetails(response)
+                    setWait("")
                 })
     }, []);
 
@@ -86,37 +90,43 @@ export default function MyOrder(props) {
             {localStorage.getItem('key') === "" ?
                 <Redirect to={"/login"}/>
                 :
-                <div>
-                    <Grid className={classes.cart}>
-                    <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                        My Orders({bookId.length} items)
-                    </Typography>
-                    <Grid style={{marginBottom: 20}}>
-                        {orderData.length !== 0 && books !== undefined ?
-                            orderData.reverse().map((data, i) =>
-                                <div key={i}>
-                                    <OrderDetails book={books[findById(bookId[orderData.length - i - 1])]}
-                                                  price={data.totalPrice}
-                                                  orderDate = {orderData[i].date}
-                                                  quantity={data.bookQuantity}/>
-                                </div>
-                            )
-                            :
-                            <div>
-                                <br/>
-                                <Link to={"/"} style={{textDecoration: "none"}}>
-                                    <Button
-                                        variant="contained"
-                                        style={{backgroundColor: "#990033", color: "white", marginLeft: 30}}
-                                    >
-                                        SHOP NOW
-                                    </Button>
-                                </Link>
-                            </div>
-                        }
-                    </Grid>
-                    </Grid>
-                </div>
+                wait === "" ?
+                    <div>
+                        <Grid className={classes.cart}>
+                            <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                                My Orders({bookId.length} items)
+                            </Typography>
+                            <Grid style={{marginBottom: 20}}>
+                                {orderData.length !== 0 && books !== undefined ?
+                                    orderData.reverse().map((data, i) =>
+                                        <div key={i}>
+                                            <OrderDetails book={books[findById(bookId[orderData.length - i - 1])]}
+                                                          price={data.totalPrice}
+                                                          orderDate={orderData[i].date}
+                                                          quantity={data.bookQuantity}/>
+                                        </div>
+                                    )
+                                    :
+                                    <div>
+                                        <br/>
+                                        <Link to={"/"} style={{textDecoration: "none"}}>
+                                            <Button
+                                                variant="contained"
+                                                style={{backgroundColor: "#990033", color: "white", marginLeft: 30}}
+                                            >
+                                                SHOP NOW
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                }
+                            </Grid>
+                        </Grid>
+                    </div>
+                    :
+                    <wait>
+                        <LinearIndeterminate/>
+                        {wait}
+                    </wait>
             }
         </div>
     );

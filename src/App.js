@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 export default function () {
     const [cartCount] = useState(0)
     const [search, setSearch] = useState("")
-    const [login, setLogin] = useState("")
     const [user, setUser] = useState("")
     const [jwt, setJwt] = useState("")
     const classes = useStyles();
@@ -49,13 +48,13 @@ export default function () {
                     }
                 )
         setJwt(localStorage.getItem('jwt'))
-    }, [login])
+    }, [])
 
     return (
         <React.Fragment>
             <CssBaseline/>
             <Router>
-                <PrimarySearchAppBar user={user} search={search} login={login} cartCount={cartCount}
+                <PrimarySearchAppBar user={user} search={search} cartCount={cartCount}
                                      setSearch={(value) => setSearch(value)}/>
                 <main>
                     <Switch>
@@ -75,7 +74,7 @@ export default function () {
                         <Route path="/profile" exact
                                component={() => (<Profile user={user}/>)}/>
                         <Route path="/login" exact
-                               component={() => (<Login login={(login) => setLogin(login)}/>)}/>
+                               component={() => (<Login/>)}/>
                         <Route path="/cart" exact
                                component={() => (<Cart cartCount={cartCount}/>)}/>
                         <Route path="/customer" exact

@@ -9,7 +9,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import {Link, Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -59,13 +59,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar(props) {
     const classes = useStyles();
-    const [login, setLogin] = useState(false)
+    const [search, setSearch] = useState("")
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const isLoggedIn = props.login || (localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== "")
+    const isLoggedIn = localStorage.getItem('key') !== null && localStorage.getItem('key') !== undefined && localStorage.getItem('key') !== ""
 
     const handleChange = (event) => {
         props.setSearch(event.target.value)
+        setSearch(event.target.value)
     }
 
     const handleMenu = (event) => {
@@ -77,12 +78,10 @@ export default function PrimarySearchAppBar(props) {
     };
 
     const handleIcon = () => {
-        // // redirect
-        // // window.setTimeout(() => {
-        //     // eslint-disable-next-line no-restricted-globals
-        //     location.reload()
-        // // }, 0)
-        setLogin(true);
+        // eslint-disable-next-line no-restricted-globals
+        if(search !== "" || location.pathname=="/")
+        // eslint-disable-next-line no-restricted-globals
+        location.assign("/")
     };
 
     const setTokenInStorage = () => {
@@ -94,17 +93,10 @@ export default function PrimarySearchAppBar(props) {
 
     return (
         <div className={classes.grow}>
-            {login ?
-                <Redirect to={"/"}/> : null
-            }
-            {login && (props.search !== "") ?
-                // eslint-disable-next-line no-restricted-globals
-                location.reload() : null
-            }
             <AppBar position="static" style={{background: '#990033'}}>
                 <Toolbar>
                     <Link to={"/"} style={{color: "white"}}>
-                        <MenuBookIcon onClick={handleIcon} className={classes.bookIcon}/>
+                        <MenuBookIcon onClick={handleIcon.bind(this)} className={classes.bookIcon}/>
                     </Link>
                     <Typography className={classes.title} variant="h6" noWrap>
                         The Bookstore
@@ -131,12 +123,10 @@ export default function PrimarySearchAppBar(props) {
                             (props.user.role !== "admin") ?
                                 <IconButton aria-label="show 4 new mails" color="inherit">
                                     <Badge badgeContent={props.cartCount} color="secondary">
-
                                         <Link to={isLoggedIn ? "/cart" : "/login"}
                                               style={{color: "white", style: "none"}}>
                                             <ShoppingCartIcon/>
                                         </Link>
-
                                     </Badge>
                                 </IconButton>
                                 :
