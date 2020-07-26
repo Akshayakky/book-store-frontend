@@ -71,7 +71,6 @@ export default function SignUp() {
         validationSchema,
         onSubmit: values => {
             setLoading(true)
-            // console.log(values.firstName + "ksdnfh" )
             Axios.all([
                 Axios.post("http://localhost:8080/user", values),
                 Axios.post("http://localhost:8080/mail-sender/register", {

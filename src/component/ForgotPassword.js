@@ -53,13 +53,13 @@ export default function ForgotPassword(props) {
             setLoading(true);
             Axios.post("http://localhost:8080/mail-sender/forget-password?email=" + values.email)
                 .then((response) => {
-                    props.setForgetPasswordJwt(response.data);
+                    console.log(response)
                     localStorage.setItem('reset-password', response.data)
                     setLoading(false)
                     setMailSent(true)
                     setError()
                 })
-                .catch(error => {
+                .catch((error) => {
                     if (error.response.status === 404) {
                         setError("User Not Registered!")
                         setLoading(false)

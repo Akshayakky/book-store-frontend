@@ -35,7 +35,6 @@ export default function () {
     const [cartCount] = useState(0)
     const [search, setSearch] = useState("")
     const [user, setUser] = useState("")
-    const [jwt, setJwt] = useState("")
     const classes = useStyles();
     const jwtDecoder = require("jsonwebtoken")
 
@@ -47,7 +46,6 @@ export default function () {
                         setUser(response.data)
                     }
                 )
-        setJwt(localStorage.getItem('jwt'))
     }, [])
 
     return (
@@ -65,8 +63,7 @@ export default function () {
                         <Route path="/my-order" exact
                                component={() => (<MyOrder/>)}/>
                         <Route path="/forgot-password" exact
-                               component={() => (<ForgotPassword
-                                   setForgetPasswordJwt={(jwt) => localStorage.setItem('jwt', "/reset-password/" + jwt)}/>)}/>
+                               component={() => (<ForgotPassword/>)}/>
                         <Route path="/admin" exact
                                component={() => (<Admin/>)}/>
                         <Route path="/order-data" exact
@@ -81,7 +78,7 @@ export default function () {
                                component={() => (<CustomerDetails/>)}/>
                         <Route path="/order-confirm" exact
                                component={() => (<OrderConfirm/>)}/>
-                        <Route path={jwt} exact
+                        <Route path={"/reset-password/" + localStorage.getItem("reset-password")} exact
                                component={() => (<ResetPassword user={user}/>)}/>
                     </Switch>
                 </main>

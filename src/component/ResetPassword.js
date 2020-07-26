@@ -12,6 +12,7 @@ import {useFormik} from "formik";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Grid from "@material-ui/core/Grid";
 import * as Yup from "yup";
+import LinearIndeterminate from "./loading";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -37,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
 const validationSchema = Yup.object().shape({
     password: Yup.string()
         .matches(
-            "^(?=.{4,})(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*$",
-            "Must Contain 4 Characters, at least One Uppercase and One Number"
+            "^(?=.{4,})(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*[^A-Za-z0-9][A-Za-z0-9]*$",
+            "Must contain at least One Uppercase, One Lowercase, One Special Character and One Number"
         ),
     confirmedPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'password must match')
@@ -47,6 +48,7 @@ const validationSchema = Yup.object().shape({
 export default function ForgotPassword(props) {
     const [login, setLogin] = useState(false)
     const [reset, setReset] = useState()
+    const [loading, setLoading] = useState(false)
     const classes = useStyles();
     const headers = {
         headers: {
@@ -55,92 +57,106 @@ export default function ForgotPassword(props) {
     }
     const {handleSubmit, handleChange, values, errors} = useFormik({
         initialValues: {
-            email: ''
+            email: '',
+            password: '',
+            confirmedPassword: ''
         },
         validationSchema,
         onSubmit: values => {
+            setLoading(true)
             Axios.put("http://localhost:8080/user", {
                 email: props.user.email, password: values.password
             }, headers).then((response => {
                 if (response.status === 200)
                     setReset("Password Changed Successfully!")
+                setLoading(false)
             }))
         }
     })
 
     return (
-        <Container component="main" maxWidth="xs">
-            {login ?
-                <Redirect to={"/login"}/> : null
+        <>
+            {loading ?
+                <LinearIndeterminate/>
+                : null
             }
-            <CssBaseline/>
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    New Password
-                </Typography>
-                {reset !== undefined ?
-                    (
-                        setTimeout(() => {
-                                setLogin(true)
-                            },
-                            1000),
-                            <Typography component="h3" variant="h6" style={{color: "green"}}>
-                                {reset}
-                            </Typography>
-                    )
-                    :
-                    null
+            <Container component="main" maxWidth="xs">
+                {login ?
+                    <Redirect to={"/login"}/> : null
                 }
-                <form className={classes.form} noValidate onSubmit={handleSubmit}>
-                    {console.log("helo")}
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                size="small"
-                                onChange={handleChange}
-                                value={values.password}
-                            />
-                            {errors.password ? errors.password : null}
+                <CssBaseline/>
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon/>
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        New Password
+                    </Typography>
+                    {reset !== undefined ?
+                        (
+                            setTimeout(() => {
+                                    setLogin(true)
+                                },
+                                1000),
+                                <Typography component="h3" variant="h6" style={{color: "green"}}>
+                                    {reset}
+                                </Typography>
+                        )
+                        :
+                        null
+                    }
+                    <form className={classes.form} onSubmit={handleSubmit}>
+                        {console.log("helo")}
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={values.password}
+                                />
+                                <div style={{color: "red"}}>
+                                    {errors.password ? errors.password : null}
+                                </div>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="confirmedPassword"
+                                    label="Confirm Password"
+                                    type="password"
+                                    id="confirmedPassword"
+                                    autoComplete="current-password"
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={values.confirmedPassword}
+                                />
+                                <div style={{color: "red"}}>
+                                    {errors.confirmedPassword ? errors.confirmedPassword : null}
+                                </div>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="confirmedPassword"
-                                label="Confirm Password"
-                                type="password"
-                                id="confirmedPassword"
-                                autoComplete="current-password"
-                                size="small"
-                                onChange={handleChange}
-                                value={values.confirmedPassword}
-                            />
-                            {errors.confirmedPassword ? errors.confirmedPassword : null}
-                        </Grid>
-                    </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Reset Password
-                    </Button>
-                </form>
-            </div>
-        </Container>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Reset Password
+                        </Button>
+                    </form>
+                </div>
+            </Container>
+        </>
     );
 }
