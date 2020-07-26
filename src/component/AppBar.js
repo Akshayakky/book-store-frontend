@@ -88,7 +88,7 @@ export default function PrimarySearchAppBar(props) {
         localStorage.setItem('key', "")
         localStorage.setItem('userEmail', "")
         // eslint-disable-next-line no-restricted-globals
-        location.reload()
+        location.assign("/login")
     }
 
     return (
