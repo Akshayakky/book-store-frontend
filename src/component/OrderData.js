@@ -9,6 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import axios from "axios";
 import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import CircularIndeterminate from "./CircularLoader";
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
@@ -40,6 +42,7 @@ function createData(orderId, email, book, address, quantity, price, orderDate) {
 export default function OrderData() {
     const classes = useStyles();
     const [orderData, setOrderData] = useState();
+    const [loading, setLoading] = useState(false);
     const headers = {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('key')
@@ -56,49 +59,65 @@ export default function OrderData() {
         }
     }
     useEffect(() => {
+        setLoading(true)
         axios.get("https://d-bookstore.herokuapp.com/order/all", headers).then((response) =>
-            setOrderData(response.data),
+                setOrderData(response.data),
+            setLoading(false)
         )
     }, [])
 
     return (
         <>
-            <main className={classes.layout}>
-                <Typography variant="h6" color="inherit" noWrap className={classes.title}>
-                    Orders({rows.length} items)
-                </Typography>
-                <TableContainer component={Paper}>
-                    <Table className={classes.table} size="small" aria-label="a dense table">
-                        <TableHead>
-                            <TableRow>
-                                <StyledTableCell style={{whiteSpace: "nowrap"}}>Id</StyledTableCell>
-                                <StyledTableCell>User Email</StyledTableCell>
-                                <StyledTableCell align="right">BookName</StyledTableCell>
-                                <StyledTableCell align="right">Deliver To</StyledTableCell>
-                                <StyledTableCell align="right">Quantity</StyledTableCell>
-                                <StyledTableCell style={{whiteSpace: "nowrap"}} align="right">Total
-                                    Price</StyledTableCell>
-                                <StyledTableCell align="right">Order Date</StyledTableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows.map((row, i) => (
-                                <TableRow key={row.orderId}>
-                                    <TableCell align="right">{row.orderId}</TableCell>
-                                    <TableCell component="th" scope="row">
-                                        {row.email}
-                                    </TableCell>
-                                    <TableCell align="right">{row.book}</TableCell>
-                                    <TableCell align="right">{row.address}</TableCell>
-                                    <TableCell align="right">{row.quantity}</TableCell>
-                                    <TableCell align="right">{row.price}</TableCell>
-                                    <TableCell style={{whiteSpace: "nowrap"}} align="right">{row.orderDate}</TableCell>
+            {loading ?
+                <div style={{paddingTop: 100}}>
+                    <Grid container justify="center">
+                        <Grid justify="center" item>
+                            <CircularIndeterminate/>
+                        </Grid>
+                    </Grid>
+                    <Grid container justify="center">
+                        <Typography component="h3" variant="h7">Loading Orders...</Typography>
+                    </Grid>
+                </div>
+                :
+                <main className={classes.layout}>
+                    <Typography variant="h6" color="inherit" noWrap className={classes.title}>
+                        Orders({rows.length} items)
+                    </Typography>
+                    <TableContainer component={Paper}>
+                        <Table className={classes.table} size="small" aria-label="a dense table">
+                            <TableHead>
+                                <TableRow>
+                                    <StyledTableCell style={{whiteSpace: "nowrap"}}>Id</StyledTableCell>
+                                    <StyledTableCell>User Email</StyledTableCell>
+                                    <StyledTableCell align="right">BookName</StyledTableCell>
+                                    <StyledTableCell align="right">Deliver To</StyledTableCell>
+                                    <StyledTableCell align="right">Quantity</StyledTableCell>
+                                    <StyledTableCell style={{whiteSpace: "nowrap"}} align="right">Total
+                                        Price</StyledTableCell>
+                                    <StyledTableCell align="right">Order Date</StyledTableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </main>
+                            </TableHead>
+                            <TableBody>
+                                {rows.map((row, i) => (
+                                    <TableRow key={row.orderId}>
+                                        <TableCell align="right">{row.orderId}</TableCell>
+                                        <TableCell component="th" scope="row">
+                                            {row.email}
+                                        </TableCell>
+                                        <TableCell align="right">{row.book}</TableCell>
+                                        <TableCell align="right">{row.address}</TableCell>
+                                        <TableCell align="right">{row.quantity}</TableCell>
+                                        <TableCell align="right">{row.price}</TableCell>
+                                        <TableCell style={{whiteSpace: "nowrap"}}
+                                                   align="right">{row.orderDate}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </main>
+            }
         </>
     );
 }
