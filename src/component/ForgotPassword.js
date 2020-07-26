@@ -53,7 +53,6 @@ export default function ForgotPassword(props) {
             setLoading(true);
             Axios.post("https://d-bookstore.herokuapp.com/mail-sender/forget-password?email=" + values.email)
                 .then((response) => {
-                    props.setForgetPasswordJwt(response.data);
                     localStorage.setItem('reset-password', response.data)
                     setLoading(false)
                     setMailSent(true)
