@@ -50,7 +50,7 @@ export default function ForgotPassword(props) {
     const classes = useStyles();
     const headers = {
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('key')
+            "Authorization": "Bearer " + localStorage.getItem('reset-password')
         }
     }
     const {handleSubmit, handleChange, values, errors} = useFormik({
@@ -61,7 +61,6 @@ export default function ForgotPassword(props) {
         onSubmit: values => {
             Axios.put("http://localhost:8080/user", {
                 email: props.user.email, password: values.password
-                , firstName: props.user.firstName, lastName: props.user.lastName
             }, headers).then((response => {
                 if (response.status === 200)
                     setReset("Password Changed Successfully!")

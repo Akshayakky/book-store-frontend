@@ -48,7 +48,7 @@ export default function Profile(props) {
         setEdit(!edit)
         if (edit)
             Axios.put("http://localhost:8080/user", {
-                firstName: firstName, lastName: lastName, password: props.user.password, role: props.user.role
+                firstName: firstName, lastName: lastName
             }, headers).then((response) => {
                 // eslint-disable-next-line no-restricted-globals
                 location.reload()
