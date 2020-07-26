@@ -69,60 +69,62 @@ export default function ForgotPassword(props) {
     })
 
     return (
-        <Container component="main" maxWidth="xs">
-            {login ?
-                <Redirect to={"/"}/> : null
+        <>
+            {loading ?
+                <LinearIndeterminate/>
+                : null
             }
-            <CssBaseline/>
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                {loading ?
-                    <LinearIndeterminate/>
-                    : null
+            <Container component="main" maxWidth="xs">
+                {login ?
+                    <Redirect to={"/"}/> : null
                 }
-                <Typography component="h1" variant="h5">
-                    Forget Password
-                </Typography>
-                <Typography component="h4" variant="h5" style={{color: "#e60000"}}>
-                    {error}
-                </Typography>
-                {mailSent ?
-                    <Typography component="h3" variant="h6" style={{color: "green"}}>
-                        Password reset link is sent to your email.
+                <CssBaseline/>
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon/>
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Forget Password
                     </Typography>
-                    :
-                    null
-                }
-                <form className={classes.form} onSubmit={handleSubmit}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        value={values.email}
-                        autoComplete="email"
-                        autoFocus
-                        onChange={handleChange}
-                    />
-                    <div style={{color: "red"}}>
-                        {errors.email ? errors.email : null}
-                    </div>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Reset Password
-                    </Button>
-                </form>
-            </div>
-        </Container>
+                    <Typography component="h4" variant="h5" style={{color: "#e60000"}}>
+                        {error}
+                    </Typography>
+                    {mailSent ?
+                        <Typography component="h3" variant="h6" style={{color: "green"}}>
+                            Password reset link is sent to your email.
+                        </Typography>
+                        :
+                        null
+                    }
+                    <form className={classes.form} onSubmit={handleSubmit}>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email Address"
+                            name="email"
+                            value={values.email}
+                            autoComplete="email"
+                            autoFocus
+                            onChange={handleChange}
+                        />
+                        <div style={{color: "red"}}>
+                            {errors.email ? errors.email : null}
+                        </div>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Reset Password
+                        </Button>
+                    </form>
+                </div>
+            </Container>
+        </>
     );
 }

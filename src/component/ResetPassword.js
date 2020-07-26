@@ -103,7 +103,7 @@ export default function ForgotPassword(props) {
                         :
                         null
                     }
-                    <form className={classes.form} noValidate onSubmit={handleSubmit}>
+                    <form className={classes.form} onSubmit={handleSubmit}>
                         {console.log("helo")}
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
