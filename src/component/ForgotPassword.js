@@ -51,26 +51,21 @@ export default function ForgotPassword(props) {
         validationSchema,
         onSubmit: values => {
             setLoading(true);
-            Axios.get("https://d-bookstore.herokuapp.com/user?email=" + values.email)
+            Axios.post("https://d-bookstore.herokuapp.com/mail-sender/forget-password?email=" + values.email)
                 .then((response) => {
-                        Axios.post("https://d-bookstore.herokuapp.com/mail-sender/forget-password", {
-                            email: values.email,
-                            password: response.data.password,
-                            name: response.data.firstName
-                        }).then((response) => {
-                            props.setForgetPasswordJwt(response.data.jwt);
-                            setLoading(false)
-                            setMailSent(true)
-                            setError()
-                        })
-                    }
-                ).catch(error => {
-                if (error.response.status === 404) {
-                    setError("User Not Registered!")
+                    props.setForgetPasswordJwt(response.data);
+                    localStorage.setItem('reset-password', response.data)
                     setLoading(false)
-                    setMailSent(false)
-                }
-            })
+                    setMailSent(true)
+                    setError()
+                })
+                .catch(error => {
+                    if (error.response.status === 404) {
+                        setError("User Not Registered!")
+                        setLoading(false)
+                        setMailSent(false)
+                    }
+                })
         }
     })
 

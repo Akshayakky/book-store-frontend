@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
 const validationSchema = Yup.object().shape({
     password: Yup.string()
         .matches(
-            "^(?=.{4,})(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*[^A-Za-z0-9][A-Za-z0-9]*$",
-            "Must contain at least One Uppercase, One Lowercase, One Special Character and One Number"
+            "^(?=.{4,})(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*$",
+            "Must Contain 4 Characters, at least One Uppercase and One Number"
         ),
     confirmedPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], 'password must match')
@@ -50,7 +50,7 @@ export default function ForgotPassword(props) {
     const classes = useStyles();
     const headers = {
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem('key')
+            "Authorization": "Bearer " + localStorage.getItem('reset-password')
         }
     }
     const {handleSubmit, handleChange, values, errors} = useFormik({
@@ -61,7 +61,6 @@ export default function ForgotPassword(props) {
         onSubmit: values => {
             Axios.put("https://d-bookstore.herokuapp.com/user", {
                 email: props.user.email, password: values.password
-                , firstName: props.user.firstName, lastName: props.user.lastName
             }, headers).then((response => {
                 if (response.status === 200)
                     setReset("Password Changed Successfully!")
@@ -112,9 +111,7 @@ export default function ForgotPassword(props) {
                                 onChange={handleChange}
                                 value={values.password}
                             />
-                            <div style={{color: "red"}}>
-                                {errors.password ? errors.password : null}
-                            </div>
+                            {errors.password ? errors.password : null}
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
@@ -130,9 +127,7 @@ export default function ForgotPassword(props) {
                                 onChange={handleChange}
                                 value={values.confirmedPassword}
                             />
-                            <div style={{color: "red"}}>
-                                {errors.confirmedPassword ? errors.confirmedPassword : null}
-                            </div>
+                            {errors.confirmedPassword ? errors.confirmedPassword : null}
                         </Grid>
                     </Grid>
                     <Button
