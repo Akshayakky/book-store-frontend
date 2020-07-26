@@ -34,7 +34,6 @@ export default function Cart(props) {
         axios.get("https://d-bookstore.herokuapp.com/cart", headers).then((result) => {
             setCartData(result)
         }).catch(error => {
-            console.log(error)
         })
     }, [trick])
 
@@ -107,7 +106,6 @@ export default function Cart(props) {
     }));
 
     const removeBook = (book) => {
-        console.log(book.bookId)
         if (book !== undefined) {
             axios.delete("https://d-bookstore.herokuapp.com/cart/delete-book/" + book.bookId, headers)
                 .then((results) => {

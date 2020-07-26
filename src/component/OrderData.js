@@ -49,7 +49,6 @@ export default function OrderData() {
         }
     }
     const rows = [];
-    console.log(orderData)
     if (orderData !== undefined) {
         for (let i = orderData.length - 1; i >= 0; i--) {
             rows.push(createData(orderData[i].orderId, orderData[i].user.email, orderData[i].book.bookTitle, orderData[i].customer.name + ", " + orderData[i].customer.address
@@ -81,7 +80,6 @@ export default function OrderData() {
                 </div>
                 :
                 <main className={classes.layout}>
-                    {console.log(loading)}
                     <Typography variant="h6" color="inherit" noWrap className={classes.title}>
                         Orders({rows.length} items)
                     </Typography>
