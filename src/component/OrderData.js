@@ -42,7 +42,7 @@ function createData(orderId, email, book, address, quantity, price, orderDate) {
 export default function OrderData() {
     const classes = useStyles();
     const [orderData, setOrderData] = useState();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const headers = {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('key')
@@ -59,10 +59,10 @@ export default function OrderData() {
         }
     }
     useEffect(() => {
-        setLoading(true)
-        axios.get("https://d-bookstore.herokuapp.com/order/all", headers).then((response) =>
-                setOrderData(response.data),
-            setLoading(false)
+        axios.get("https://d-bookstore.herokuapp.com/order/all", headers).then((response) => {
+                setOrderData(response.data)
+                setLoading(false)
+            }
         )
     }, [])
 
@@ -81,6 +81,7 @@ export default function OrderData() {
                 </div>
                 :
                 <main className={classes.layout}>
+                    {console.log(loading)}
                     <Typography variant="h6" color="inherit" noWrap className={classes.title}>
                         Orders({rows.length} items)
                     </Typography>

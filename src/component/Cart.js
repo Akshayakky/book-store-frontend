@@ -148,7 +148,6 @@ export default function Cart(props) {
     let sum = 0
     return (
         <div>
-
             {localStorage.getItem('key') === "" ?
                 <Redirect to={"/login"}/>
                 :
