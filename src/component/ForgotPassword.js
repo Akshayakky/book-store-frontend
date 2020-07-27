@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid")
+    email: Yup.string().trim().email("Invalid")
 })
 
 export default function ForgotPassword(props) {
@@ -44,6 +44,7 @@ export default function ForgotPassword(props) {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState()
     const classes = useStyles();
+
     const {handleSubmit, handleChange, values, errors} = useFormik({
         initialValues: {
             email: ''
@@ -51,8 +52,7 @@ export default function ForgotPassword(props) {
         validationSchema,
         onSubmit: values => {
             setLoading(true);
-            values.email = values.email.split(" ")[0]
-            Axios.post("https://d-bookstore.herokuapp.com/mail-sender/forget-password?email=" + values.email)
+            Axios.post("https://d-bookstore.herokuapp.com/mail-sender/forget-password?email=" + values.email.trim())
                 .then((response) => {
                     localStorage.setItem('reset-password', response.data)
                     setLoading(false)
