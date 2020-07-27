@@ -44,9 +44,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const validationSchema = Yup.object().shape({
-    firstName: Yup.string().min(3, "Minimum 3 characters"),
-    lastName: Yup.string().min(3, "Minimum 3 characters"),
-    email: Yup.string().email("Invalid"),
+    firstName: Yup.string().trim().min(3, "Minimum 3 characters"),
+    lastName: Yup.string().trim().min(3, "Minimum 3 characters"),
+    email: Yup.string().trim().email("Invalid"),
     password: Yup.string()
         .matches(
             "^(?=.{4,})(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*[^A-Za-z0-9][A-Za-z0-9]*$",
@@ -59,7 +59,6 @@ const validationSchema = Yup.object().shape({
 export default function SignUp() {
     const [message, setMessage] = useState();
     const [loading, setLoading] = useState(false)
-
     const {handleSubmit, handleChange, values, errors} = useFormik({
         initialValues: {
             firstName: "",
@@ -71,12 +70,11 @@ export default function SignUp() {
         validationSchema,
         onSubmit: values => {
             setLoading(true)
+            values.firstName = values.firstName.trim()
+            values.firstName = values.firstName.trim()
+            values.email = values.email.trim()
             Axios.all([
                 Axios.post("https://d-bookstore.herokuapp.com/user", values),
-                Axios.post("https://d-bookstore.herokuapp.com/mail-sender/register", {
-                    name: values.firstName,
-                    email: values.email
-                })
             ])
                 .then(Axios.spread((registration, email) => {
                     if (registration.status === 201)
@@ -88,6 +86,10 @@ export default function SignUp() {
                         setMessage("Email Already Registered!");
                     setLoading(false)
                 })
+            Axios.post("https://d-bookstore.herokuapp.com/mail-sender/register", {
+                name: values.firstName,
+                email: values.email
+            })
         }
     })
 

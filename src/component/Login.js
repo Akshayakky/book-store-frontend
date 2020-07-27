@@ -45,7 +45,7 @@ export default function Login(props) {
         },
         onSubmit: values => {
             setLoading(true)
-            formik.values.email = formik.values.email.split(" ")[0]
+            formik.values.email = formik.values.email.trim()
             Axios.post('https://d-bookstore.herokuapp.com/authenticate', formik.values)
                 .then(response => {
                     // eslint-disable-next-line no-restricted-globals
