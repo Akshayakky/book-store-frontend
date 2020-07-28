@@ -77,8 +77,13 @@ export default function SignUp() {
                 Axios.post("https://d-bookstore.herokuapp.com/user", values),
             ])
                 .then(Axios.spread((registration, email) => {
-                    if (registration.status === 201)
+                    if (registration.status === 201) {
                         setMessage("User Registered Successfully!")
+                        Axios.post("https://d-bookstore.herokuapp.com/mail-sender/register", {
+                            firstName: values.firstName,
+                            email: values.email
+                        })
+                    }
                     setLoading(false)
                 }))
                 .catch(error => {
@@ -86,143 +91,141 @@ export default function SignUp() {
                         setMessage("Email Already Registered!");
                     setLoading(false)
                 })
-            Axios.post("https://d-bookstore.herokuapp.com/mail-sender/register", {
-                name: values.firstName,
-                email: values.email
-            })
         }
     })
 
     const classes = useStyles();
 
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline/>
-            <Paper className={classes.paper} variant="elevation">
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign up
-                </Typography>
-                {loading ?
-                    <LinearIndeterminate/>
-                    : null
-                }
-                <Typography component="h3" variant="h6" style={message === 'User Registered Successfully!'
-                    ? {color: "green"} : {color: "#e60000"}}>
-                    {message}
-                </Typography>
-                <form className={classes.form} onSubmit={handleSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                name="firstName"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="firstName"
-                                label="First Name"
-                                autoFocus
-                                size="small"
-                                onChange={handleChange}
-                                value={values.firstName}
+        <div>
+            {loading ?
+                <LinearIndeterminate/>
+                : null
+            }
+            <Container component="main" maxWidth="xs">
+                <CssBaseline/>
+                <Paper className={classes.paper} variant="elevation">
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon/>
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign up
+                    </Typography>
+                    <Typography component="h3" variant="h6" style={message === 'User Registered Successfully!'
+                        ? {color: "green"} : {color: "#e60000"}}>
+                        {message}
+                    </Typography>
+                    <form className={classes.form} onSubmit={handleSubmit}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    name="firstName"
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="firstName"
+                                    label="First Name"
+                                    autoFocus
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={values.firstName}
 
-                            />
-                            <div style={{color: "red"}}>
-                                {errors.firstName ? errors.firstName : null}
-                            </div>
+                                />
+                                <div style={{color: "red"}}>
+                                    {errors.firstName ? errors.firstName : null}
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="lastName"
+                                    label="Last Name"
+                                    name="lastName"
+                                    autoComplete="lname"
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={values.lastName}
+                                />
+                                <div style={{color: "red"}}>
+                                    {errors.lastName ? errors.lastName : null}
+                                </div>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={values.email}
+                                />
+                                <div style={{color: "red"}}>
+                                    {errors.email ? errors.email : null}
+                                </div>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={values.password}
+                                />
+                                <div style={{color: "red"}}>
+                                    {errors.password ? errors.password : null}
+                                </div>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="confirmedPassword"
+                                    label="Confirmed Password"
+                                    type="password"
+                                    id="confirmedPassword"
+                                    autoComplete="current-password"
+                                    size="small"
+                                    onChange={handleChange}
+                                    value={values.confirmedPassword}
+                                />
+                                <div style={{color: "red"}}>
+                                    {errors.confirmedPassword ? errors.confirmedPassword : null}
+                                </div>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="lname"
-                                size="small"
-                                onChange={handleChange}
-                                value={values.lastName}
-                            />
-                            <div style={{color: "red"}}>
-                                {errors.lastName ? errors.lastName : null}
-                            </div>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="outlined"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Sign Up
+                        </Button>
+                        <Grid container justify="center">
+                            <Grid item>
+                                <Link href="/login" variant="body2">
+                                    {"Already have an account? Sign in"}
+                                </Link>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                                size="small"
-                                onChange={handleChange}
-                                value={values.email}
-                            />
-                            <div style={{color: "red"}}>
-                                {errors.email ? errors.email : null}
-                            </div>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                size="small"
-                                onChange={handleChange}
-                                value={values.password}
-                            />
-                            <div style={{color: "red"}}>
-                                {errors.password ? errors.password : null}
-                            </div>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="confirmedPassword"
-                                label="Confirmed Password"
-                                type="password"
-                                id="confirmedPassword"
-                                autoComplete="current-password"
-                                size="small"
-                                onChange={handleChange}
-                                value={values.confirmedPassword}
-                            />
-                            <div style={{color: "red"}}>
-                                {errors.confirmedPassword ? errors.confirmedPassword : null}
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="outlined"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign Up
-                    </Button>
-                    <Grid container justify="center">
-                        <Grid item>
-                            <Link href="/login" variant="body2">
-                                {"Already have an account? Sign in"}
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </form>
-                <h1></h1>{}
-            </Paper>
-        </Container>
+                    </form>
+                    <h1></h1>{}
+                </Paper>
+            </Container>
+        </div>
     );
 }
